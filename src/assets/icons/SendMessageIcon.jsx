@@ -8,6 +8,7 @@ const SendMessageIcon = () => {
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className="hover:shadow-sm hover:bg-gray-100 rounded-lg hover:cursor-pointer"
     >
       <path
         fillRule="evenodd"

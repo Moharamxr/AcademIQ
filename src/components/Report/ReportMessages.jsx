@@ -41,16 +41,15 @@ const ReportMessages = () => {
               Guy Hawkins
             </p>
             <p className="font-poppins text-xs  font-light ps-1">
-              To:{" "}
+              To:
               <span className="text-gray-400 font-poppins font-extralight text-[10px]">
-                {" "}
-                Cooper Leslie{" "}
+                Cooper Leslie
               </span>
             </p>
           </div>
         </div>
         <p className="font-poppins font-light text-xs  text-gray-400">
-          31 / 07 / 2020{" "}
+          31 / 07 / 2020
         </p>
       </FixedTopContent>
       <div className="container flex flex-col gap-1 pb-4 min-h-[28rem]">

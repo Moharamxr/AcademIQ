@@ -8,6 +8,7 @@ const EditIcon = () => {
       viewBox="0 0 31 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className="hover:shadow-sm hover:bg-gray-100 rounded-lg hover:cursor-pointer"
     >
       <path
         d="M24.5268 2.68262L28.4018 6.68262L25.4478 9.73328L21.5728 5.73328L24.5268 2.68262ZM10.334 21.3333H14.209L23.6214 11.6173L19.7464 7.61728L10.334 17.3333V21.3333Z"

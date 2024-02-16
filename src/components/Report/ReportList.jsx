@@ -26,8 +26,10 @@ const ReportList = () => {
         <h3 className="font-poppins font-normal text-base md:text-lg lg:text-xl xl:text-2xl leading-normal md:leading-relaxed text-center py-1 pb-2">
           Inbox
         </h3>
-        <div className="flex border-opacity-40 border-b border-b-slate-400 pb-2 px-2">
-          <SearchIcon className=" text-gray-400 pointer-events-none" />
+        <div className="flex border-opacity-40 border-b border-b-slate-400 pb-2 px-2 ">
+          <div className="hover:shadow-sm hover:bg-gray-100 rounded-lg hover:cursor-pointer">
+            <SearchIcon />
+          </div>
           <input
             type="search"
             className="bg-transparent  outline-none  text-center text-sm font-normal"
