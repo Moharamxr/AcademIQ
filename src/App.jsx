@@ -4,11 +4,12 @@ import Layout from './components/Layout/Layout';
 import Announcements from './components/Parent/announcements/Announcements';
 import LeaderBoard from './components/Parent/leaderBoard/LeaderBoard';
 import Connect from './components/connect/Connect';
+import Report from './components/Report/Report';
 
 function App() {
   return (
     <Layout>
-      <Connect />
+      <Report />
     </Layout>
   );
 }
