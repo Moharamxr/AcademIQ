@@ -7,6 +7,7 @@ import UpCursor from "../../../assets/icons/UpCursor.jsx";
 import ConnectIcon from "../../../assets/icons/ConnectIcon.jsx";
 import ReportIcon from "../../../assets/icons/ReportIcon.jsx";
 import FirstChildImage from "../../../assets/FirstChild.png";
+import SecondChildImage from "../../../assets/secondChild.png";
 import SettingIcon from "../../../assets/icons/SettingIcon.jsx";
 import SignOutIcon from "../../../assets/icons/SignoutIcon.jsx";
 import SupportIcon from "../../../assets/icons/SupportIcon.jsx";
@@ -133,7 +134,7 @@ const Sidebar = () => {
             <li>
               <div className="flex space-x-4 hover:bg-white rounded-xl">
                 <img
-                  src={FirstChildImage}
+                  src={SecondChildImage}
                   alt="SecondChild"
                   className="aspect-square"
                 />

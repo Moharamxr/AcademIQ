@@ -48,7 +48,7 @@ const ReportNewMessage = () => {
             name="type a message"
             id="ReportMessage"
             placeholder="Type a message"
-            className="outline-none bg-transparent h-40 px-2 w-full text-sm "
+            className="outline-none bg-transparent h-40 px-2 w-full text-sm  max-h-80"
           />
         </div>
       </div>

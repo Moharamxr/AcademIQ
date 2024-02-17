@@ -8,7 +8,7 @@ const TableCard = ({ isActive }) => {
   return (
     <div className="flex items-center gap-x-1 w-full">
       {isActive ? <ActiveTimeTableIcon /> : <DisabledTimeTableIcon />}
-      <div className="bg-gray-100 flex-1 rounded-md p-3 relative overflow-hidden flex items-center justify-between h-14">
+      <div className="bg-gray-100 flex-1 rounded-xl p-3 relative overflow-hidden flex items-center justify-between h-14">
         <div className="flex">
           <div className="flex items-center  w-12 h-7 me-6 mt-2">
             <img src={TableChild} alt="TableChild" className="mr-2 w-11" />
