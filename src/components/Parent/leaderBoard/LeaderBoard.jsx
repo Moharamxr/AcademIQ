@@ -13,7 +13,7 @@ const LeaderBoardContainer = styled('div')({
 
 const LeaderBoard = () => {
   return (
-    <LeaderBoardContainer className="bg-white rounded-2xl p-4">
+    <LeaderBoardContainer className="bg-white rounded-2xl p-4 overflow-hidden">
       <h3 className="font-poppins font-medium text-2xl leading-10 pt-0 text-black bg-white">
         Six grade Leaderboard
       </h3>
