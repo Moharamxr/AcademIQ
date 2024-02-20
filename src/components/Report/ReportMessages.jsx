@@ -32,8 +32,8 @@ const FixedBottomContent = styled.div`
 
 const ReportMessages = () => {
   return (
-    <ConnectChatContainer className="bg-white container rounded-2xl w-full md:w-8/12 overflow-hidden">
-      <FixedTopContent className="container between bg-white px-4 pe-6 py-3 border-b-gray-300 border-b-2 border-opacity-40 ">
+    <ConnectChatContainer className="bg-white  rounded-2xl w-full md:w-8/12 overflow-hidden">
+      <FixedTopContent className="w-full between bg-white px-4 pe-6 py-3 border-b-gray-300 border-b-2 border-opacity-40 ">
         <div className="flex gap-2">
           <img src={Teacher1} alt="Teacher1" />
           <div className="flex flex-col gap-y-1 p-1">
@@ -52,10 +52,10 @@ const ReportMessages = () => {
           31 / 07 / 2020
         </p>
       </FixedTopContent>
-      <div className="container flex flex-col gap-1 pb-4 min-h-[28rem]">
+      <div className="w-full flex flex-col gap-1 pb-4 min-h-[28rem]">
         <ReportMessageCard img={Teacher1} forward={true} />
       </div>
-      <FixedBottomContent className="container flex justify-around items-center border-t-[1px] border-t-gray-400 border-opacity-40 px-4 py-2 bg-white">
+      <FixedBottomContent className="w-full flex justify-around items-center border-t-[1px] border-t-gray-400 border-opacity-40 px-4 py-2 bg-white">
         <Trash />
         <ShareIcon />
         <OpenFolder />

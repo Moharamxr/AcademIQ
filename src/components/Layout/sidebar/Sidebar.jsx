@@ -14,12 +14,13 @@ import SupportIcon from "../../../assets/icons/SupportIcon.jsx";
 import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
-  const [activeChild, setActiveChild] = useState(false);
-  const [activeConnect, setActiveConnect] = useState(false);
-  const [activeReport, setActiveReport] = useState(false);
-  const [activeHome, setActiveHome] = useState(false);
-  const [activeSetting, setActiveSetting] = useState(false);
-  const [activeSupport, setActiveSupport] = useState(false);
+  const [path,setPath] = useState(location.pathname);
+  const [activeChild, setActiveChild] = useState(path.includes("/child"));
+  const [activeConnect, setActiveConnect] = useState(path.includes("/connect"));
+  const [activeReport, setActiveReport] = useState(path.includes("/report"));
+  const [activeHome, setActiveHome] = useState(path==="/");
+  const [activeSetting, setActiveSetting] = useState(path.includes("/setting"));
+  const [activeSupport, setActiveSupport] = useState(path.includes("/support"));
 
   const handleChildClick = () => {
     setActiveChild(!activeChild);
@@ -87,7 +88,7 @@ const Sidebar = () => {
             activeHome ? "bg-active-bg  border-active " : "border-white "
           } hover:bg-active-bg`}
         >
-          <HomeIcon active={!activeHome} />
+          <HomeIcon active={activeHome} />
           <p
             className={`font-poppins text-sm leading-6 tracking-normal text-left ${
               activeHome ? "text-active" : "text-default"
@@ -102,7 +103,11 @@ const Sidebar = () => {
             activeChild ? "bg-active-bg  border-active " : "border-white "
           } hover:bg-active-bg`}
         >
-          <NavLink to={'/'} className="between space-x-4" onClick={handleChildClick}>
+          <NavLink
+            to={"/"}
+            className="between space-x-4"
+            onClick={handleChildClick}
+          >
             <div className="flex space-x-4">
               <ChildIcon active={activeChild} />
               <p
@@ -149,26 +154,36 @@ const Sidebar = () => {
           </ul>
         </div>
 
-        <NavLink to={'/connect'}
+        <NavLink
+          to={"/connect"}
           className={`flex p-1 px-4 py-2 cursor-pointer space-x-4 rounded-[3px] border-l-[3px] ${
             activeConnect ? "bg-active-bg  border-active " : "border-white "
           } hover:bg-active-bg`}
           onClick={handleConnectClick}
         >
           <ConnectIcon active={activeConnect} />
-          <p className="font-poppins text-sm leading-6 tracking-normal text-left text-default">
+          <p
+            className={`font-poppins text-sm leading-6 tracking-normal text-left ${
+              activeConnect ? "text-active" : "text-default "
+            }`}
+          >
             Connect
           </p>
         </NavLink>
 
-        <NavLink to={'/report'}
+        <NavLink
+          to={"/report"}
           className={`flex p-1 px-4 py-2 cursor-pointer space-x-3 rounded-[3px] border-l-[3px] ${
             activeReport ? "bg-active-bg  border-active " : "border-white "
           } hover:bg-active-bg`}
           onClick={handleReportClick}
         >
           <ReportIcon active={activeReport} />
-          <p className="font-poppins text-sm leading-6 tracking-normal text-left text-default">
+          <p
+            className={`font-poppins text-sm leading-6 tracking-normal text-left ${
+              activeReport ? "text-active" : "text-default "
+            }`}
+          >
             Report
           </p>
         </NavLink>

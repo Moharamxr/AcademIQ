@@ -20,8 +20,9 @@ const FixedTopContent = styled.div`
 `;
 
 const ReportList = () => {
+  
   return (
-    <ConnectListContainer className="container bg-white w-full hidden md:block md:w-4/12  rounded-xl min-h-80 p-4 pt-0 overflow-hidden">
+    <ConnectListContainer className=" bg-white w-full  md:w-4/12  rounded-xl min-h-80 p-4 pt-0 overflow-hidden">
       <FixedTopContent className="bg-white pt-4">
         <h3 className="font-poppins font-normal text-base md:text-lg lg:text-xl xl:text-2xl leading-normal md:leading-relaxed text-center py-1 pb-2">
           Inbox
@@ -38,7 +39,7 @@ const ReportList = () => {
         </div>
       </FixedTopContent>
 
-      <div className="container mx-auto flex flex-col gap-y-2 py-2">
+      <div className="w-full mx-auto flex flex-col gap-y-2 py-2">
         <ReportListCard img={Teacher1} active={true} />
         <ReportListCard img={Teacher2} active={false} />
         <ReportListCard img={Teacher1} active={false} />

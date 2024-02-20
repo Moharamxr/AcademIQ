@@ -1,14 +1,17 @@
 import React from "react";
 import SendMessageIcon from "../../assets/icons/SendMessageIcon";
+import { useState } from "react";
 
 const ReportNewMessage = () => {
+  
   return (
+   
     <div className="bg-white container flex flex-col rounded-2xl w-full md:w-8/12">
       <div className="container between py-2 px-4">
         <h5 class="font-poppins font-medium text-xl leading-10 text-gray-900">
           New Message
         </h5>
-        <span className="pe-4 rounded-md">
+        <span className="pe-4 rounded-md" >
           <SendMessageIcon />
         </span>
       </div>

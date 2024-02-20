@@ -1,12 +1,12 @@
 import React from "react";
 
 const HomeIcon = ({ active }) => {
-  const color = active ? "rgba(148, 163, 184, 1)" : "rgba(0, 118, 158, 1)";
+  const color = !active ? "rgba(148, 163, 184, 1)" : "rgba(0, 118, 158, 1)";
   return (
     <svg
       width="18"
       height="18"
-      viewBox="0 0 19 19"
+      viewBox="0 0 20 20"
       fill={color}
       xmlns="http://www.w3.org/2000/svg"
     >

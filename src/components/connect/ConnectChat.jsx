@@ -34,8 +34,8 @@ const ConnectChat = () => {
   }, []);
 
   return (
-    <ConnectChatContainer className="bg-white container rounded-2xl w-full md:w-8/12 overflow-hidden min-h-full">
-      <FixedTopContent className="container between bg-white px-4 pe-6 py-3 border-b-gray-300 border-b-2 border-opacity-40 ">
+    <ConnectChatContainer className="bg-white  rounded-2xl w-full md:w-8/12 overflow-hidden min-h-full">
+      <FixedTopContent className="w-full between bg-white px-4 pe-6 py-3 border-b-gray-300 border-b-2 border-opacity-40 ">
         <div className="flex gap-2">
           <img src={Teacher1} alt="Teacher1" />
           <div className="flex flex-col gap-y-1 p-1">
@@ -49,14 +49,14 @@ const ConnectChat = () => {
         <div className="hover:shadow-slate-500 hover:shadow-2xl rounded-full "><ThreeDots /></div>
         
       </FixedTopContent>
-      <div className="container flex flex-col gap-1 pb-4   min-h-[28rem]">
+      <div className="w-full flex flex-col gap-1 pb-4   min-h-[28rem]">
         <ConnectChatMessage img={Teacher1} forward={true} />
         <ConnectChatMessage forward={false} />
         <ConnectChatMessage img={Teacher1} forward={true} />
         <ConnectChatMessage forward={false} />
 
       </div>
-      <FixedBottomContent className="container between border-t-[1px] border-t-gray-400 border-opacity-40 px-4 py-2 bg-white">
+      <FixedBottomContent className="w-full between border-t-[1px] border-t-gray-400 border-opacity-40 px-4 py-2 bg-white">
         <textarea
           name="connectTextInp"
           id="connectTextInp"

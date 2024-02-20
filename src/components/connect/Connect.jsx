@@ -4,7 +4,7 @@ import ConnectChat from './ConnectChat'
 
 const Connect = () => {
   return (
-    <div className='container flex gap-x-4 '>
+    <div className='w-full flex md:flex-row flex-col gap-x-4 '>
         <ConnectList />
         <ConnectChat />
     </div>

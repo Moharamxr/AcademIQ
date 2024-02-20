@@ -4,8 +4,8 @@ import AvatarPic from "../../../assets/AvatarTop.png";
 import NotificationIcon from "../../../assets/icons/NotificationIcon";
 const TopBar = () => {
   return (
-    <div className="between mb-3 h-16">
-      <div className="xl:w-8/12 w-[80%]   lg:center   h-12 pb-2">
+    <div className="between mb-4 pt-0 h-16">
+      <div className="xl:w-8/12  w-full md:ms-10   lg:   h-12 pb-2 ">
         <div className="bg-white flex  me-2  p-3 px-4 rounded-xl">
           <div className="bg-gray-200 bg-opacity-30 container center p-1 rounded-lg">
             <div className=" w-8 h-6 center rounded-md hover:shadow-gray-300 hover:bg-gray-200 hover:shadow-sm">
@@ -23,14 +23,14 @@ const TopBar = () => {
           </div>
         </div>
       </div>
-      <div className="xl:w-4/12 w-5/12  md:w-5/12 container  h-11 flex gap-x-4 justify-end">
+      <div className="xl:w-4/12 w-5/12  md:w- container  h-11 flex  justify-end  ">
         <div className="flex gap-x-1">
           <img
             src={AvatarPic}
             alt="AvatarPic"
-            className="aspect-square "
+            className="aspect-square mx-2"
           />
-          <div className="bg-white xl:py-3 xl:px-4 md:py-1 md:px-1  md:flex hidden  flex-col justify-center items-center rounded-xl">
+          <div className="bg-white xl:py-3 xl:px-4 md:py-1 md:px-1  lg:flex hidden  flex-col justify-center items-center rounded-xl">
             <p className="font-poppins font-normal lg:text-sm text-xs leading-6 text-black ">
               Cooper Leslie{" "}
             </p>
@@ -39,7 +39,7 @@ const TopBar = () => {
             </p>
           </div>
         </div>
-        <div className="lg:bg-white lg:p-4 center rounded-2xl md:bg-transparent me-3">
+        <div className="lg:bg-white lg:p-4 between rounded-2xl md:bg-transparent me-4 ms-2">
           <span className="relative inline-block ">
             <NotificationIcon />
             <span className="absolute bottom-3 left-2 inline-flex items-center justify-center h-4 w-[fit-content] p-1 bg-red-500 text-white text-[10px] font-bold rounded-full">

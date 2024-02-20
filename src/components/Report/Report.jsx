@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import ReportList from "./ReportList";
 import ReportMessages from "./ReportMessages";
 import ReportNewMessage from "./ReportNewMessage";
 
 const Report = () => {
+  
   return (
-    <div className="container flex gap-x-4">
+    <div className="w-full flex flex-col gap-4 md:flex-row">
       <ReportList/>
-      <ReportNewMessage/>
+      <ReportMessages/>
+      {/* <ReportNewMessage/> */}
     </div>
   );
 };
