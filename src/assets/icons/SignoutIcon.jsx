@@ -4,7 +4,7 @@ const SignOutIcon = () => {
 
   return (
     <svg
-    className="ms-1"
+    className="ms-1 cursor-pointer"
       width="19"
       height="19"
       viewBox="0 0 22 22"

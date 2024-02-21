@@ -25,7 +25,7 @@ const BorderLinearProgress = styled(LinearProgress)({
   backgroundColor: "rgba(0, 0, 0, 0.12)", // Example static color
   "& .MuiLinearProgress-bar": {
     borderRadius: 5,
-    backgroundColor: "rgba(0, 118, 158, 1)", // Example static color
+    backgroundColor: "#029e2e", // Example static color
   },
 });
 
@@ -40,7 +40,7 @@ const ToDoLists = ({ status }) => {
   return (
     <TodoListContainer
       className={`flex flex-col w-full p-4 pt-0 bg-white rounded-xl ${
-        status === "Assigned" ? "max-h-[30rem]" : "max-h-[18.4rem]"
+        status === "Assigned" ? "lg:max-h-[30rem]" : "lg:max-h-[18.4rem]"
       }`}
     >
       <FixedTopContent className=" bg-white py-4">
@@ -49,7 +49,7 @@ const ToDoLists = ({ status }) => {
             {status}
           </h3>
           {status === "Assigned" && (
-            <button className="bg-active text-white center gap-1 rounded-md p-1 px-2 text-sm">
+            <button className="bg-active text-white center gap-1 rounded-md p-1 px-2 text-sm" onClick={openAddTodo}>
               <PlusIcon /> Add
             </button>
           )}
@@ -204,7 +204,7 @@ const ToDoLists = ({ status }) => {
           </div>
         </div>
       </div>
-      <AddTodo />
+      {status==='Assigned'&&<AddTodo onClose={closeAddTodo} isOpen={isOpen} />}
     </TodoListContainer>
   );
 };

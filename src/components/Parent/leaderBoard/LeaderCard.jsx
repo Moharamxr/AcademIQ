@@ -4,8 +4,7 @@ import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 import LeaderStudent1 from "../../../assets/leader (1).png";
-import LeaderStudent2 from "../../../assets/leader (2).png";
-import LeaderStudent3 from "../../../assets/leader (3).png";
+
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,

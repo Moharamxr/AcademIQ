@@ -10,6 +10,7 @@ import { Route, Routes } from 'react-router-dom';
 import Calendar from './components/Student/calender/Calender';
 import ToDoPage from './components/Student/todo-list/ToDoPage';
 import StuAssignments from './components/Student/assignments/StuAssignments';
+import Child from './components/Parent/child/Child';
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
         <Route path="/todolist" element={<ToDoPage />} />
 
         <Route path="/assignments" element={<StuAssignments />} />
+
+        <Route path="/child" element={<Child />} />
         
         
       </Routes>

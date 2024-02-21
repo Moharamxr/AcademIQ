@@ -33,7 +33,7 @@ const Sidebar = () => {
   }, [location.pathname]);
 
   return (
-    <nav className="w-full min-w-[fit-content] min-h-[97.7%]  bg-white rounded-2xl">
+    <nav className="w-full min-w-[fit-content] max-h-[40rem] min-h-[43rem]  bg-white rounded-2xl">
       <div className="py-10 flex justify-center items-center">
         <Logo />
       </div>
@@ -60,7 +60,7 @@ const Sidebar = () => {
             activeChild ? "bg-active-bg  border-active " : "border-white "
           } hover:bg-active-bg`}
         >
-          <NavLink to={"/"} className="between space-x-4">
+          <NavLink to={"/child"} className="between space-x-4">
             <div className="flex space-x-4">
               <ChildIcon active={activeChild} />
               <p

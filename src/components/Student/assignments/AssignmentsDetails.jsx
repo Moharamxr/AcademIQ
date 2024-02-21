@@ -30,20 +30,15 @@ const AssignmentsDetails = () => {
           </time>
         </article>
         <form>
-          <h5 className="font-poppins font-medium text-lg leading-10 text-active">
-            Assignment Name
-          </h5>
-          <form className="flex flex-col gap-y-1">
+          <div className="flex flex-col gap-y-1">
             <label htmlFor="assignmentAns">Attachment*</label>
-          <textarea type="text" name="assignmentAns" id="assignmentAns" className="w-full h-24 outline-none bg-gray-100 border border-gray-300 rounded-lg" />
-          </form>
-          <form className="flex flex-col gap-y-1">
-            <label htmlFor="assignmentAns">Add Comment ( Optional )</label>
-          <textarea type="text" name="assignmentAns" id="assignmentAns" className="w-full h-20 outline-none bg-gray-100 border border-gray-300 rounded-lg" />
-          </form>
+            <textarea type="text" name="assignmentAns" id="assignmentAns" className="w-full h-24 outline-none bg-gray-100 border border-gray-300 rounded-lg" />
+          </div>
+          <div className="flex flex-col gap-y-1">
+            <label htmlFor="assignmentComment">Add Comment (Optional)</label>
+            <textarea type="text" name="assignmentComment" id="assignmentComment" className="w-full h-20 outline-none bg-gray-100 border border-gray-300 rounded-lg" />
+          </div>
           <button className="bg-active text-white rounded-lg text-center text-lg w-full py-2 my-4">Submit</button>
-          
-          
         </form>
       </div>
     </div>

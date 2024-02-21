@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { useState } from 'react';
 const TodoListContainer = styled("div")({
     maxHeight: "36.3rem",
     overflowY: "auto",
@@ -14,10 +14,11 @@ const TodoListContainer = styled("div")({
     z-index: 1;
   `;
 const AssignmentsList = () => {
+    const [assignmentStatus ,setAssignmentStatus] = useState('Active');
   return (
     <TodoListContainer className='bg-white flex flex-col justify-center items-center p-3 pt-0 rounded-xl'>
         <FixedTopContent className=' bg-white py-3 w-full'>
-            <select value='Active' className='w-full outline-none border border-gray-200 rounded-lg h-12 text-xl p-2 ps-1 font-normal '>
+            <select value={assignmentStatus} onChange={(e)=>setAssignmentStatus(e.target.value)} className='w-full outline-none border border-gray-200 rounded-lg h-12 text-xl p-2 ps-1 font-normal '>
             <option value="Active" >Active</option>
             <option value="Active">Active</option>
             <option value="Active">Active</option>

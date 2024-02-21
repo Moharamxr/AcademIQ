@@ -5,51 +5,36 @@ import ChildIcon from "../../../../assets/icons/ChildIcon";
 import ConnectIcon from "../../../../assets/icons/ConnectIcon";
 import ReportIcon from "../../../../assets/icons/ReportIcon";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const FixedBottomContent = styled.div`
   position: fixed;
   bottom: 0;
+  left: 0;
   z-index: 10;
 `;
 
 const BottomBar = () => {
-  const [path,setPath] = useState(location.pathname);
-  const [activeChild, setActiveChild] = useState(path.includes("/child"));
-  const [activeConnect, setActiveConnect] = useState(path.includes("/connect"));
-  const [activeReport, setActiveReport] = useState(path.includes("/report"));
-  const [activeHome, setActiveHome] = useState(path==="/");
-  const handleHomeClick = () => {
-    setActiveHome(!activeHome);
-    setActiveChild(false);
-    setActiveConnect(false);
-    setActiveReport(false);
-  };
-  const handleChildClick = () => {
-    setActiveChild(!activeChild);
-    setActiveConnect(false);
-    setActiveReport(false);
-    setActiveHome(false);
-  };
+  const location = useLocation();
+  const [activeChild, setActiveChild] = useState(false);
+  const [activeConnect, setActiveConnect] = useState(false);
+  const [activeReport, setActiveReport] = useState(false);
+  const [activeHome, setActiveHome] = useState(false);
 
-  const handleConnectClick = () => {
-    setActiveConnect(!activeConnect);
-    setActiveChild(false);
-    setActiveReport(false);
-    setActiveHome(false);
-  };
 
-  const handleReportClick = () => {
-    setActiveReport(!activeReport);
-    setActiveChild(false);
-    setActiveConnect(false);
-    setActiveHome(false);
-  };
+  useEffect(() => {
+    const path = location.pathname;
+    setActiveHome(path === "/");
+    setActiveChild(path.includes("/child"));
+    setActiveConnect(path.includes("/connect"));
+    setActiveReport(path.includes("/report"));
+
+  }, [location.pathname]);
   return (
-    <FixedBottomContent className="bg-white container min-h-12  flex md:hidden px-2 gap-x-1 min-w-full">
+    <FixedBottomContent className="bg-white container min-h-12  flex md:hidden px-2 gap-x-1 w-full">
       <NavLink
         to={"/"}
-        onClick={handleHomeClick}
         className={`w-1/4 p-2  border-t-4 ${
           activeHome && "border-t-active-br"
         } flex flex-col rounded-sm items-center`}
@@ -64,8 +49,7 @@ const BottomBar = () => {
         </p>
       </NavLink>
       <NavLink
-        to={"/"}
-        onClick={handleChildClick}
+        to={"/child"}
         className={`w-1/4 p-2  border-t-4 ${
           activeChild && "border-t-active-br"
         } flex flex-col rounded-sm items-center`}
@@ -81,7 +65,6 @@ const BottomBar = () => {
       </NavLink>
       <NavLink
         to={"/connect"}
-        onClick={handleConnectClick}
         className={`w-1/4 p-2  border-t-4 ${
           activeConnect && "border-t-active-br"
         } flex flex-col rounded-sm items-center`}
@@ -97,7 +80,6 @@ const BottomBar = () => {
       </NavLink>
       <NavLink
         to={"/report"}
-        onClick={handleReportClick}
         className={`w-1/4 p-2  border-t-4 ${
           activeReport && "border-t-active-br"
         } flex flex-col rounded-sm items-center`}
@@ -111,6 +93,7 @@ const BottomBar = () => {
           Report
         </p>
       </NavLink>
+      
     </FixedBottomContent>
   );
 };
