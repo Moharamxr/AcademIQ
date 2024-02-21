@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../../../assets/Logo.jsx";
 import HomeIcon from "../../../assets/icons/HomeIcon.jsx";
 import "./style.css";
@@ -11,68 +11,26 @@ import SecondChildImage from "../../../assets/secondChild.png";
 import SettingIcon from "../../../assets/icons/SettingIcon.jsx";
 import SignOutIcon from "../../../assets/icons/SignoutIcon.jsx";
 import SupportIcon from "../../../assets/icons/SupportIcon.jsx";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
-  const [path,setPath] = useState(location.pathname);
-  const [activeChild, setActiveChild] = useState(path.includes("/child"));
-  const [activeConnect, setActiveConnect] = useState(path.includes("/connect"));
-  const [activeReport, setActiveReport] = useState(path.includes("/report"));
-  const [activeHome, setActiveHome] = useState(path==="/");
-  const [activeSetting, setActiveSetting] = useState(path.includes("/setting"));
-  const [activeSupport, setActiveSupport] = useState(path.includes("/support"));
+  const location = useLocation();
+  const [activeChild, setActiveChild] = useState(false);
+  const [activeConnect, setActiveConnect] = useState(false);
+  const [activeReport, setActiveReport] = useState(false);
+  const [activeHome, setActiveHome] = useState(false);
+  const [activeSetting, setActiveSetting] = useState(false);
+  const [activeSupport, setActiveSupport] = useState(false);
 
-  const handleChildClick = () => {
-    setActiveChild(!activeChild);
-    setActiveConnect(false);
-    setActiveReport(false);
-    setActiveHome(false);
-    setActiveSetting(false);
-    setActiveSupport(false);
-  };
-
-  const handleConnectClick = () => {
-    setActiveConnect(!activeConnect);
-    setActiveChild(false);
-    setActiveReport(false);
-    setActiveHome(false);
-    setActiveSetting(false);
-    setActiveSupport(false);
-  };
-
-  const handleReportClick = () => {
-    setActiveReport(!activeReport);
-    setActiveChild(false);
-    setActiveConnect(false);
-    setActiveHome(false);
-    setActiveSetting(false);
-    setActiveSupport(false);
-  };
-
-  const handleSupportClick = () => {
-    setActiveSetting(false);
-    setActiveSupport(!activeSupport);
-    setActiveHome(false);
-    setActiveChild(false);
-    setActiveConnect(false);
-    setActiveReport(false);
-  };
-  const handleSettingClick = () => {
-    setActiveSetting(!activeSetting);
-    setActiveSupport(false);
-    setActiveHome(false);
-    setActiveChild(false);
-    setActiveConnect(false);
-    setActiveReport(false);
-  };
-  const handleHomeClick = () => {
-    setActiveSetting(false);
-    setActiveSupport(false);
-    setActiveHome(!activeHome);
-    setActiveChild(false);
-    setActiveConnect(false);
-    setActiveReport(false);
-  };
+  useEffect(() => {
+    const path = location.pathname;
+    setActiveHome(path === "/");
+    setActiveChild(path.includes("/child"));
+    setActiveConnect(path.includes("/connect"));
+    setActiveReport(path.includes("/report"));
+    setActiveSetting(path.includes("/setting"));
+    setActiveSupport(path.includes("/support"));
+  }, [location.pathname]);
 
   return (
     <nav className="w-full min-w-[fit-content] min-h-[97.7%]  bg-white rounded-2xl">
@@ -80,10 +38,9 @@ const Sidebar = () => {
         <Logo />
       </div>
 
-      <div className="flex flex-col  gap-4 mx-auto px-6 pb-6 ">
+      <div className="flex flex-col gap-4 mx-auto px-6 pb-6 ">
         <NavLink
           to={"/"}
-          onClick={handleHomeClick}
           className={` flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors border-l-[3px] rounded-[3px] ${
             activeHome ? "bg-active-bg  border-active " : "border-white "
           } hover:bg-active-bg`}
@@ -103,11 +60,7 @@ const Sidebar = () => {
             activeChild ? "bg-active-bg  border-active " : "border-white "
           } hover:bg-active-bg`}
         >
-          <NavLink
-            to={"/"}
-            className="between space-x-4"
-            onClick={handleChildClick}
-          >
+          <NavLink to={"/"} className="between space-x-4">
             <div className="flex space-x-4">
               <ChildIcon active={activeChild} />
               <p
@@ -159,7 +112,6 @@ const Sidebar = () => {
           className={`flex p-1 px-4 py-2 cursor-pointer space-x-4 rounded-[3px] border-l-[3px] ${
             activeConnect ? "bg-active-bg  border-active " : "border-white "
           } hover:bg-active-bg`}
-          onClick={handleConnectClick}
         >
           <ConnectIcon active={activeConnect} />
           <p
@@ -176,7 +128,6 @@ const Sidebar = () => {
           className={`flex p-1 px-4 py-2 cursor-pointer space-x-3 rounded-[3px] border-l-[3px] ${
             activeReport ? "bg-active-bg  border-active " : "border-white "
           } hover:bg-active-bg`}
-          onClick={handleReportClick}
         >
           <ReportIcon active={activeReport} />
           <p
@@ -191,9 +142,8 @@ const Sidebar = () => {
 
       <hr />
 
-      <div className="flex flex-col  gap-4 mx-auto px-6 pt-6 pb-2">
+      <div className="flex flex-col gap-4 mx-auto px-6 pt-6 pb-2">
         <div
-          onClick={handleSettingClick}
           className={` flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors border-l-[3px]  rounded-[3px] ${
             activeSetting ? "bg-active-bg  border-active " : "border-white "
           } hover:bg-active-bg`}
@@ -208,7 +158,6 @@ const Sidebar = () => {
           </p>
         </div>
         <div
-          onClick={handleSupportClick}
           className={` flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors border-l-[3px]  rounded-[3px] ${
             activeSupport ? "bg-active-bg  border-active " : "border-white "
           } hover:bg-active-bg`}

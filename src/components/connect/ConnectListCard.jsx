@@ -6,7 +6,7 @@ const ConnectListCard = ({ img, active }) => {
       <img src={img} alt="teacher" className="w-12 h-12" />
       <div className="w-full flex flex-col gap-1 p-1 overflow-hidden">
         <div className="between">
-          <p className="font-poppins font-normal text-sm">Guy Hawkins</p>
+          <p className="font-poppins font-normal lg:text-sm md:text-[12px] text-sm">Guy Hawkins</p>
           <p className="font-poppins text-[9.5px] text-slate-500">01:00 AM</p>
         </div>
 

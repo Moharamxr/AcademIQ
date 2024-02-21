@@ -39,22 +39,45 @@ const ConnectChat = () => {
         <div className="flex gap-2">
           <img src={Teacher1} alt="Teacher1" />
           <div className="flex flex-col gap-y-1 p-1">
-            <p className="font-poppins font-normal text-xs sm:text-sm">Guy Hawkins</p>
+            <p className="font-poppins font-normal text-xs sm:text-sm">
+              Guy Hawkins
+            </p>
             <div className="font-poppins text-xs text-slate-300 font-light ps-1">
               <div className="bg-green-500 w-1 h-1 relative top-1 right-1 rounded-full"></div>
               online
             </div>
           </div>
         </div>
-        <div className="hover:shadow-slate-500 hover:shadow-2xl rounded-full "><ThreeDots /></div>
-        
+        <div className="hover:shadow-slate-500 hover:shadow-2xl rounded-full ">
+          <ThreeDots />
+        </div>
       </FixedTopContent>
       <div className="w-full flex flex-col gap-1 pb-4   min-h-[28rem]">
         <ConnectChatMessage img={Teacher1} forward={true} />
         <ConnectChatMessage forward={false} />
         <ConnectChatMessage img={Teacher1} forward={true} />
         <ConnectChatMessage forward={false} />
-
+        <ConnectChatMessage img={Teacher1} forward={true} />
+        <ConnectChatMessage forward={false} />
+        <ConnectChatMessage img={Teacher1} forward={true} />
+        <ConnectChatMessage forward={false} />
+        <ConnectChatMessage img={Teacher1} forward={true} />
+        <ConnectChatMessage forward={false} />
+        <ConnectChatMessage img={Teacher1} forward={true} />
+        <ConnectChatMessage forward={false} />
+        <ConnectChatMessage img={Teacher1} forward={true} />
+        <ConnectChatMessage forward={false} />
+        <ConnectChatMessage img={Teacher1} forward={true} />
+        <ConnectChatMessage forward={false} />
+        <ConnectChatMessage img={Teacher1} forward={true} />
+        <ConnectChatMessage forward={false} />
+        <ConnectChatMessage img={Teacher1} forward={true} />
+        <ConnectChatMessage forward={false} />
+        <ConnectChatMessage img={Teacher1} forward={true} />
+        <ConnectChatMessage forward={false} />
+        <ConnectChatMessage img={Teacher1} forward={true} />
+        <ConnectChatMessage forward={false} />
+        <div ref={bottomRef} />
       </div>
       <FixedBottomContent className="w-full between border-t-[1px] border-t-gray-400 border-opacity-40 px-4 py-2 bg-white">
         <textarea
@@ -67,8 +90,6 @@ const ConnectChat = () => {
 
         <SendMessageIcon />
       </FixedBottomContent>
-
-      <div ref={bottomRef} />
     </ConnectChatContainer>
   );
 };

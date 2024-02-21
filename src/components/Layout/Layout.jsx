@@ -19,12 +19,7 @@ const Layout = (props) => {
         </div>
 
         <div className="flex flex-col lg:flex-row">
-          <div className="w-full lg:w-8/12 lg:ps-4 me-2 pb-4">
-            {props.children}
-          </div>
-          <div className="w-full lg:w-4/12 ms-2">
-            <ParentTimeTable />
-          </div>
+        {props.children}
         </div>
       </div>
       <BottomBar />

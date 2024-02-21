@@ -19,7 +19,7 @@ const MobileTopBar = () => {
       <div >
         <Logo />
       </div>
-      <div >
+      <div className='pe-2'>
         <NotificationIcon />
       </div>
     </FixedTopContent>

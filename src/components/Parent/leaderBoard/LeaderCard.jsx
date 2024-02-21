@@ -10,6 +10,7 @@ import LeaderStudent3 from "../../../assets/leader (3).png";
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
   borderRadius: 5,
+  width : '100%',
   [`&.${linearProgressClasses.colorPrimary}`]: {
     backgroundColor:
       theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
@@ -38,24 +39,24 @@ const LeaderCard = () => {
           <p className="font-poppins font-medium text-base leading-6 py-2">
             Ahmed Khaled
           </p>
-          <div className="flex-grow">
+          <div className="flex-grow md:w-full w-48">
             <BorderLinearProgress variant="determinate" value={50} />
           </div>
           <div className="flex gap-x-3">
-            <p class="font-poppins font-light text-xs leading-6 text-gray-600">
+            <p className="font-poppins font-light text-xs leading-6 text-gray-600">
               37 lessons
             </p>
-            <p class="font-poppins font-light text-xs leading-6 text-gray-600">
+            <p className="font-poppins font-light text-xs leading-6 text-gray-600">
               2 quizzes
             </p>
-            <p class="font-poppins font-light text-xs leading-6 text-gray-600">
+            <p className="font-poppins font-light text-xs leading-6 text-gray-600">
               4 assignments
             </p>
           </div>
         </div>
       </div>
     </div>
-    <p class="font-poppins font-medium text-xs leading-6 text-black pb-10">
+    <p className="font-poppins font-medium text-xs leading-6 text-black pb-10">
       (405 points)
     </p>
   </div>
