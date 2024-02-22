@@ -19,7 +19,7 @@ const Child = () => {
     <>
       <div className="w-full lg:w-8/12 lg:ps-4  pb-4">
         <div className="bg-white p-2 rounded-xl w-full">
-          <div className="center flex-col  py-10 gap-y-2">
+          <div className="center flex-col  py-10 gap-2">
             <img src={childPhoto} alt="child photo" className="rounded-full" />
             <p className="font-poppins font-light text-xl text-active  leading-8">
             Jane Cooper
