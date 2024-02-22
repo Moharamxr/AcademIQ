@@ -14,7 +14,7 @@ const Report = () => {
           {/* <ReportNewMessage/> */}
         </div>
       </div>
-      <div className="w-full lg:w-4/12 ms-2 hidden md:block">
+      <div className="w-full lg:w-4/12 hidden md:block">
         <ParentTimeTable />
       </div>
     </>

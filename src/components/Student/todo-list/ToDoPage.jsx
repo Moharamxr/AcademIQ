@@ -9,7 +9,7 @@ const ToDoPage = () => {
         <Calendar />
         <ToDoLists status='Assigned' />
       </div>
-      <div className="w-full lg:w-4/12 ms-2 hidden md:block">
+      <div className="w-full lg:w-4/12  hidden md:block">
         <div className="flex flex-col gap-y-4">
           <div ><ToDoLists status='Done' /></div>
           <div ><ToDoLists status='Missing' /></div>

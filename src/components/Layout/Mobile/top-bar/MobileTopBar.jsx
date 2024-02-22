@@ -24,7 +24,7 @@ const MobileTopBar = () => {
   };
   return (
     <>
-      <FixedTopContent className="container between p-3 md:hidden bg-white w-full rounded">
+      <FixedTopContent className="container between p-3 md:hidden bg-white min-w-full rounded">
         <div onClick={openBurger} className="cursor-pointer">
           {isOpen?<NonThreeBarIcon/>:<ThreeBarIcon />}
         </div>

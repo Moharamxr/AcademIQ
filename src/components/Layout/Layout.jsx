@@ -18,7 +18,7 @@ const Layout = (props) => {
          <TopBar/>
         </div>
 
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row gap-x-4">
         {props.children}
         </div>
       </div>

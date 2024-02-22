@@ -32,7 +32,7 @@ const BottomBar = () => {
 
   }, [location.pathname]);
   return (
-    <FixedBottomContent className="bg-white container min-h-12  flex md:hidden px-2 gap-x-1 w-full">
+    <FixedBottomContent className="bg-white container min-h-12  flex md:hidden px-2 gap-x-1 min-w-full">
       <NavLink
         to={"/"}
         className={`w-1/4 p-2  border-t-4 ${
