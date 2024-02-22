@@ -6,7 +6,7 @@ import ParentTimeTable from "../Layout/timeTables/parentTimeTable/ParentTimeTabl
 const Connect = () => {
   return (
     <>
-      <div className="w-full lg:w-8/12 lg:ps-4 me-2 pb-4">
+      <div className="w-full lg:w-8/12 lg:ps-4  pb-4">
         <div className="w-full flex md:flex-row flex-col gap-x-4 ">
           <ConnectList />
           <ConnectChat />

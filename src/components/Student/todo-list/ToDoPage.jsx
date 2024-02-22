@@ -5,7 +5,7 @@ import ToDoLists from "./ToDoLists";
 const ToDoPage = () => {
   return (
     <>
-      <div className="w-full lg:w-8/12 lg:ps-4 me-2 pb-4 flex flex-col gap-y-3">
+      <div className="w-full lg:w-8/12 lg:ps-4  pb-4 flex flex-col gap-y-3">
         <Calendar />
         <ToDoLists status='Assigned' />
       </div>

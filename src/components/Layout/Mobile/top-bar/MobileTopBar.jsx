@@ -5,6 +5,7 @@ import Logo from "../../../../assets/Logo";
 import NotificationIcon from "../../../../assets/icons/NotificationIcon";
 import BurgerBar from "../burger/BurgerBar";
 import NonThreeBarIcon from "../../../../assets/icons/NonThreeBarIcon";
+import SearchIcon from "../../../../assets/icons/SearchIcon";
 
 const FixedTopContent = styled.div`
   position: fixed;
@@ -23,7 +24,7 @@ const MobileTopBar = () => {
   };
   return (
     <>
-      <FixedTopContent className="container between p-3 md:hidden bg-white min-w-full rounded">
+      <FixedTopContent className="container between p-3 md:hidden bg-white w-full rounded">
         <div onClick={openBurger} className="cursor-pointer">
           {isOpen?<NonThreeBarIcon/>:<ThreeBarIcon />}
         </div>
@@ -34,6 +35,12 @@ const MobileTopBar = () => {
           <NotificationIcon />
         </div>
       </FixedTopContent>
+      <div className="bg-white py-2 px-4 w-full mb-0 block md:hidden">
+        <div className="between bg-gray-100 rounded-2xl p-1 gap-x-3 ps-3">
+          <SearchIcon />
+          <input type="text" name="mobileSearch" id="mobileSearch" placeholder="Search here" className="bg-gray-100 w-full outline-none" />
+        </div>
+      </div>
       <BurgerBar onClose={closeBurger} isOpen={isOpen} />
     </>
   );

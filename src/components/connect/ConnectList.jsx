@@ -23,7 +23,7 @@ const ConnectList = () => {
   return (
     <ConnectListContainer className="w-full bg-white  md:w-4/12  rounded-xl min-h-80 p-4 pt-0 overflow-hidden">
       <FixedTopContent className="bg-white pt-4">
-        <h3 className="font-poppins font-normal text-base md:text-lg lg:text-xl xl:text-2xl leading-normal md:leading-relaxed text-center py-1 pb-2">
+        <h3 className="font-poppins font-normal text-lg lg:text-xl xl:text-2xl leading-normal md:leading-relaxed text-center py-1 pb-2">
           Connect
         </h3>
         <div className="flex border-opacity-40 border-b border-b-slate-400 pb-2 px-2 ">

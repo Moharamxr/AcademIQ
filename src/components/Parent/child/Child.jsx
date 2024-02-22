@@ -17,7 +17,7 @@ const Child = () => {
   ];
   return (
     <>
-      <div className="w-full lg:w-8/12 lg:ps-4 me-2 pb-4">
+      <div className="w-full lg:w-8/12 lg:ps-4  pb-4">
         <div className="bg-white p-2 rounded-xl w-full">
           <div className="center flex-col  py-10 gap-y-2">
             <img src={childPhoto} alt="child photo" className="rounded-full" />
@@ -34,7 +34,7 @@ const Child = () => {
                   activeTab === index
                     ? "bg-active text-white"
                     : "bg-transparent text-gray-500 hover:bg-active-bg"
-                } w-[93px] text-center p-1 rounded-lg focus:outline-none font-poppins text-sm font-medium`}
+                } w-[93px] text-center p-1 rounded-lg focus:outline-none font-poppins text-sm font-medium cursor-pointer`}
                 onClick={() => setActiveTab(index)}
               >
                 {tab.label}

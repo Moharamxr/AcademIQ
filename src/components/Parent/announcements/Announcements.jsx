@@ -36,7 +36,7 @@ const Announcements = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl  px-4 py-4 mb-4">
+    <div className="bg-white rounded-2xl  px-4 py-4 mb-4 overflow-hidden">
       <div className="between">
         <h3 className="font-poppins font-normal text-2xl leading-10 pt-0">
           Announcement

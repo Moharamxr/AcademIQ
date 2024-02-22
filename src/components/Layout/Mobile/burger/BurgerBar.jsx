@@ -14,7 +14,7 @@ const BurgerBar = ({ onClose, isOpen }) => {
         <div className="fixed top-0 left-0 w-2/3 h-full bg-white z-40 flex flex-col divide-y-2 divide-gray-200/90 pt-16">
           <div className="flex items-center gap-4 p-2 cursor-pointer hover:bg-gray-100" >
             <img src={ProfilePic} alt="ProfilePic" className="w-10 h-10" />
-            <p className="font-poppins font-semibold text-lg leading-6 py-3">
+            <p className="font-poppins font-medium text-lg leading-6 py-3">
               Cooper Leslie
             </p>
           </div>
