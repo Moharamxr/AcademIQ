@@ -3,10 +3,10 @@ import childPhoto from "../../../assets/childPage.png";
 
 import { useState } from "react";
 import ChildProfile from "./ChildProfile.jsx";
-import ChildAssignments from "./ChildAssignments.jsx";
+import ChildAssignments from "./childAssignments/ChildAssignments.jsx";
 import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable.jsx";
-import ChildClasses from "./ChildClasses.jsx";
-import ChildExaminations from "./ChildExaminations.jsx";
+import ChildClasses from "./childClasses/ChildClasses.jsx";
+import ChildExaminations from "./childExaminations/ChildExaminations.jsx";
 const Child = () => {
   const [activeTab, setActiveTab] = useState(0);
   const tabs = [
@@ -17,8 +17,8 @@ const Child = () => {
   ];
   return (
     <>
-      <div className="w-full lg:w-8/12 lg:ps-4  pb-4">
-        <div className="bg-white p-2 rounded-xl w-full">
+      <div className="w-full lg:w-8/12 lg:ps-4  ">
+        <div className="bg-white p-2 rounded-xl w-full ">
           <div className="center flex-col  py-10 gap-2">
             <img src={childPhoto} alt="child photo" className="rounded-full" />
             <p className="font-poppins font-light text-xl text-active  leading-8">
@@ -47,7 +47,7 @@ const Child = () => {
           </div>
         </div>
       </div>
-      <div className="w-full lg:w-4/12 ms-2 hidden md:block">
+      <div className="w-full lg:w-4/12  hidden md:block">
         <ParentTimeTable />
       </div>
     </>
