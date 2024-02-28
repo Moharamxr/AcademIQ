@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import LeaderCard from "./LeaderCard";
 
 const LeaderBoardContainer = styled('div')({
-  height: '23rem', // Adjust the height as needed
+  height: '23rem', 
   overflowY: 'auto',
   '&::-webkit-scrollbar': {
     width: '0',
