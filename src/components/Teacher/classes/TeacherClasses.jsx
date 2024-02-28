@@ -5,6 +5,7 @@ import TeacherFiles from "./TeacherFiles";
 import TeacherStudents from "./TeacherStudents";
 import TeacherAssignments from "./TeacherAssignments";
 import { useState } from "react";
+import styled from "@emotion/styled";
 
 const FixedTopContent = styled.div`
   position: sticky;
