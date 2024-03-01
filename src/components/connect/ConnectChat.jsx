@@ -34,7 +34,7 @@ const ConnectChat = () => {
   }, []);
 
   return (
-    <ConnectChatContainer className="bg-white  rounded-2xl w-full md:w-8/12 overflow-hidden min-h-full">
+    <ConnectChatContainer className="bg-white  rounded-2xl w-full md:w-8/12 overflow-hidden min-h-full hidden md:block">
       <FixedTopContent className="w-full between bg-white px-4 pe-6 py-3 border-b-gray-300 border-b-2 border-opacity-40 ">
         <div className="flex gap-2">
           <img src={Teacher1} alt="Teacher1" />

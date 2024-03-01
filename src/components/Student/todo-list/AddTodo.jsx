@@ -11,7 +11,7 @@ const AddTodo = ({ onClose, isOpen }) => {
     <>
       {isOpen && (
         <>
-          <div className="fixed inset-0 z-40 flex justify-center items-center bg-gray-600 bg-opacity-50">
+          <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-600 bg-opacity-50">
             <div className="bg-white z-50 w-[90%] md:w-[50%] xl:w-[35%]  h-[90%] rounded-xl px-6 py-4">
               <h3 className="font-inter font-normal text-lg leading-7 text-active text-center">
                 Add to todo list
@@ -60,7 +60,7 @@ const AddTodo = ({ onClose, isOpen }) => {
                   </div>
                 </div>
                 <div className="between px-4">
-                  <button onClick={onClose} className="h-12 text-active border border-active font-medium rounded-md py-0 sm:px-24 md:px-10 lg:px-16 px-11">Cancel</button>
+                  <button onClick={onClose} className="h-12 text-active border border-active font-medium rounded-md py-0 sm:px-24 md:px-10 lg:px-16 px-10">Cancel</button>
                   <button className="h-12 bg-active text-white rounded-md font-medium py-0 sm:px-24 md:px-10 lg:px-16 px-11">Save</button>
                 </div>
               </form>

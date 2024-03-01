@@ -6,7 +6,7 @@ import TableTeacher from "../../../../assets/tableTeacher.png";
 
 const TableCard = ({ isActive }) => {
   return (
-    <div className="between  w-full">
+    <div className="between  w-full pe-6">
       {isActive ? <ActiveTimeTableIcon /> : <DisabledTimeTableIcon />}
       <div className="bg-gray-100 rounded-xl p-3 relative overflow-hidden between h-14 min-w-[85%]">
         

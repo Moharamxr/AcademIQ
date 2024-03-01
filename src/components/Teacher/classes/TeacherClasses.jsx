@@ -1,9 +1,9 @@
 import React from "react";
 import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
-import TeachersPosts from "./TeachersPosts";
-import TeacherFiles from "./TeacherFiles";
-import TeacherStudents from "./TeacherStudents";
-import TeacherAssignments from "./TeacherAssignments";
+import TeachersPosts from "./Posts/TeachersPosts";
+import TeacherFiles from "./Files/TeacherFiles";
+import TeacherStudents from "./Students/TeacherStudents";
+import TeacherAssignments from "./Assignments/TeacherAssignments";
 import { useState } from "react";
 import styled from "@emotion/styled";
 
@@ -12,6 +12,14 @@ const FixedTopContent = styled.div`
   top: 0;
   z-index: 1;
 `;
+const TeacherClassesContainer = styled("div")({
+  height: "35.8rem",
+  overflowY: "auto",
+  "&::-webkit-scrollbar": {
+    width: "0",
+    background: "transparent",
+  },
+});
 const TeacherClasses = () => {
   const [activeTab, setActiveTab] = useState(0);
   const tabs = [
@@ -22,17 +30,32 @@ const TeacherClasses = () => {
   ];
   return (
     <>
-      <div className="w-full lg:w-8/12 lg:ps-4 pb-4">
-        <div className="bg-white w-full rounded-xl  ">
-          <FixedTopContent className="">
-            <h3 className="font-poppins font-normal text-lg leading-10 p-3 text-gray-800">
+      <div className="w-full lg:w-8/12 lg:ps-4 pb-4 md:pb-0">
+        <TeacherClassesContainer className="bg-white w-full rounded-xl  ">
+          <FixedTopContent className="bg-white">
+            <h2 className="font-poppins font-medium text-2xl leading-10 p-3 text-gray-800">
               Class Details
-            </h3>
-            <div className="center w-full border-gray-300 border-b-[1px] pt-7 pb-5">
-
+            </h2>
+            <div className="center gap-14 w-full border-gray-300 border-b-[1px] pt-7 pb-0">
+              {tabs.map((tab, index) => (
+                <h4
+                  key={index}
+                  className={`${
+                    activeTab === index
+                      ? "border-b-2 border-active text-active"
+                      : "text-gray-400"
+                  } font-poppins font-normal text-base leading-7 pb-2  cursor-pointer`}
+                  onClick={() => setActiveTab(index)}
+                >
+                  {tab.label}
+                </h4>
+              ))}
             </div>
           </FixedTopContent>
-        </div>
+          <div className="pt-7 ">
+              {tabs[activeTab].content}
+          </div>
+        </TeacherClassesContainer>
       </div>
       <div className="w-full lg:w-4/12 hidden md:block">
         <ParentTimeTable />

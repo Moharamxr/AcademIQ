@@ -10,6 +10,7 @@ import StuAssignments from './components/Student/assignments/StuAssignments';
 import Child from './components/Parent/child/Child';
 import Teacher from './components/Teacher/home/Teacher';
 import TeacherClasses from './components/Teacher/classes/TeacherClasses';
+import TeacherGrades from './components/Teacher/grades/TeacherGrades';
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
         <Route path="/teacher" element={<Teacher />} />
 
         <Route path="/classes" element={<TeacherClasses />} />
+
+        <Route path="/grades" element={<TeacherGrades />} />
 
         <Route path="/parent" element={<Parent />} />
 

@@ -3,7 +3,7 @@ import TableCard from "./TableCard";
 
 const ParentTimeTable = () => {
   return (
-    <div className="bg-white p-3 rounded-2xl flex flex-col justify-center items-center w-full max-h-min">
+    <div className="bg-white p-3 rounded-2xl flex flex-col justify-center items-center w-full h-full">
       <h3 className="font-poppins font-medium text-xl text-center leading-10 text-gray-700 my-1">
         Today Timetable
       </h3>
