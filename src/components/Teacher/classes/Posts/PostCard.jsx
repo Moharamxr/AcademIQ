@@ -3,7 +3,7 @@ import PostPic from "../../../../assets/Ellipse 136.png";
 import ThreeDots from "../../../../assets/icons/ThreeDots";
 const PostCard = () => {
   return (
-    <div className="flex flex-col border-2 border-gray-200/70 rounded-xl w-4/6">
+    <div className="flex flex-col border-2 border-gray-200/70 rounded-xl lg:w-5/6 w-full">
       <div className="between p-4">
         <div className="flex gap-2">
           <img src={PostPic} alt="PostPic" />

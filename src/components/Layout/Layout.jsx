@@ -7,7 +7,7 @@ import MobileTopBar from "./Mobile/top-bar/MobileTopBar";
 
 const Layout = (props) => {
   return (
-    <div className="flex  w-full md:p-6 p-0  pt-14 md:pb-4 md:pt-6 pb-12">
+    <div className="flex gap-2  w-full md:p-6 p-0  pt-14 md:pb-4 md:pt-6 pb-12">
       
       <div className="hidden  md:block w-1/6 ">
         <Sidebar />
