@@ -30,7 +30,7 @@ const TeacherClasses = () => {
   ];
   return (
     <>
-      <div className="w-full lg:w-8/12 lg:ps-4 pb-4 md:pb-0">
+      <div className="w-full lg:w-8/12 ">
         <TeacherClassesContainer className="bg-white w-full rounded-xl  ">
           <FixedTopContent className="bg-white">
             <h2 className="font-poppins font-medium text-2xl leading-10 p-3 text-gray-800">

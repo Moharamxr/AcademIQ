@@ -1,7 +1,7 @@
 import React from "react";
 
 const SettingIcon = ({ active }) => {
-    const color = active ? "rgba(148, 163, 184, 1)" : "rgba(0, 118, 158, 1)";
+    const color = !active ? "rgba(148, 163, 184, 1)" : "rgba(0, 118, 158, 1)";
 
   return (
     <svg

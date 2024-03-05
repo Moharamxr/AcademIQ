@@ -10,6 +10,7 @@ const FixedTopContent = styled.div`
 `;
 const TeacherGradesContainer = styled("div")({
   height: "35.8rem",
+  width: "100%",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -18,7 +19,7 @@ const TeacherGradesContainer = styled("div")({
 });
 const TeacherGrades = () => {
   return (
-    <TeacherGradesContainer className="w-full pb-4 md:pb-0 lg:ps-4 ">
+    <TeacherGradesContainer>
       <div className="bg-white w-full rounded-xl  ">
         <FixedTopContent className="bg-white p-3 w-full rounded-t-xl pb-0">
           <h3 className="font-poppins font-normal text-base md:text-lg lg:text-xl xl:text-2xl leading-relaxed md:leading-none text-gray-700">
@@ -64,19 +65,19 @@ const TeacherGrades = () => {
             <span className="text-active w-8/12 lg:w-10/12 sm:text-base md:text-sm lg:text-base text-sm">
               Name
             </span>
-            <div className="between md:gap-6 lg:gap-7  sm:gap-9   gap-2 ">
-              <span className="text-active sm:text-base md:text-sm lg:text-base text-sm">
+            
+              <span className="text-active w-2/12 lg:w-1/12 sm:text-base md:text-sm lg:text-base text-xs px-2">
                 {"Grade [50]"}
               </span>
-              <span className="text-active sm:text-base md:text-sm lg:text-base text-sm">
+              <span className="text-active w-2/12 lg:w-1/12 sm:text-base md:text-sm lg:text-base text-xs px-2">
                 {"Percentage%"}
               </span>
-            </div>
+          
           </div>
         </FixedTopContent>
         <div className="flex flex-col gap-3 p-3">
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -87,7 +88,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -98,7 +99,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -109,7 +110,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -120,7 +121,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -131,7 +132,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -142,7 +143,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -153,7 +154,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -164,7 +165,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -175,7 +176,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -186,7 +187,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -197,7 +198,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -208,7 +209,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -219,7 +220,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
@@ -230,7 +231,7 @@ const TeacherGrades = () => {
             </span>
           </div>
           <div className="between gap-1">
-            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-sm">
+            <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
               Mahmoud Ahmed Abdelader
             </span>
             <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">

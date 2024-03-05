@@ -5,12 +5,12 @@ import ToDoLists from "./ToDoLists";
 const ToDoPage = () => {
   return (
     <>
-      <div className="w-full lg:w-8/12 lg:ps-4  pb-4 flex flex-col gap-y-3">
+      <div className="w-full lg:w-8/12  flex flex-col gap-3">
         <Calendar />
         <ToDoLists status='Assigned' />
       </div>
       <div className="w-full lg:w-4/12 ">
-        <div className="flex flex-col gap-y-4">
+        <div className="flex flex-col gap-4">
           <div ><ToDoLists status='Done' /></div>
           <div ><ToDoLists status='Missing' /></div>
         

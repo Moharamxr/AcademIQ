@@ -7,7 +7,7 @@ import Book from "../../../assets/red opened book.png";
 const Teacher = () => {
   return (
     <>
-      <div className="w-full lg:w-8/12 lg:ps-4 pb-4">
+      <div className="w-full lg:w-8/12  ">
         <div className="flex flex-col gap-4 pt-1 w-full">
           <div className="bg-white rounded-xl p-4 ">
             <h2 className="font-poppins font-bold text-2xl leading-10 text-gray-800">

@@ -17,7 +17,7 @@ const Child = () => {
   ];
   return (
     <>
-      <div className="w-full lg:w-8/12 lg:ps-4  ">
+      <div className="w-full lg:w-8/12  ">
         <div className="bg-white p-2 rounded-xl w-full ">
           <div className="center flex-col  py-10 gap-2">
             <img src={childPhoto} alt="child photo" className="rounded-full" />

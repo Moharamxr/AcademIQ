@@ -1,0 +1,31 @@
+/* Hide the default radio button */
+.red-radio,
+.green-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid transparent; /* Change border color */
+  outline: none;
+}
+
+/* Style the custom radio button when checked */
+.red-radio:checked + label:before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: red; /* Change background color */
+}
+
+.green-radio:checked + label:before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: green; /* Change background color */
+}

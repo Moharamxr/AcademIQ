@@ -11,6 +11,13 @@ import Child from './components/Parent/child/Child';
 import Teacher from './components/Teacher/home/Teacher';
 import TeacherClasses from './components/Teacher/classes/TeacherClasses';
 import TeacherGrades from './components/Teacher/grades/TeacherGrades';
+import TeacherGradesDetails from './components/Teacher/grades/TeacherGradesDetails';
+import TeacherExams from './components/Teacher/exams/TeacherExams';
+import TeacherExamDetails from './components/Teacher/exams/TeacherExamDetails';
+import ExamCreation from './components/Teacher/exams/ExamCreation';
+import Teachers from './components/Admin/Teachers/Teachers';
+import Students from './components/Admin/Students/Students';
+import Admins from './components/Admin/Admins/Admins';
 
 function App() {
   return (
@@ -22,7 +29,15 @@ function App() {
 
         <Route path="/classes" element={<TeacherClasses />} />
 
+        <Route path="/grades/details" element={<TeacherGradesDetails />} />
+        
         <Route path="/grades" element={<TeacherGrades />} />
+
+        <Route path="/exams" element={<TeacherExams />} />
+
+        <Route path="/exams/details" element={<TeacherExamDetails />} />
+
+        <Route path="/exams/create" element={<ExamCreation />} />
 
         <Route path="/parent" element={<Parent />} />
 
@@ -35,8 +50,13 @@ function App() {
         <Route path="/assignments" element={<StuAssignments />} />
 
         <Route path="/child" element={<Child />} />
-        
-        
+
+        <Route path="/admin/teachers" element={<Teachers />} />
+
+        <Route path="/admin/students" element={<Students />} />
+
+        <Route path="/admin/admins" element={<Admins />} />
+         
       </Routes>
     </Layout>
     

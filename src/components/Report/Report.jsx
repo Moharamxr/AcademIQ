@@ -7,7 +7,7 @@ import ParentTimeTable from "../Layout/timeTables/parentTimeTable/ParentTimeTabl
 const Report = () => {
   return (
     <>
-      <div className="w-full lg:w-8/12 lg:ps-4  pb-4">
+      <div className="w-full lg:w-8/12 ">
         <div className="w-full flex flex-col gap-4 md:flex-row">
           <ReportList />
           <ReportMessages />

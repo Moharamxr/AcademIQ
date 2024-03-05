@@ -15,172 +15,178 @@ import { NavLink, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation();
-  const [activeChild, setActiveChild] = useState(false);
-  const [activeConnect, setActiveConnect] = useState(false);
-  const [activeReport, setActiveReport] = useState(false);
-  const [activeHome, setActiveHome] = useState(false);
-  const [activeSetting, setActiveSetting] = useState(false);
-  const [activeSupport, setActiveSupport] = useState(false);
+  const [navBar, setNavBar] = useState([
+    {
+      name: "Home",
+      icon: <HomeIcon />,
+      activeIcon: <HomeIcon active={true} />,
+      path: "/",
+      active: false,
+    },
+    {
+      name: "Child",
+      icon: <ChildIcon />,
+      activeIcon: <ChildIcon active={true} />,
+      path: "/child",
+      active: false,
+      children: [
+        {
+          name: "Jane Cooper",
+          image: FirstChildImage,
+          id: 1,
+        },
+        {
+          name: "Wade Cooper",
+          image: SecondChildImage,
+          id: 2,
+        },
+      ],
+    },
+    {
+      name: "Connect",
+      icon: <ConnectIcon />,
+      activeIcon: <ConnectIcon active={true} />,
+      path: "/connect",
+      active: false,
+    },
+    {
+      name: "Report",
+      icon: <ReportIcon />,
+      activeIcon: <ReportIcon active={true} />,
+      path: "/report",
+      active: false,
+    },
+  ]);
+  const staticNavBar = [
+    {
+      name: "Setting",
+      icon: <SettingIcon />,
+      activeIcon : <SettingIcon active={true} />,
+      path: "/setting",
+      active: false,
+    },
+    {
+      name: "Support & Help",
+      icon: <SupportIcon />,
+      activeIcon : <SupportIcon active={true} />,
+      path: "/support",
+      active: false,
+    },
+    {
+      name: "Logout",
+      icon: <SignOutIcon />,
+      activeIcon : <SignOutIcon active={true} />,
+      path: "/logout",
+      active: false,
+    },
+  ];
 
   useEffect(() => {
     const path = location.pathname;
-    setActiveHome(path === "/");
-    setActiveChild(path.includes("/child"));
-    setActiveConnect(path.includes("/connect"));
-    setActiveReport(path.includes("/report"));
-    setActiveSetting(path.includes("/setting"));
-    setActiveSupport(path.includes("/support"));
+    setNavBar((prevNavBar) =>
+      prevNavBar.map((item) => ({
+        ...item,
+        active: item.path === path,
+      }))
+    );
   }, [location.pathname]);
 
   return (
-    <nav className="w-full min-w-[fit-content] min-h-full  bg-white rounded-2xl">
+    <nav className="w-full min-w-[fit-content] min-h-full bg-white rounded-2xl">
       <div className="py-10 flex justify-center items-center">
         <Logo />
       </div>
 
-      <div className="flex flex-col gap-4 mx-auto px-6 pb-6 ">
-        <NavLink
-          to={"/"}
-          className={` flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors border-l-[3px] rounded-[3px] ${
-            activeHome ? "bg-active-bg  border-active " : "border-white "
-          } hover:bg-active-bg`}
-        >
-          <HomeIcon active={activeHome} />
-          <p
-            className={`font-poppins text-sm leading-6 tracking-normal text-left ${
-              activeHome ? "text-active" : "text-default"
-            } `}
-          >
-            Home
-          </p>
-        </NavLink>
-
-        <div
-          className={`p-1 px-4 py-2  cursor-pointer  border-l-[3px] rounded-[3px] ${
-            activeChild ? "bg-active-bg  border-active " : "border-white "
-          } hover:bg-active-bg`}
-        >
-          <NavLink to={"/child"} className="between space-x-4">
-            <div className="flex space-x-4">
-              <ChildIcon active={activeChild} />
-              <p
-                className={`font-poppins text-sm leading-6 tracking-normal text-left ${
-                  activeChild ? "text-active" : "text-default h-1"
-                } `}
+      <div className="flex flex-col gap-4 mx-auto px-6 pb-6">
+        {navBar.map((item, index) => (
+          <>
+            {item.name !== "Child" ? (
+              <NavLink
+                key={index}
+                to={item.path}
+                className={`flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors border-l-[3px] rounded-[3px] ${
+                  item.active ? "bg-active-bg border-active" : "border-white"
+                } hover:bg-active-bg`}
               >
-                Child
-              </p>
-            </div>
-            <UpCursor active={activeChild} />
-          </NavLink>
-          <ul className={`list space-y-4 mt-3 ${activeChild ? "active" : ""}`}>
-            <li>
-              <div className="flex space-x-4 hover:bg-white rounded-xl">
-                <img
-                  src={FirstChildImage}
-                  alt="FirstChild"
-                  className="aspect-square"
-                />
+                {!item.active ? item.icon : item.activeIcon}
                 <p
-                  className={`font-poppins text-[10px] leading-6 tracking-normal text-left text-active flex-shrink-0 
-                  `}
+                  className={`font-poppins text-sm leading-6 tracking-normal text-left ${
+                    item.active ? "text-active" : "text-default"
+                  }`}
                 >
-                  Jane Cooper
+                  {item.name}
                 </p>
-              </div>
-            </li>
-            <li>
-              <div className="flex space-x-4 hover:bg-white rounded-xl">
-                <img
-                  src={SecondChildImage}
-                  alt="SecondChild"
-                  className="aspect-square"
-                />
-                <p
-                  className={`font-poppins text-[10px] leading-6 tracking-normal text-left text-active flex-shrink-0 
-                  `}
+              </NavLink>
+            ) : (
+              <div
+                className={`p-1 px-4 py-2  cursor-pointer  border-l-[3px] rounded-[3px] ${
+                  item.active ? "bg-active-bg  border-active " : "border-white "
+                } hover:bg-active-bg`}
+                key={index}
+              >
+                <NavLink
+                  key={index}
+                  to={item.path}
+                  className="between space-x-4"
                 >
-                  Wade Cooper
-                </p>
+                  <div className="flex space-x-4">
+                    <ChildIcon active={item.active} />
+                    <p
+                      className={`font-poppins text-sm leading-6 tracking-normal text-left ${
+                        item.active ? "text-active" : "text-default h-1"
+                      } `}
+                    >
+                      {item.name}
+                    </p>
+                  </div>
+                  <UpCursor active={item.active} />
+                </NavLink>
+                <ul
+                  className={`list space-y-4 mt-3 ${
+                    item.active ? "active" : ""
+                  }`}
+                >
+                  {item.children.map((child, index) => () => {
+                    return (
+                      <li key={index}>
+                        <div className="flex space-x-4 hover:bg-white rounded-xl">
+                          <img
+                            src={child.image}
+                            alt="FirstChild"
+                            className="aspect-square"
+                          />
+                          <p
+                            className={`font-poppins text-[10px] leading-6 tracking-normal text-left text-active flex-shrink-0 
+                  `}
+                          >
+                            {child.name}
+                          </p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
-            </li>
-          </ul>
-        </div>
-
-        <NavLink
-          to={"/connect"}
-          className={`flex p-1 px-4 py-2 cursor-pointer space-x-4 rounded-[3px] border-l-[3px] ${
-            activeConnect ? "bg-active-bg  border-active " : "border-white "
-          } hover:bg-active-bg`}
-        >
-          <ConnectIcon active={activeConnect} />
-          <p
-            className={`font-poppins text-sm leading-6 tracking-normal text-left ${
-              activeConnect ? "text-active" : "text-default "
-            }`}
-          >
-            Connect
-          </p>
-        </NavLink>
-
-        <NavLink
-          to={"/report"}
-          className={`flex p-1 px-4 py-2 cursor-pointer space-x-3 rounded-[3px] border-l-[3px] ${
-            activeReport ? "bg-active-bg  border-active " : "border-white "
-          } hover:bg-active-bg`}
-        >
-          <ReportIcon active={activeReport} />
-          <p
-            className={`font-poppins text-sm leading-6 tracking-normal text-left ${
-              activeReport ? "text-active" : "text-default "
-            }`}
-          >
-            Report
-          </p>
-        </NavLink>
+            )}
+          </>
+        ))}
       </div>
 
       <hr />
 
       <div className="flex flex-col gap-4 mx-auto px-6 pt-6 pb-2">
-        <div
-          className={` flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors border-l-[3px]  rounded-[3px] ${
-            activeSetting ? "bg-active-bg  border-active " : "border-white "
-          } hover:bg-active-bg`}
-        >
-          <SettingIcon active={!activeSetting} />
-          <p
-            className={`font-poppins text-sm leading-6 tracking-normal text-left ${
-              activeSetting ? "text-active" : "text-default"
-            } `}
+        {staticNavBar.map((item, index) => (
+          <NavLink
+            key={index}
+            to={item.path}
+            className="flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors border-l-[3px] rounded-[3px] border-white hover:bg-active-bg"
           >
-            Setting
-          </p>
-        </div>
-        <div
-          className={` flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors border-l-[3px]  rounded-[3px] ${
-            activeSupport ? "bg-active-bg  border-active " : "border-white "
-          } hover:bg-active-bg`}
-        >
-          <SupportIcon active={!activeSupport} />
-          <p
-            className={`font-poppins text-sm leading-6 tracking-normal text-left ${
-              activeSupport ? "text-active" : "text-default"
-            } `}
-          >
-            Support & Help
-          </p>
-        </div>
-        <div
-          className={` flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors hover:bg-active-bg`}
-        >
-          <SignOutIcon />
-          <p
-            className={`font-poppins text-sm leading-6 tracking-normal text-left text-default`}
-          >
-            Logout
-          </p>
-        </div>
+                {!item.active ? item.icon : item.activeIcon}
+            <p className="font-poppins text-sm leading-6 tracking-normal text-left text-default">
+              {item.name}
+            </p>
+          </NavLink>
+        ))}
       </div>
     </nav>
   );
