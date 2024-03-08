@@ -78,8 +78,8 @@ const Teachers = () => {
         </select>
       </FixedTopContent>
       {teachers.map((teacher) => (
-        <div className="between py-3  border-2 border-gray-200/60 rounded-md px-6">
-          <div key={teacher.id} className="flex items-center gap-5">
+        <div key={teacher.id} className="between py-3  border-2 border-gray-200/60 rounded-md px-6">
+          <div  className="flex items-center gap-5">
             <span className="text-lg font-medium">{teacher.id}</span>
             <img src={Stu1} alt="" className="w-9 h-9" />
             <p className="font-poppins font-medium">{teacher.name}</p>
