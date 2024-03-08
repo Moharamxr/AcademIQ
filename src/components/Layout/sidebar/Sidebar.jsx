@@ -12,6 +12,16 @@ import SettingIcon from "../../../assets/icons/SettingIcon.jsx";
 import SignOutIcon from "../../../assets/icons/SignoutIcon.jsx";
 import SupportIcon from "../../../assets/icons/SupportIcon.jsx";
 import { NavLink, useLocation } from "react-router-dom";
+import AssignmentsIcon from "../../../assets/icons/AssignmentsIcon.jsx";
+import TodoListIcon from "../../../assets/icons/TodoListIcon.jsx";
+import AttendanceIcon from "../../../assets/icons/AttendanceIcon.jsx";
+import GradesIcon from "../../../assets/icons/GradesIcon.jsx";
+import ExamsIcon from "../../../assets/icons/ExamsIcon.jsx";
+import QuestionBankIcon from "../../../assets/icons/QuestionBankIcon.jsx";
+import ClassesIcon from "../../../assets/icons/ClassesIcon.jsx";
+import TeachersIcon from "../../../assets/icons/TeachersIcon.jsx";
+import AdminsIcon from "../../../assets/icons/AdminsIcon.jsx";
+import StudentsIcon from "../../../assets/icons/StudentsIcon.jsx";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -33,12 +43,12 @@ const Sidebar = () => {
         {
           name: "Jane Cooper",
           image: FirstChildImage,
-          id: 1,
+          id: 1355,
         },
         {
           name: "Wade Cooper",
           image: SecondChildImage,
-          id: 2,
+          id: 2555,
         },
       ],
     },
@@ -56,26 +66,96 @@ const Sidebar = () => {
       path: "/report",
       active: false,
     },
+    {
+      name: "Classes",
+      icon: <ClassesIcon />,
+      activeIcon: <ClassesIcon active={true} />,
+      path: "/classes",
+      active: false,
+    },
+    {
+      name: "To Do List",
+      icon: <TodoListIcon />,
+      activeIcon: <TodoListIcon active={true} />,
+      path: "/todolist",
+      active: false,
+    },
+    {
+      name: "Assignments",
+      icon: <AssignmentsIcon />,
+      activeIcon: <AssignmentsIcon active={true} />,
+      path: "/assignments",
+      active: false,
+    },
+    {
+      name: "Attendance",
+      icon: <AttendanceIcon />,
+      activeIcon: <AttendanceIcon active={true} />,
+      path: "/attendance",
+      active: false,
+    },
+    {
+      name: "Grades",
+      icon: <GradesIcon />,
+      activeIcon: <GradesIcon active={true} />,
+      path: "/grades",
+      active: false,
+    },
+    {
+      name: "Exams",
+      icon: <ExamsIcon />,
+      activeIcon: <ExamsIcon active={true} />,
+      path: "/exams",
+      active: false,
+    },
+    {
+      name: "Question Bank",
+      icon: <QuestionBankIcon />,
+      activeIcon: <QuestionBankIcon active={true} />,
+      path: "/question-bank",
+      active: false,
+    },
+    {
+      name: "Teachers",
+      icon: <TeachersIcon color={"#94A3B8"}/>,
+      activeIcon: <TeachersIcon color={"#00769E"}  />,
+      path: "/admin/teachers",
+      active: false,
+    },
+    {
+      name: "Students",
+      icon: <StudentsIcon color={"#94A3B8"}/>,
+      activeIcon: <StudentsIcon color={"#00769E"} />,
+      path: "/admin/students",
+      active: false,
+    },
+    {
+      name: "Admins",
+      icon: <AdminsIcon color={"#94A3B8"}/>,
+      activeIcon: <AdminsIcon color={"#00769E"}  />,
+      path: "/admin/admins",
+      active: false,
+    },
   ]);
   const staticNavBar = [
     {
       name: "Setting",
       icon: <SettingIcon />,
-      activeIcon : <SettingIcon active={true} />,
+      activeIcon: <SettingIcon active={true} />,
       path: "/setting",
       active: false,
     },
     {
       name: "Support & Help",
       icon: <SupportIcon />,
-      activeIcon : <SupportIcon active={true} />,
+      activeIcon: <SupportIcon active={true} />,
       path: "/support",
       active: false,
     },
     {
       name: "Logout",
       icon: <SignOutIcon />,
-      activeIcon : <SignOutIcon active={true} />,
+      activeIcon: <SignOutIcon active={true} />,
       path: "/logout",
       active: false,
     },
@@ -99,10 +179,10 @@ const Sidebar = () => {
 
       <div className="flex flex-col gap-4 mx-auto px-6 pb-6">
         {navBar.map((item, index) => (
-          <>
+          <div key={index}>
             {item.name !== "Child" ? (
               <NavLink
-                key={index}
+                key={item.path}
                 to={item.path}
                 className={`flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors border-l-[3px] rounded-[3px] ${
                   item.active ? "bg-active-bg border-active" : "border-white"
@@ -122,10 +202,10 @@ const Sidebar = () => {
                 className={`p-1 px-4 py-2  cursor-pointer  border-l-[3px] rounded-[3px] ${
                   item.active ? "bg-active-bg  border-active " : "border-white "
                 } hover:bg-active-bg`}
-                key={index}
+                key={item.path}
               >
                 <NavLink
-                  key={index}
+                
                   to={item.path}
                   className="between space-x-4"
                 >
@@ -146,42 +226,37 @@ const Sidebar = () => {
                     item.active ? "active" : ""
                   }`}
                 >
-                  {item.children.map((child, index) => () => {
-                    return (
-                      <li key={index}>
-                        <div className="flex space-x-4 hover:bg-white rounded-xl">
-                          <img
-                            src={child.image}
-                            alt="FirstChild"
-                            className="aspect-square"
-                          />
-                          <p
-                            className={`font-poppins text-[10px] leading-6 tracking-normal text-left text-active flex-shrink-0 
-                  `}
-                          >
-                            {child.name}
-                          </p>
-                        </div>
-                      </li>
-                    );
-                  })}
+                  {item.children.map((child) => (
+                    <li key={child.id}>
+                      <div className="flex space-x-4 hover:bg-white rounded-xl">
+                        <img
+                          src={child.image}
+                          alt={child.name}
+                          className="aspect-square"
+                        />
+                        <p className="font-poppins text-[10px] leading-6 tracking-normal text-left text-active flex-shrink-0">
+                          {child.name}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
             )}
-          </>
+          </div>
         ))}
       </div>
 
       <hr />
 
       <div className="flex flex-col gap-4 mx-auto px-6 pt-6 pb-2">
-        {staticNavBar.map((item, index) => (
+        {staticNavBar.map((item) => (
           <NavLink
-            key={index}
+            key={item.path}
             to={item.path}
             className="flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors border-l-[3px] rounded-[3px] border-white hover:bg-active-bg"
           >
-                {!item.active ? item.icon : item.activeIcon}
+            {!item.active ? item.icon : item.activeIcon}
             <p className="font-poppins text-sm leading-6 tracking-normal text-left text-default">
               {item.name}
             </p>

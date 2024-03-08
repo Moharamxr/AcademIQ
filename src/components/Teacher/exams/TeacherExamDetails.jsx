@@ -9,7 +9,7 @@ const FixedTopContent = styled.div`
   background-color: white;
 `;
 
-const TeacherExamsContainer = styled.div`
+const TeacherExamsContainer = styled.main`
   height: 35.8rem;
   width: 100%;
   background-color: white;

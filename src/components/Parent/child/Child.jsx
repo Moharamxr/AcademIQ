@@ -17,7 +17,7 @@ const Child = () => {
   ];
   return (
     <>
-      <div className="w-full lg:w-8/12  ">
+      <main className="w-full lg:w-8/12  ">
         <div className="bg-white p-2 rounded-xl w-full ">
           <div className="center flex-col  py-10 gap-2">
             <img src={childPhoto} alt="child photo" className="rounded-full" />
@@ -46,10 +46,10 @@ const Child = () => {
             <div className="text-sm text-gray-900">{tabs[activeTab].content}</div>
           </div>
         </div>
-      </div>
-      <div className="w-full lg:w-4/12  hidden md:block">
+      </main>
+      <aside className="w-full lg:w-4/12  hidden md:block">
         <ParentTimeTable />
-      </div>
+      </aside>
     </>
   );
 };

@@ -36,7 +36,7 @@ const Admins = () => {
     },
   ];
   return (
-    <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 ">
+    <main className="w-full grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 ">
       {admins.map((admin, index) => {
         return (
           <div
@@ -65,7 +65,7 @@ const Admins = () => {
               Add Admin
             </button>
       </div>
-    </div>
+    </main>
   );
 };
 

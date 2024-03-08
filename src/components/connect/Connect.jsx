@@ -6,15 +6,15 @@ import ParentTimeTable from "../Layout/timeTables/parentTimeTable/ParentTimeTabl
 const Connect = () => {
   return (
     <>
-      <div className="w-full lg:w-8/12 ">
+      <main className="w-full lg:w-8/12 ">
         <div className="w-full flex md:flex-row flex-col gap-4 ">
           <ConnectList />
           <ConnectChat />
         </div>
-      </div>
-      <div className="w-full lg:w-4/12  hidden md:block">
+      </main>
+      <aside className="w-full lg:w-4/12  hidden md:block">
         <ParentTimeTable />
-      </div>
+      </aside>
     </>
   );
 };

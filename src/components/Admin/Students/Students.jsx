@@ -4,7 +4,7 @@ import Stu1 from "../../../assets/connect-teatcher (2).png";
 import styled from "@emotion/styled";
 import AddNewStudent from "./AddNewStudent";
 import { useState } from "react";
-const ListContainer = styled("div")({
+const ListContainer = styled("main")({
   height: "38rem",
   overflowY: "auto",
   "&::-webkit-scrollbar": {

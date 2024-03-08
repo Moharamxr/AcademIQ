@@ -4,7 +4,7 @@ const AddNewStudent = ({ isOpen, onClose }) => {
   return (
     isOpen && (
       <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-600 bg-opacity-50">
-        <div className="bg-white rounded-xl p-5 w-1/2">
+        <section className="bg-white rounded-xl p-5 w-1/2">
           <h2 className="font-poppins text-2xl font-medium">Add New Student </h2>
 
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
@@ -158,7 +158,7 @@ const AddNewStudent = ({ isOpen, onClose }) => {
               Done
             </button>
           </div>
-        </div>
+        </section>
       </div>
     )
   );

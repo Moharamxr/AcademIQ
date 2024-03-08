@@ -30,7 +30,7 @@ const TeacherClasses = () => {
   ];
   return (
     <>
-      <div className="w-full lg:w-8/12 ">
+      <main className="w-full lg:w-8/12 ">
         <TeacherClassesContainer className="bg-white w-full rounded-xl  ">
           <FixedTopContent className="bg-white">
             <h2 className="font-poppins font-medium text-2xl leading-10 p-3 text-gray-800">
@@ -56,10 +56,10 @@ const TeacherClasses = () => {
               {tabs[activeTab].content}
           </div>
         </TeacherClassesContainer>
-      </div>
-      <div className="w-full lg:w-4/12 hidden md:block">
+      </main>
+      <aside className="w-full lg:w-4/12 hidden md:block">
         <ParentTimeTable />
-      </div>
+      </aside>
     </>
   );
 };

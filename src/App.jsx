@@ -18,6 +18,8 @@ import ExamCreation from './components/Teacher/exams/ExamCreation';
 import Teachers from './components/Admin/Teachers/Teachers';
 import Students from './components/Admin/Students/Students';
 import Admins from './components/Admin/Admins/Admins';
+import Attendance from './components/Teacher/attendance/Attendance';
+import Dashboard from './components/Admin/Dashboard/Dashboard';
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
         <Route path="/grades" element={<TeacherGrades />} />
 
         <Route path="/exams" element={<TeacherExams />} />
+
+        <Route path="/attendance" element={<Attendance />} />
 
         <Route path="/exams/details" element={<TeacherExamDetails />} />
 
@@ -56,6 +60,8 @@ function App() {
         <Route path="/admin/students" element={<Students />} />
 
         <Route path="/admin/admins" element={<Admins />} />
+
+        <Route path="/admin" element={<Dashboard />} />
          
       </Routes>
     </Layout>

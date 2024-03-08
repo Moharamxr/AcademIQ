@@ -6,12 +6,12 @@ import MobileTopBar from "./Mobile/top-bar/MobileTopBar";
 
 const Layout = (props) => {
   return (
-    <div className="flex gap-4  w-full md:p-6 p-0  pt-14 md:pb-4 md:pt-6 pb-12">
-      <div className="hidden  md:block w-1/6 ">
+    <main className="flex gap-4  w-full md:p-6 p-0  pt-14 md:pb-4 md:pt-6 pb-12">
+      <section className="hidden  md:block w-1/6 ">
         <Sidebar />
-      </div>
+      </section>
 
-      <div className="w-full lg:w-5/6 md:w-5/6 lg:pl-3 xl:pl-0 md:pl-16 pl-0 ">
+      <section className="w-full lg:w-5/6 md:w-5/6 lg:pl-3 xl:pl-0 md:pl-16 pl-0 ">
         <MobileTopBar />
         <div className=" flex-shrink-0 overflow-hidden  pt-0 hidden md:block">
           <TopBar />
@@ -20,9 +20,9 @@ const Layout = (props) => {
         <div className="flex flex-col lg:flex-row gap-4 pb-4 md:pb-0 ">
           {props.children}
         </div>
-      </div>
+      </section>
       <BottomBar />
-    </div>
+    </main>
   );
 };
 

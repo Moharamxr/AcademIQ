@@ -5,7 +5,7 @@ import Teacher2 from "../../assets/connect-teatcher (2).png";
 import ConnectListCard from "./ConnectListCard";
 import styled from "@emotion/styled";
 
-const ConnectListContainer = styled("div")({
+const ConnectListContainer = styled("section")({
   height: "36rem",
   overflowY: "auto",
   "&::-webkit-scrollbar": {

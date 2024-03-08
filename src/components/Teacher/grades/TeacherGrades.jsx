@@ -8,7 +8,7 @@ const FixedTopContent = styled.div`
   top: 0;
   z-index: 1;
 `;
-const TeacherGradesContainer = styled("div")({
+const TeacherGradesContainer = styled("main")({
   height: "35.8rem",
   width: "100%",
   overflowY: "auto",

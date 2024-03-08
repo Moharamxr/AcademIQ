@@ -7,16 +7,16 @@ import ParentTimeTable from "../Layout/timeTables/parentTimeTable/ParentTimeTabl
 const Report = () => {
   return (
     <>
-      <div className="w-full lg:w-8/12 ">
+      <main className="w-full lg:w-8/12 ">
         <div className="w-full flex flex-col gap-4 md:flex-row">
           <ReportList />
           <ReportMessages />
           {/* <ReportNewMessage/> */}
         </div>
-      </div>
-      <div className="w-full lg:w-4/12 hidden md:block">
+      </main>
+      <aside className="w-full lg:w-4/12 hidden md:block">
         <ParentTimeTable />
-      </div>
+      </aside>
     </>
   );
 };

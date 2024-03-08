@@ -7,7 +7,7 @@ const ExamCreation = () => {
     const onClose = () => setIsOpen(false);
     const onOpen = () => setIsOpen(true);
   return (
-    <div className="w-full bg-white rounded-xl p-4">
+    <main className="w-full bg-white rounded-xl p-4">
       <h2 className="font-poppins text-2xl font-medium">Exam Creation </h2>
       <div className="between flex flex-col md:flex-row py-4 md:gap-20 ">
         <form className="flex flex-col gap-2 w-full md:w-1/2">
@@ -128,7 +128,7 @@ const ExamCreation = () => {
         </button>
       </div>
       <AddQuestion isOpen={isOpen} onClose={onClose} />
-    </div>
+    </main>
   );
 };
 

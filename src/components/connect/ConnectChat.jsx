@@ -5,7 +5,7 @@ import ThreeDots from "../../assets/icons/ThreeDots";
 import ConnectChatMessage from "./ConnectChatMessage";
 import SendMessageIcon from "../../assets/icons/SendMessageIcon";
 
-const ConnectChatContainer = styled("div")({
+const ConnectChatContainer = styled("section")({
   height: "36rem",
   overflowY: "auto",
   "&::-webkit-scrollbar": {

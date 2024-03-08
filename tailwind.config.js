@@ -19,7 +19,7 @@ export default {
       },
       gridTemplateColumns: {
         '24': 'repeat(24, minmax(0, 1fr))',
-        '30': 'repeat(30, minmax(0, 1fr))',
+        '13': 'repeat(13, minmax(0, 1fr))',
       },
       screens: {
         'xs': '375px',

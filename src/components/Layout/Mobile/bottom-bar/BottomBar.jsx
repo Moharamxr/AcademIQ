@@ -8,7 +8,7 @@ import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
-const FixedBottomContent = styled.div`
+const FixedBottomContent = styled.section`
   position: fixed;
   bottom: 0;
   left: 0;
