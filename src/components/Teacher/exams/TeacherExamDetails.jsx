@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
-import ExamDetailCard from "./ExamDEtailCard";
+import ExamDetailCard from "./ExamDetailCard";
+
 
 const FixedTopContent = styled.div`
   position: sticky;
@@ -52,7 +53,7 @@ const TeacherExamDetails = () => {
       </FixedTopContent>
       <div className="flex flex-col gap-5 p-5">
         <h5 className="font-poppins">Mcq</h5>
-        <ExamDetailCard />
+        <ExamDetailCard  />
       </div>
     </TeacherExamsContainer>
   );

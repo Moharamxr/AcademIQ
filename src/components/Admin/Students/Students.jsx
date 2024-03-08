@@ -77,8 +77,8 @@ const Students = () => {
         </select>
       </FixedTopContent>
       {students.map((student) => (
-        <div className="between py-3  border-2 border-gray-200/60 rounded-md px-6">
-          <div key={student.id} className="flex items-center gap-5">
+        <div key={student.id} className="between py-3  border-2 border-gray-200/60 rounded-md px-6">
+          <div  className="flex items-center gap-5">
             <span className="text-lg font-medium">{student.id}</span>
             <img src={Stu1} alt="" className="w-9 h-9" />
             <p className="font-poppins font-medium">{student.name}</p>

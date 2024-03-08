@@ -38,9 +38,9 @@ const Announcements = () => {
   return (
     <section className="bg-white rounded-2xl  px-4 py-4 mb-4 overflow-hidden">
       <div className="between">
-        <h3 className="font-poppins font-normal text-2xl leading-10 pt-0">
+        <h1 className="font-poppins font-normal text-2xl leading-10 pt-0">
           Announcement
-        </h3>
+        </h1>
         <RightCursor className="hover:bg-slate-100 rounded-md" />
       </div>
       <div
