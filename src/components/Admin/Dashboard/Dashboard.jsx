@@ -26,19 +26,19 @@ const Dashboard = () => {
           <Announcements />
         </div>
         <div className="col-span-2 bg-white rounded-xl h-[11.3rem] center flex-col gap-2">
-          <div className="center gap-3 w-40 px-3 py-2 bg-green-600  rounded-lg">
+          <div className="center gap-3 w-5/6 px-3 py-2 bg-green-600  rounded-lg">
             <StudentsIcon color={"#FFFFFF"} />
             <h4 className="text-white  font-medium font-poppins">
               2000 Students
             </h4>
           </div>
-          <div className="center gap-3 w-40 px-3 py-2 bg-gray-400 rounded-lg">
+          <div className="center gap-3 w-5/6 px-3 py-2 bg-gray-400 rounded-lg">
             <TeachersIcon color={"#FFFFFF"} />
             <h4 className="text-white  font-medium font-poppins">
               300 Teachers
             </h4>
           </div>
-          <div className="center gap-3 w-40 px-3 py-2 bg-active rounded-lg">
+          <div className="center gap-3 w-5/6 px-3 py-2 bg-active rounded-lg">
             <AdminsIcon color={"#FFFFFF"} />
             <h4 className="text-white  font-medium font-poppins">
               6 Admins

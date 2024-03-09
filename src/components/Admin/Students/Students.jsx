@@ -23,9 +23,9 @@ const FixedBottomContent = styled.div`
   z-index: 1;
 `;
 const Students = () => {
-    const [ isOpen, setIsOpen ] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
-    const onOpen = () => setIsOpen(true);
+  const onOpen = () => setIsOpen(true);
   const students = [
     {
       id: 1,
@@ -72,13 +72,20 @@ const Students = () => {
     <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
       <FixedTopContent className="between bg-white  py-5">
         <h2 className="text-2xl ">Students</h2>
-        <select name="" id="" className="bg-gray-100 rounded-lg p-3 outline-none">
+        <select
+          name=""
+          id=""
+          className="bg-gray-100 rounded-lg p-3 outline-none"
+        >
           <option value="">Class 1</option>
         </select>
       </FixedTopContent>
       {students.map((student) => (
-        <div key={student.id} className="between py-3  border-2 border-gray-200/60 rounded-md px-6">
-          <div  className="flex items-center gap-5">
+        <div
+          key={student.id}
+          className="between py-3  border-2 border-gray-200/60 rounded-md px-6"
+        >
+          <div className="flex items-center gap-5">
             <span className="text-lg font-medium">{student.id}</span>
             <img src={Stu1} alt="" className="w-9 h-9" />
             <p className="font-poppins font-medium">{student.name}</p>
@@ -89,12 +96,14 @@ const Students = () => {
         </div>
       ))}
       <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
-        <button className="bg-active text-white rounded-lg py-3 px-6"onClick={onOpen}>
+        <button
+          className="bg-active text-white rounded-lg py-3 px-6"
+          onClick={onOpen}
+        >
           Add Student
         </button>
       </FixedBottomContent>
       <AddNewStudent isOpen={isOpen} onClose={onClose} />
-
     </ListContainer>
   );
 };

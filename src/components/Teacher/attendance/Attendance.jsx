@@ -48,8 +48,22 @@ const Attendance = () => {
     { id: 3000000, name: "Alice Johnson", checked: false },
   ]);
   const toggleCheck = (id) => {
-
-    // setStudents 
+    setStudents(
+      students.map((student) =>
+        student.id === id ? { ...student, checked: !student.checked } : student
+      )
+    );
+  };
+  const selectAll = () => { 
+    setStudents(students.map((student) => ({ ...student, checked: true })));
+  }
+  const deselectAll = () => { 
+    setStudents(students.map((student) => ({ ...student, checked: false })));
+  }
+  const attends = () => {
+    const totalStudents = students.length;
+    const presentStudents = students.filter((student) => student.checked).length;
+    return presentStudents;
   };
   return (
     <>
@@ -76,12 +90,16 @@ const Attendance = () => {
 
               <div className="flex gap-5">
                 <div className="center gap-1">
+                  <SmCircle color={"#00769E"} />
+                  <span>{students.length} Total</span>
+                </div>
+                <div className="center gap-1">
                   <SmCircle color={"#26B170"} />
-                  <span>90% Attend</span>
+                  <span>{attends().toFixed(0)} Attend</span>
                 </div>
                 <div className="center gap-1">
                   <SmCircle color={"#FE626B"} />
-                  <span>10% Absent</span>
+                  <span>{students.length-attends().toFixed(0)} Absent</span>
                 </div>
               </div>
               <span className="font-poppins font-normal text-base leading-7 text-active">
@@ -96,11 +114,11 @@ const Attendance = () => {
                 className="between bg-gray-100 rounded-lg px-4 py-2"
               >
                 <p>{student.name}</p>
-                <button onClick={toggleCheck(student.id)}>
+                <button onClick={() => toggleCheck(student.id)}>
                   {student.checked ? (
-                    <CheckedIcon checked={true} onClick={toggleCheck} />
+                    <CheckedIcon checked={true} />
                   ) : (
-                    <CheckedIcon onClick={toggleCheck} />
+                    <CheckedIcon />
                   )}
                 </button>
               </div>
@@ -108,12 +126,17 @@ const Attendance = () => {
           </div>
         </TeacherGradesContainer>
         <div className="between pt-4">
-            <button className="py-3  bg-active text-white rounded-lg w-36" >Select</button>
-            <div className="flex gap-8">
-                <button className="py-3  bg-transparent text-active border-2 border-active-br rounded-lg w-36">Select All</button>
-            <button className="py-3  bg-transparent text-red-600 border-2 border-red-600 rounded-lg w-36">Remove All</button>
-            </div>
-            
+          <button className="py-3  bg-active text-white rounded-lg w-36">
+            Submit
+          </button>
+          <div className="flex gap-8">
+            <button className="py-3  bg-transparent text-active border-2 border-active-br rounded-lg w-36" onClick={selectAll}>
+              Select All
+            </button>
+            <button className="py-3  bg-transparent text-red-600 border-2 border-red-600 rounded-lg w-36"onClick={deselectAll}>
+              Remove All
+            </button>
+          </div>
         </div>
       </main>
       <aside className="w-full lg:w-4/12 hidden md:block">

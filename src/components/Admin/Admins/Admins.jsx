@@ -1,8 +1,13 @@
 import React from "react";
 import Stu1 from "../../../assets/connect-teatcher (2).png";
 import GrayAddImg from "../../../assets/GrayAddImg";
+import AddNewAdmin from "./AddNewAdmin";
+import { useState } from "react";
 
 const Admins = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => setIsOpen(false);
+  const onOpen = () => setIsOpen(true);
   const admins = [
     {
       name: "Renada Ahmed",
@@ -61,10 +66,12 @@ const Admins = () => {
       })}
       <div className=" bg-white center flex-col p-4 gap-10 rounded-xl">
         <GrayAddImg/>
-        <button className="bg-active text-white rounded-lg py-2 px-4">
+        <button className="bg-active text-white rounded-lg py-2 px-4"onClick={onOpen}>
               Add Admin
             </button>
       </div>
+      <AddNewAdmin isOpen={isOpen} onClose={onClose} />
+
     </main>
   );
 };
