@@ -7,6 +7,16 @@ import ReportIcon from "../../../../assets/icons/ReportIcon";
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import AssignmentsIcon from "../../../../assets/icons/AssignmentsIcon.jsx";
+import TodoListIcon from "../../../../assets/icons/TodoListIcon.jsx";
+import AttendanceIcon from "../../../../assets/icons/AttendanceIcon.jsx";
+import GradesIcon from "../../../../assets/icons/GradesIcon.jsx";
+import ExamsIcon from "../../../../assets/icons/ExamsIcon.jsx";
+import QuestionBankIcon from "../../../../assets/icons/QuestionBankIcon.jsx";
+import ClassesIcon from "../../../../assets/icons/ClassesIcon.jsx";
+import TeachersIcon from "../../../../assets/icons/TeachersIcon.jsx";
+import AdminsIcon from "../../../../assets/icons/AdminsIcon.jsx";
+import StudentsIcon from "../../../../assets/icons/StudentsIcon.jsx";
 
 const FixedBottomContent = styled.section`
   position: fixed;
@@ -17,83 +27,182 @@ const FixedBottomContent = styled.section`
 
 const BottomBar = () => {
   const location = useLocation();
-  const [activeChild, setActiveChild] = useState(false);
-  const [activeConnect, setActiveConnect] = useState(false);
-  const [activeReport, setActiveReport] = useState(false);
-  const [activeHome, setActiveHome] = useState(false);
+  const role = "teacher";
+  const [nav, setNav] = useState({
+    admin: [
+      {
+        name: "Home",
+        icon: <HomeIcon />,
+        activeIcon: <HomeIcon active={true} />,
+        path: "/",
+        active: false,
+      },
+      {
+        name: "Teachers",
+        icon: <TeachersIcon color={"#94A3B8"} />,
+        activeIcon: <TeachersIcon color={"#00769E"} />,
+        path: "/admin/teachers",
+        active: false,
+      },
+      {
+        name: "Students",
+        icon: <StudentsIcon color={"#94A3B8"} />,
+        activeIcon: <StudentsIcon color={"#00769E"} />,
+        path: "/admin/students",
+        active: false,
+      },
+      {
+        name: "Admins",
+        icon: <AdminsIcon color={"#94A3B8"} />,
+        activeIcon: <AdminsIcon color={"#00769E"} />,
+        path: "/admin/admins",
+        active: false,
+      },
+    ],
 
+    parent: [
+      {
+        name: "Home",
+        icon: <HomeIcon />,
+        activeIcon: <HomeIcon active={true} />,
+        path: "/",
+        active: false,
+      },
+      {
+        name: "Child",
+        icon: <ChildIcon />,
+        activeIcon: <ChildIcon active={true} />,
+        path: "/child",
+        active: false,
+      },
+      {
+        name: "Connect",
+        icon: <ConnectIcon />,
+        activeIcon: <ConnectIcon active={true} />,
+        path: "/connect",
+        active: false,
+      },
+      {
+        name: "Report",
+        icon: <ReportIcon />,
+        activeIcon: <ReportIcon active={true} />,
+        path: "/report",
+        active: false,
+      },
+    ],
+    student: [
+      {
+        name: "Home",
+        icon: <HomeIcon />,
+        activeIcon: <HomeIcon active={true} />,
+        path: "/",
+        active: false,
+      },
+      {
+        name: "Classes",
+        icon: <ClassesIcon />,
+        activeIcon: <ClassesIcon active={true} />,
+        path: "/classes",
+        active: false,
+      },
+      {
+        name: "To Do List",
+        icon: <TodoListIcon />,
+        activeIcon: <TodoListIcon active={true} />,
+        path: "/todolist",
+        active: false,
+      },
+      {
+        name: "Assignments",
+        icon: <AssignmentsIcon />,
+        activeIcon: <AssignmentsIcon active={true} />,
+        path: "/assignments",
+        active: false,
+      },
+      
+    ],
+    teacher: [
+      {
+        name: "Home",
+        icon: <HomeIcon />,
+        activeIcon: <HomeIcon active={true} />,
+        path: "/",
+        active: false,
+      },
+      {
+        name: "Classes",
+        icon: <ClassesIcon />,
+        activeIcon: <ClassesIcon active={true} />,
+        path: "/classes",
+        active: false,
+      },
+      {
+        name: "Question Bank",
+        icon: <QuestionBankIcon />,
+        activeIcon: <QuestionBankIcon active={true} />,
+        path: "/question-bank",
+        active: false,
+      },
+      {
+        name: "Exams",
+        icon: <ExamsIcon />,
+        activeIcon: <ExamsIcon active={true} />,
+        path: "/exams",
+        active: false,
+      },
+      {
+        name: "Grades",
+        icon: <GradesIcon />,
+        activeIcon: <GradesIcon active={true} />,
+        path: "/grades",
+        active: false,
+      },
+      {
+        name: "Attendance",
+        icon: <AttendanceIcon />,
+        activeIcon: <AttendanceIcon active={true} />,
+        path: "/attendance",
+        active: false,
+      },
+    ],
+  });
 
   useEffect(() => {
     const path = location.pathname;
-    setActiveHome(path === "/");
-    setActiveChild(path.includes("/child"));
-    setActiveConnect(path.includes("/connect"));
-    setActiveReport(path.includes("/report"));
+    if (role && nav[role]) {
+      setNav((prevNavBar) => {
+        const updatedNav = {
+          ...prevNavBar,
+          [role]: prevNavBar[role].map((item) => ({
+            ...item,
+            active: item.path === path,
+          })),
+        };
+        return updatedNav;
+      });
+    }
+  }, [location.pathname, role]);
 
-  }, [location.pathname]);
   return (
-    <FixedBottomContent className="bg-white container min-h-12  flex md:hidden px-2 gap-x-1 min-w-full">
-      <NavLink
-        to={"/"}
-        className={`w-1/4 p-2  border-t-4 ${
-          activeHome && "border-t-active-br"
-        } flex flex-col rounded-sm items-center`}
-      >
-        <HomeIcon active={activeHome} />
-        <p
-          className={`font-poppins text-sm leading-6 tracking-normal text-left ${
-            activeHome ? "text-active" : "text-default"
-          } `}
+    <FixedBottomContent className={"bg-white  min-h-12  flex md:hidden px-2 gap-x-1 min-w-full"}>
+      {nav[role].map((item, index) => (
+        <NavLink
+          key={index}
+          to={item.path}
+          className={`w-1/${nav[role].length} p-2  border-t-4 ${
+            item.active && "border-t-active-br"
+          } between flex-col rounded-sm items-center`}
         >
-          Home
-        </p>
-      </NavLink>
-      <NavLink
-        to={"/child"}
-        className={`w-1/4 p-2  border-t-4 ${
-          activeChild && "border-t-active-br"
-        } flex flex-col rounded-sm items-center`}
-      >
-        <ChildIcon active={activeChild} />
-        <p
-          className={`font-poppins text-sm leading-6 tracking-normal text-left ${
-            activeChild ? "text-active" : "text-default h-1"
-          } `}
-        >
-          Child
-        </p>
-      </NavLink>
-      <NavLink
-        to={"/connect"}
-        className={`w-1/4 p-2  border-t-4 ${
-          activeConnect && "border-t-active-br"
-        } flex flex-col rounded-sm items-center`}
-      >
-        <ConnectIcon active={activeConnect} />
-        <p
-          className={`font-poppins text-sm leading-6 tracking-normal text-left ${
-            activeConnect ? "text-active" : "text-default "
-          }`}
-        >
-          Connect
-        </p>
-      </NavLink>
-      <NavLink
-        to={"/report"}
-        className={`w-1/4 p-2  border-t-4 ${
-          activeReport && "border-t-active-br"
-        } flex flex-col rounded-sm items-center`}
-      >
-        <ReportIcon active={activeReport} />
-        <p
-          className={`font-poppins text-sm leading-6 tracking-normal text-left ${
-            activeReport ? "text-active" : "text-default "
-          }`}
-        >
-          Report
-        </p>
-      </NavLink>
-      
+          {item.active ? item.activeIcon : item.icon}
+          <p
+            className={`font-poppins text-xs leading-6 tracking-normal text-center ${
+              item.active ? "text-active" : "text-default"
+            } `}
+          >
+            {item.name}
+          </p>
+        </NavLink>
+      ))}
     </FixedBottomContent>
   );
 };

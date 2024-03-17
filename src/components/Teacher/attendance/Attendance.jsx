@@ -91,15 +91,15 @@ const Attendance = () => {
               <div className="flex gap-5">
                 <div className="center gap-1">
                   <SmCircle color={"#00769E"} />
-                  <span>{students.length} Total</span>
+                  <span className="text-xs md:text-base">{students.length} Total</span>
                 </div>
                 <div className="center gap-1">
                   <SmCircle color={"#26B170"} />
-                  <span>{attends().toFixed(0)} Attend</span>
+                  <span className="text-xs md:text-base">{attends().toFixed(0)} Attend</span>
                 </div>
                 <div className="center gap-1">
                   <SmCircle color={"#FE626B"} />
-                  <span>{students.length-attends().toFixed(0)} Absent</span>
+                  <span className="text-xs md:text-base">{students.length-attends().toFixed(0)} Absent</span>
                 </div>
               </div>
               <span className="font-poppins font-normal text-base leading-7 text-active">
