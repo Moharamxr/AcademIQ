@@ -3,9 +3,11 @@ import Sidebar from "./sidebar/Sidebar";
 import TopBar from "./top-bar/TopBar";
 import BottomBar from "./Mobile/bottom-bar/BottomBar";
 import MobileTopBar from "./Mobile/top-bar/MobileTopBar";
+import Login from "../login/Login";
 
 const Layout = (props) => {
-  return (
+  const isAuth = false;
+  return isAuth ? (
     <main className="flex gap-4  w-full md:p-6 p-0  pt-14 md:pb-4 md:pt-6 pb-12">
       <section className="hidden  md:block md:w-2/6 lg:w-3/12 xl:w-1/6  ">
         <Sidebar />
@@ -23,6 +25,8 @@ const Layout = (props) => {
       </section>
       <BottomBar />
     </main>
+  ) : (
+    <Login />
   );
 };
 

@@ -32,7 +32,7 @@ const Sidebar = () => {
         name: "Home",
         icon: <HomeIcon />,
         activeIcon: <HomeIcon active={true} />,
-        path: "/",
+        path: "/home",
         active: false,
       },
       {
@@ -63,7 +63,7 @@ const Sidebar = () => {
         name: "Home",
         icon: <HomeIcon />,
         activeIcon: <HomeIcon active={true} />,
-        path: "/",
+        path: "/home",
         active: false,
       },
       {
@@ -105,7 +105,7 @@ const Sidebar = () => {
         name: "Home",
         icon: <HomeIcon />,
         activeIcon: <HomeIcon active={true} />,
-        path: "/",
+        path: "/home",
         active: false,
       },
       {
@@ -142,7 +142,7 @@ const Sidebar = () => {
         name: "Home",
         icon: <HomeIcon />,
         activeIcon: <HomeIcon active={true} />,
-        path: "/",
+        path: "/home",
         active: false,
       },
       {

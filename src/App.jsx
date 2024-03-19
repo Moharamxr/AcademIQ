@@ -20,12 +20,15 @@ import Students from './components/Admin/Students/Students';
 import Admins from './components/Admin/Admins/Admins';
 import Attendance from './components/Teacher/attendance/Attendance';
 import Dashboard from './components/Admin/Dashboard/Dashboard';
+import Login from './components/login/Login';
 
 function App() {
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={<Parent />} />
+        <Route path="/" element={<Login />} />
+
+        <Route path="/home" element={<Parent />} />
 
         <Route path="/teacher" element={<Teacher />} />
 
