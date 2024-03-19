@@ -7,7 +7,7 @@ const Login = () => {
     const navigate = useNavigate();
   return (
     <div className="w-full h-screen flex">
-      <div className="w-2/6 bg-gradient-to-b from-active to-green-500 flex flex-col items-center pt-32  gap-8   ">
+      <div className="w-2/6 hidden bg-gradient-to-b from-active to-green-500 md:flex flex-col items-center pt-32  gap-8   ">
         <div>
           <p className="font-poppins font-medium text-white text-5xl leading-10 text-center py-2">
             Welcome to
@@ -18,13 +18,11 @@ const Login = () => {
         </div>
         <img src={Magnifier} alt="Magnifier" className="w-1/2 " />
       </div>
-      <div className="bg-white w-4/6 flex flex-col items-center py-12  px-40 ">
-        <LoginLogo w={50} h={20} />
+      <div className="bg-white md:w-4/6 w-full flex flex-col items-center gap-9 py-12 px-5  xl:px-40 lg:px-24 md:px-20">
+        <LoginLogo />
         <div className="flex flex-col gap-8 w-full">
-          <span className="font-poppins font-medium  text-3xl leading-10">
-            Login
-          </span>
-          <div className="gap-5">
+          
+          <div className="">
             <div className="flex flex-col gap-2 py-3">
               <label htmlFor="loginEmail">Email</label>
               <input

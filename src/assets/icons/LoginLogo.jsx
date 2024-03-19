@@ -3,7 +3,7 @@ import React from "react";
 const LoginLogo = () => {
   return (
     <svg
-      width="380"
+      width="300"
       height="120"
       viewBox="0 0 408 132"
       fill="none"
