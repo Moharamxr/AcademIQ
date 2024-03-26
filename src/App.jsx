@@ -21,6 +21,8 @@ import Admins from './components/Admin/Admins/Admins';
 import Attendance from './components/Teacher/attendance/Attendance';
 import Dashboard from './components/Admin/Dashboard/Dashboard';
 import Login from './components/login/Login';
+import QuestionBank from './components/Teacher/question-bank/Questionbank';
+import UnitBank from './components/Teacher/question-bank/UnitBank';
 
 function App() {
   return (
@@ -41,6 +43,10 @@ function App() {
         <Route path="/exams" element={<TeacherExams />} />
 
         <Route path="/attendance" element={<Attendance />} />
+
+        <Route path="/question-bank" element={<QuestionBank />} />
+
+        <Route path="/question-bank/unit" element={<UnitBank />} />
 
         <Route path="/exams/details" element={<TeacherExamDetails />} />
 

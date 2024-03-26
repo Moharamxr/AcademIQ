@@ -1,0 +1,19 @@
+.card{
+width: 96%;
+/* border: 1px solid #00769E ; */
+}
+.br {
+    border: 1px solid #00769E;
+}
+
+.btn:hover {
+    background-color: #00769E;
+    color: white;
+  }
+.hoveredIcon {
+    fill: #fff; /* Change the fill color when hovered */
+    transition: fill 0.3s; /* Add a transition for smooth effect */
+}
+.txt {
+    color: #00769E;
+}
