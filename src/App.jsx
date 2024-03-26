@@ -28,9 +28,9 @@ function App() {
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
 
-        <Route path="/home" element={<Parent />} />
+        <Route path="/" element={<Parent />} />
 
         <Route path="/teacher" element={<Teacher />} />
 
