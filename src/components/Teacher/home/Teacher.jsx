@@ -7,7 +7,7 @@ import Book from "../../../assets/red opened book.png";
 const Teacher = () => {
   return (
     <>
-      <main className="w-full lg:w-8/12  ">
+      <div className="w-full lg:w-8/12  ">
         <div className="flex flex-col gap-4 pt-1 w-full">
           <div className="bg-white rounded-xl p-4 ">
             <h2 className="font-poppins font-bold text-2xl leading-10 text-gray-800">
@@ -42,7 +42,7 @@ const Teacher = () => {
             </div>
           </div>
         </div>
-      </main>
+      </div>
       <aside className="w-full lg:w-4/12 hidden md:block">
         <ParentTimeTable />
       </aside>

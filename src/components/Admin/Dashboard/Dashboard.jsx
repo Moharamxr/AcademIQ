@@ -20,7 +20,7 @@ const Dashboard = () => {
     }
   };
   return (
-    <main className="w-full hidden lg:block">
+    <div className="w-full hidden lg:block">
       <section className="grid grid-cols-12 gap-5">
         <div className="col-span-10">
           <Announcements />
@@ -57,20 +57,20 @@ const Dashboard = () => {
           <div className=" col-span-1 center">
             <CalenderIcon />
           </div>
-          <div className="row-start-2 row-span-1 col-span-1 bg-active-bg text-active center p-2 rounded-lg">
+          <div className="row-start-2 row-span-1 col-span-1 bg-active-bg text-active center  rounded-lg">
             Sunday
           </div>
           <div className="row-start-3 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
-            Sunday
+            Monday
           </div>
           <div className="row-start-4 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
-            Sunday
+            Tuesday
           </div>
           <div className="row-start-5 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
-            Sunday
+            Wednesday
           </div>
           <div className="row-start-6 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
-            Sunday
+            Thursday
           </div>
           <div className=" col-span-2 bg-active-bg text-active text-center py-2 px-4 center rounded-lg">
             9:00 - 10:30
@@ -99,7 +99,7 @@ const Dashboard = () => {
           ))}
         </div>
       </section>
-    </main>
+    </div>
   );
 };
 

@@ -25,7 +25,7 @@ const TeacherExams = () => {
     { label: "Upcoming Exams", content: <Exams /> },
   ];
   return (
-    <main className="w-full bg-white rounded-xl">
+    <div className="w-full bg-white rounded-xl">
       <TeacherExamsContainer className=" bg-white rounded-xl ">
         <FixedTopContent>
           <div className="between p-5 pb-0">
@@ -64,7 +64,7 @@ const TeacherExams = () => {
           </button>
         </div>
       </TeacherExamsContainer>
-    </main>
+    </div>
   );
 };
 

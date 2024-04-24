@@ -25,14 +25,28 @@ import StudentsIcon from "../../../assets/icons/StudentsIcon.jsx";
 
 const Sidebar = () => {
   const location = useLocation();
-  const role = "student";
+  const role = localStorage.getItem('role');
   const [nav, setNav] = useState({
-    admin: [
+    superAdmin: [
       {
         name: "Home",
         icon: <HomeIcon />,
         activeIcon: <HomeIcon active={true} />,
-        path: "/home",
+        path: "/admin/dashboard",
+        active: false,
+      },
+      {
+        name: "Courses",
+        icon: <ClassesIcon  />,
+        activeIcon: <ClassesIcon active={true} />,
+        path: "/admin/courses",
+        active: false,
+      },
+      {
+        name: "Classes",
+        icon: <ClassesIcon  />,
+        activeIcon: <ClassesIcon active={true} />,
+        path: "/admin/classes",
         active: false,
       },
       {
@@ -201,7 +215,7 @@ const Sidebar = () => {
       name: "Logout",
       icon: <SignOutIcon />,
       activeIcon: <SignOutIcon active={true} />,
-      path: "",
+      path: "/",
       active: false,
     },
   ];
@@ -221,6 +235,11 @@ const Sidebar = () => {
       });
     }
   }, [location.pathname, role]);
+
+  const handleLogout = () => {
+    localStorage.setItem("isLoggedIn", false);
+    localStorage.setItem("token", "");
+  };
 
   return (
     <nav className="w-full min-w-[fit-content] min-h-full bg-white rounded-2xl">
@@ -306,6 +325,7 @@ const Sidebar = () => {
           <NavLink
             key={item.path}
             to={item.path}
+            onClick={item.name === "Logout" ? handleLogout : null}
             className="flex p-1 px-4 py-2 cursor-pointer space-x-4 transition-colors border-l-[3px] rounded-[3px] border-white hover:bg-active-bg"
           >
             {!item.active ? item.icon : item.activeIcon}

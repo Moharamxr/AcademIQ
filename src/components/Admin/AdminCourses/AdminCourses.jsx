@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ThreeDots from "../../../assets/icons/ThreeDots";
 import Stu1 from "../../../assets/connect-teatcher (2).png";
 import styled from "@emotion/styled";
-import AddNewStudent from "./AddNewStudent";
 import { useState } from "react";
-import { getUsers } from "../../../services/admin.service";
+import AddNewCourse from "./AddNewCourse";
+import { getGradeCourses } from "../../../services/admin.service";
+import { useEffect } from "react";
 const ListContainer = styled("div")({
   height: "38rem",
   overflowY: "auto",
@@ -23,7 +24,7 @@ const FixedBottomContent = styled.div`
   bottom: 0;
   z-index: 1;
 `;
-const Students = () => {
+const AdminCourses = () => {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => {
     setIsOpen(false);
@@ -31,12 +32,12 @@ const Students = () => {
   };
   const onOpen = () => setIsOpen(true);
 
-  const [students, setStudents] = useState([]);
+  const [gradeCourses, setGradeCourses] = useState([]);
 
   const getData = async () => {
     try {
-      const data = await getUsers("student");
-      setStudents(data.users);
+      const data = await getGradeCourses();
+      setGradeCourses(data.courses);
     } catch (error) {
       console.error(error);
     }
@@ -47,7 +48,7 @@ const Students = () => {
   return (
     <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
       <FixedTopContent className="between bg-white  py-5">
-        <h2 className="text-2xl ">Students</h2>
+        <h2 className="text-2xl ">Courses</h2>
         <select
           name=""
           id=""
@@ -56,32 +57,35 @@ const Students = () => {
           <option value="">Class 1</option>
         </select>
       </FixedTopContent>
-      {students.map((student, index) => (
-        <div
-          key={student._id}
-          className="between py-3  border-2 border-gray-200/60 rounded-md px-6"
-        >
-          <div className="flex items-center gap-5">
-            <span className="text-lg font-medium">{index + 1}</span>
-            <img src={Stu1} alt="" className="w-9 h-9" />
-            <p className="font-poppins font-medium">{student.username}</p>
+      {Array.isArray(gradeCourses) &&
+        gradeCourses.map((courseData) => (
+          <div
+            key={courseData._id}
+            className="between py-3 border-2 border-gray-200/60 rounded-md px-6"
+          >
+            <div className="flex items-center gap-5">
+              <span className="text-lg font-medium">
+                {courseData.department}
+              </span>
+              <p className="font-poppins font-medium">{courseData.courseId}</p>
+            </div>
+            <span className="cursor-pointer">
+              <ThreeDots />
+            </span>
           </div>
-          <span className="cursor-pointer   ">
-            <ThreeDots />
-          </span>
-        </div>
-      ))}
+        ))}
+
       <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
         <button
           className="bg-active text-white rounded-lg py-3 px-6"
           onClick={onOpen}
         >
-          Add Student
+          Add Class
         </button>
       </FixedBottomContent>
-      <AddNewStudent isOpen={isOpen} onClose={onClose} />
+      <AddNewCourse isOpen={isOpen} onClose={onClose} />
     </ListContainer>
   );
 };
 
-export default Students;
+export default AdminCourses;

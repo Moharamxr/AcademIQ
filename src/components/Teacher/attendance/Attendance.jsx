@@ -67,7 +67,7 @@ const Attendance = () => {
   };
   return (
     <>
-      <main className="w-full lg:w-8/12">
+      <div className="w-full lg:w-8/12">
         <TeacherGradesContainer className="w-full bg-white rounded-xl">
           <FixedTopContent className="bg-white p-5 pb-0">
             <div className="between">
@@ -138,7 +138,7 @@ const Attendance = () => {
             </button>
           </div>
         </div>
-      </main>
+      </div>
       <aside className="w-full lg:w-4/12 hidden md:block">
         <ParentTimeTable />
       </aside>

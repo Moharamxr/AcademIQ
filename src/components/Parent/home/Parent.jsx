@@ -6,10 +6,10 @@ import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeT
 const Parent = () => {
   return (
     <>
-      <main className="w-full lg:w-8/12 ">
+      <div className="w-full lg:w-8/12 ">
         <Announcements />
         <LeaderBoard />
-      </main>
+      </div>
       <aside className="w-full lg:w-4/12 ">
         <ParentTimeTable />
       </aside>

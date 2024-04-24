@@ -1,47 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Stu1 from "../../../assets/connect-teatcher (2).png";
 import GrayAddImg from "../../../assets/GrayAddImg";
 import AddNewAdmin from "./AddNewAdmin";
 import { useState } from "react";
+import { getUsers } from "../../../services/admin.service";
 
 const Admins = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const onClose = () => setIsOpen(false);
+  const onClose = () => {setIsOpen(false);getData();}
   const onOpen = () => setIsOpen(true);
-  const admins = [
-    {
-      name: "Renada Ahmed",
-      email: "renadaahmed@gmail.com",
-      phone: "010234567889",
-    },
-    {
-      name: "John Doe",
-      email: "johndoe@gmail.com",
-      phone: "1234567890",
-    },
-    {
-      name: "Jane Smith",
-      email: "janesmith@gmail.com",
-      phone: "0987654321",
-    },
-    {
-      name: "Michael Johnson",
-      email: "michaeljohnson@gmail.com",
-      phone: "9876543210",
-    },
-    {
-      name: "Emily Davis",
-      email: "emilydavis@gmail.com",
-      phone: "0123456789",
-    },
-    {
-      name: "David Wilson",
-      email: "davidwilson@gmail.com",
-      phone: "6789012345",
-    },
-  ];
+  
+  const [admins, setAdmins] = useState([]);
+
+  const getData = async () => {
+    try {
+      const data = await getUsers('admin');
+      setAdmins(data.users);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
-    <main className="w-full grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 ">
+    <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 ">
       {admins.map((admin, index) => {
         return (
           <div
@@ -50,13 +34,13 @@ const Admins = () => {
           >
             <img src={Stu1} alt="" />
             <span className="text-center text-gray-900 font-poppins font-medium">
-              {admin.name}
+              {admin.username}
+            </span>
+            <span className="text-center text-gray-500 font-poppins text-sm">
+              {admin.userId}
             </span>
             <span className="text-center text-gray-500 font-poppins text-sm">
               {admin.email}
-            </span>
-            <span className="text-center text-gray-500 font-poppins text-sm">
-              {admin.phone}
             </span>
             <button className="bg-active text-white rounded-lg py-2 px-4">
               View Profile
@@ -72,7 +56,7 @@ const Admins = () => {
       </div>
       <AddNewAdmin isOpen={isOpen} onClose={onClose} />
 
-    </main>
+    </div>
   );
 };
 

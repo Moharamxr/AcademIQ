@@ -23,14 +23,16 @@ import Dashboard from './components/Admin/Dashboard/Dashboard';
 import Login from './components/login/Login';
 import QuestionBank from './components/Teacher/question-bank/Questionbank';
 import UnitBank from './components/Teacher/question-bank/UnitBank';
+import AdminClasses from './components/Admin/AdminClasses/AdminClasses';
+import AdminCourses from './components/Admin/AdminCourses/AdminCourses';
 
 function App() {
   return (
     <Layout>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
 
-        <Route path="/" element={<Parent />} />
+        <Route path="/home" element={<Parent />} />
 
         <Route path="/teacher" element={<Teacher />} />
 
@@ -64,13 +66,17 @@ function App() {
 
         <Route path="/child" element={<Child />} />
 
+        <Route path="/admin/courses" element={<AdminCourses />} />
+
+        <Route path="/admin/classes" element={<AdminClasses />} />
+
         <Route path="/admin/teachers" element={<Teachers />} />
 
         <Route path="/admin/students" element={<Students />} />
 
         <Route path="/admin/admins" element={<Admins />} />
 
-        <Route path="/admin" element={<Dashboard />} />
+        <Route path="/admin/dashboard" element={<Dashboard />} />
          
       </Routes>
     </Layout>

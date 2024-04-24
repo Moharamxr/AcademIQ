@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ThreeDots from "../../../assets/icons/ThreeDots";
 import Stu1 from "../../../assets/connect-teatcher (2).png";
 import styled from "@emotion/styled";
 import AddNewTeacher from "./AddNewTeacher";
 import { useState } from "react";
-const ListContainer = styled("main")({
+import { getUsers } from "../../../services/admin.service";
+const ListContainer = styled("div")({
   height: "38rem",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
@@ -23,66 +24,47 @@ const FixedBottomContent = styled.div`
   z-index: 1;
 `;
 const Teachers = () => {
-  const teachers = [
-    {
-      id: 1,
-      name: "Ahmed Hossam",
-    },
-    {
-      id: 2,
-      name: "Mohamed Ali",
-    },
-    {
-      id: 3,
-      name: "Ahmed Hossam",
-    },
-    {
-      id: 4,
-      name: "Mohamed Ali",
-    },
-    {
-      id: 5,
-      name: "Ahmed Hossam",
-    },
-    {
-      id: 6,
-      name: "Mohamed Ali",
-    },
-    {
-      id: 7,
-      name: "Ahmed Hossam",
-    },
-    {
-      id: 8,
-      name: "Mohamed Ali",
-    },
-    {
-      id: 9,
-      name: "Ahmed Hossam",
-    },
-    {
-      id: 10,
-      name: "Mohamed Ali",
-    },
-  ];
-  const [ isOpen, setIsOpen ] = useState(false);
-  const onClose = () => setIsOpen(false);
-    const onOpen = () => setIsOpen(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => {
+    setIsOpen(false);
+    getData();
+  };
+  const onOpen = () => setIsOpen(true);
+  const [teachers, setTeachers] = useState([]);
+
+  const getData = async () => {
+    try {
+      const data = await getUsers("teacher");
+      setTeachers(data.users);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
       <FixedTopContent className="between bg-white  py-5">
         <h2 className="text-2xl ">Teachers</h2>
-        <select name="" id="" className="bg-gray-100 rounded-lg p-3 outline-none">
+        <select
+          name=""
+          id=""
+          className="bg-gray-100 rounded-lg p-3 outline-none"
+        >
           <option value="">Class 1</option>
         </select>
       </FixedTopContent>
-      {teachers.map((teacher) => (
-        <div key={teacher.id} className="between py-3  border-2 border-gray-200/60 rounded-md px-6">
-          <div  className="flex items-center gap-5">
-            <span className="text-lg font-medium">{teacher.id}</span>
+      {teachers.map((teacher, index) => (
+        <div
+          key={teacher._id}
+          className="between py-3  border-2 border-gray-200/60 rounded-md px-6"
+        >
+          <div className="flex items-center gap-5">
+            <span className="text-lg font-medium">{index + 1}</span>
             <img src={Stu1} alt="" className="w-9 h-9" />
-            <p className="font-poppins font-medium">{teacher.name}</p>
+            <p className="font-poppins font-medium">{teacher.username}</p>
           </div>
           <span className="cursor-pointer">
             <ThreeDots />
@@ -90,7 +72,10 @@ const Teachers = () => {
         </div>
       ))}
       <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
-        <button className="bg-active text-white rounded-lg py-3 px-6" onClick={onOpen}>
+        <button
+          className="bg-active text-white rounded-lg py-3 px-6"
+          onClick={onOpen}
+        >
           Add Teacher
         </button>
       </FixedBottomContent>

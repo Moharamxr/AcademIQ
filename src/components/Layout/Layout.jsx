@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "./sidebar/Sidebar";
 import TopBar from "./top-bar/TopBar";
 import BottomBar from "./Mobile/bottom-bar/BottomBar";
 import MobileTopBar from "./Mobile/top-bar/MobileTopBar";
 import Login from "../login/Login";
+import { useNavigate,useLocation } from "react-router-dom";
 
 const Layout = (props) => {
-  const isAuth = true;
-  return isAuth ? (
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const location = useLocation();
+  const navigate = useNavigate();
+  const path = location.pathname;
+  useEffect(() => {
+    if (!isLoggedIn && path !== "/") {
+      navigate("/");
+    }
+  }, [isLoggedIn, path, navigate]);
+  return isLoggedIn ? (
     <main className="flex gap-4  w-full md:p-6 p-0  pt-14 md:pb-4 md:pt-6 pb-12">
       <section className="hidden  md:block md:w-2/6 lg:w-3/12 xl:w-1/6  ">
         <Sidebar />
