@@ -6,6 +6,7 @@ import AddNewClass from "./AddNewClass";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getGradeClasses } from "../../../services/gradClass.service";
+import { Skeleton } from "@mui/material";
 const ListContainer = styled("div")({
   height: "38rem",
   overflowY: "auto",
@@ -29,17 +30,21 @@ const AdminClasses = () => {
   const onClose = () => setIsOpen(false);
   const onOpen = () => setIsOpen(true);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [gradeClasses, setGradeClasses] = useState([]);
   const [reservedClassRooms, setReservedClassRooms] = useState([]);
 
   const getData = async () => {
     try {
+      setIsLoading(true);
       const data = await getGradeClasses();
       setGradeClasses(data.gradeClasses);
+      setIsLoading(false);
       const rooms = data.gradeClasses.map((gradeClass) => gradeClass.room);
       setReservedClassRooms(rooms);
     } catch (error) {
       console.error("Error fetching grade classes: ", error);
+      setIsLoading(false);
     }
   };
 
@@ -58,23 +63,37 @@ const AdminClasses = () => {
           <option value="">Class 1</option>
         </select>
       </FixedTopContent>
-      {Array.isArray(gradeClasses) &&
-        gradeClasses.map((classData) => (
-          <div key={classData._id} className="class-card mb-4 hover:bg-slate-100 hover:cursor-pointer" >
+      {!isLoading ? (
+        Array.isArray(gradeClasses) &&
+        gradeClasses.map((classData, index) => (
+          <div
+            key={classData._id}
+            className="class-card mb-4 hover:bg-slate-100 hover:cursor-pointer"
+          >
             <div className="class-info flex items-center justify-between py-3 border border-gray-200 rounded-md px-6">
               <div className="class-details flex items-center space-x-5">
-                <span className="text-lg font-medium">
-                  {classData.gradeClassId}
-                </span>
-                <p className="font-poppins font-medium">{classData.letter}</p>
-                <p className="font-poppins font-medium">{classData.room}</p>
+                <span className="text-lg font-medium">{index + 1}</span>
+                <p className="font-poppins font-medium">
+                  Class {classData.level} {classData.letter}
+                </p>
               </div>
               <span className="more-options cursor-pointer">
                 <ThreeDots />
               </span>
             </div>
           </div>
-        ))}
+        ))
+      ) : (
+        <>
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+        </>
+      )}
 
       <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
         <button

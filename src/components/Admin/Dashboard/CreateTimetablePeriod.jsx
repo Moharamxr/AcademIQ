@@ -16,11 +16,6 @@ const CreateTimetablePeriod = ({ isOpen, onClose }) => {
   const [teachers, setTeachers] = useState([]);
   const [duration, setDuration] = useState("");
 
-  useEffect(() => {
-    console.log("start", startTime);
-    console.log("end", endTime);
-  }, [startTime, endTime]);
-
   const handleDayChange = (e) => {
     setDay(e.target.value);
   };
@@ -32,7 +27,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose }) => {
       setDuration("");
       return;
     }
-    setDuration(per[e.target.value - 1]); 
+    setDuration(per[e.target.value - 1]);
     setStartTime({
       hour: parseInt(per[e.target.value - 1].split("-")[0]),
       minute: 0,
@@ -85,7 +80,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose }) => {
         setError("");
       }, 3000);
       return false;
-    } 
+    }
     return true;
   };
 
@@ -109,6 +104,9 @@ const CreateTimetablePeriod = ({ isOpen, onClose }) => {
   };
 
   const getCourses = async () => {
+    if (!isOpen) {
+      return;
+    }
     try {
       const data = await getGradeCourses();
       setCourses(data.courses);
@@ -254,7 +252,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose }) => {
               disabled={isLoading}
               onClick={handleCreateTimetablePeriod}
             >
-             {!isLoading?'Done':'....'} 
+              {!isLoading ? "Done" : "...."}
             </button>
             <button
               className="w-64 bg-white border-active-br border-2 text-active rounded-lg p-3 text-center"

@@ -9,6 +9,7 @@ import CreateTimetablePeriod from "./CreateTimetablePeriod";
 import { getClassTimetable } from "../../../services/timetable.service";
 import { getGradeClasses } from "../../../services/gradClass.service";
 import { getUsersCounts } from "../../../services/user.service";
+import { Skeleton } from "@mui/material";
 
 const Dashboard = () => {
   const [table, setTable] = useState([]);
@@ -16,7 +17,7 @@ const Dashboard = () => {
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
   const [classesData, setClassesData] = useState([]);
   const [usersCount, setUsersCount] = useState({});
-
+  const [isTableLoading, setIsTableLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => {
     setIsOpen(false);
@@ -29,17 +30,33 @@ const Dashboard = () => {
   };
   const renderAdminTable = async () => {
     const newTable = Array(30).fill({ subject: "", teacher: "" });
-    const data = await getClassTimetable(classId);
-    data.timetable.forEach((entry) => {
-      const index = days.indexOf(entry.day) * 6 + entry.period - 1;
-      const fullName = `${entry.teacher.name.first} ${entry.teacher.name.last}`;
-      newTable[index] = {
-        subject: entry.course.title,
-        teacher: fullName,
-      };
-    });
-    setTable(newTable);
+    try {
+      setIsTableLoading(true);
+      const data = await getClassTimetable(classId);
+      setIsTableLoading(false);
+      data.timetable.forEach((entry) => {
+        const index = days.indexOf(entry.day) * 6 + entry.period - 1;
+        const fullName = `${entry.teacher.name.first} ${entry.teacher.name.last}`;
+        newTable[index] = {
+          subject: entry.course.title,
+          teacher: fullName,
+        };
+      });
+      setTable(newTable);
+    } catch (error) {
+      console.error(error);
+      setIsTableLoading(false);
+    }
   };
+
+  const renderSkeleton = () => {
+    return Array(30)
+      .fill(0)
+      .map((_, index) => (
+        <Skeleton key={index} variant="rounded"  height={118} className="col-span-2" />
+      ));
+  };
+
   const getClasses = async () => {
     try {
       const data = await getGradeClasses();
@@ -114,19 +131,19 @@ const Dashboard = () => {
           >
             <CalenderIcon />
           </div>
-          <div className="row-start-2 row-span-1 col-span-1 bg-active-bg text-active center  rounded-lg">
+          <div className="row-start-2 row-span-1 col-span-1  text-active center  rounded-lg">
             Sunday
           </div>
-          <div className="row-start-3 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+          <div className="row-start-3 row-span-1 col-span-1  text-active center rounded-lg">
             Monday
           </div>
-          <div className="row-start-4 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+          <div className="row-start-4 row-span-1 col-span-1  text-active center rounded-lg">
             Tuesday
           </div>
-          <div className="row-start-5 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+          <div className="row-start-5 row-span-1 col-span-1  text-active center rounded-lg">
             Wednesday
           </div>
-          <div className="row-start-6 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+          <div className="row-start-6 row-span-1 col-span-1  text-active center rounded-lg">
             Thursday
           </div>
           <div className=" col-span-2 bg-active-bg text-active text-center py-2 px-4 center rounded-lg">
@@ -148,15 +165,17 @@ const Dashboard = () => {
           <div className=" col-span-2 bg-active-bg text-active text-center py-2 px-4 center rounded-lg">
             1:00 - 2:00
           </div>
-          {table.map((t, index) => (
-            <div
-              key={index}
-              className="col-span-2 bg-gray-100 text-gray-700 text-center py-2 px-4 center flex-col rounded-lg overflow-hidden"
-            >
-              <span>{t.subject}</span>
-              <p className="text-gray-500">{t.teacher}</p>
-            </div>
-          ))}
+          {!isTableLoading
+            ? table?.map((t, index) => (
+                <div
+                  key={index}
+                  className="col-span-2 bg-gray-100 text-gray-700 text-center py-2 px-4 center flex-col rounded-lg overflow-hidden"
+                >
+                  <span>{t.subject}</span>
+                  <p className="text-gray-500">{t.teacher}</p>
+                </div>
+              ))
+            : renderSkeleton()}
         </div>
       </section>
       <CreateTimetablePeriod isOpen={isOpen} onClose={onClose} />

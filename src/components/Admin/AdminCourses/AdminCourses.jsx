@@ -5,6 +5,7 @@ import { useState } from "react";
 import AddNewCourse from "./AddNewCourse";
 import { useEffect } from "react";
 import { getGradeCourses } from "../../../services/courses.service";
+import { Skeleton } from "@mui/material";
 const ListContainer = styled("div")({
   height: "38rem",
   overflowY: "auto",
@@ -32,13 +33,16 @@ const AdminCourses = () => {
   const onOpen = () => setIsOpen(true);
 
   const [gradeCourses, setGradeCourses] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const getData = async () => {
     try {
+      setIsLoading(true);
       const data = await getGradeCourses();
       setGradeCourses(data.courses);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -56,23 +60,34 @@ const AdminCourses = () => {
           <option value="">Class 1</option>
         </select>
       </FixedTopContent>
-      {Array.isArray(gradeCourses) &&
-        gradeCourses.map((courseData) => (
+      {!isLoading ? (
+        Array.isArray(gradeCourses) &&
+        gradeCourses.map((courseData, index) => (
           <div
             key={courseData._id}
             className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
           >
             <div className="flex items-center gap-5">
               <span className="text-lg font-medium">
-                {courseData.department}
+                {index + 1} {courseData.title}
               </span>
-              <p className="font-poppins font-medium">{courseData.courseId}</p>
             </div>
             <span className="cursor-pointer">
               <ThreeDots />
             </span>
           </div>
-        ))}
+        ))
+      ) : (
+        <>
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+        </>
+      )}
 
       <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
         <button

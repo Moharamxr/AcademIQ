@@ -6,6 +6,7 @@ import AddNewTeacher from "./AddNewTeacher";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../../services/user.service";
+import { Skeleton } from "@mui/material";
 const ListContainer = styled("div")({
   height: "38rem",
   overflowY: "auto",
@@ -33,12 +34,16 @@ const Teachers = () => {
   const onOpen = () => setIsOpen(true);
   const [teachers, setTeachers] = useState([]);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const getData = async () => {
     try {
+      setIsLoading(true);
       const data = await getUsers("teacher");
+      setIsLoading(false);
       setTeachers(data.users);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -57,7 +62,7 @@ const Teachers = () => {
           <option value="">Class 1</option>
         </select>
       </FixedTopContent>
-      {teachers.map((teacher, index) => (
+      {!isLoading ?teachers.map((teacher, index) => (
         <div
           key={teacher._id}
           className="between py-3  border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
@@ -72,7 +77,15 @@ const Teachers = () => {
             <ThreeDots />
           </span>
         </div>
-      ))}
+      )) : ( <>
+        <Skeleton  variant="rounded" height={50} />
+        <Skeleton variant="rounded" height={50} />
+        <Skeleton variant="rounded" height={50} />
+        <Skeleton variant="rounded" height={50} />
+        <Skeleton variant="rounded" height={50} />
+        <Skeleton variant="rounded" height={50} />
+        <Skeleton variant="rounded" height={50} />
+      </>)}
       <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
         <button
           className="bg-active text-white rounded-lg py-3 px-6"
