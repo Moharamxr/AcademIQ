@@ -27,12 +27,12 @@ const Sidebar = () => {
   const location = useLocation();
   const role = localStorage.getItem('role');
   const [nav, setNav] = useState({
-    superAdmin: [
+    admin: [
       {
         name: "Home",
         icon: <HomeIcon />,
         activeIcon: <HomeIcon active={true} />,
-        path: "/admin/dashboard",
+        path: "/home",
         active: false,
       },
       {

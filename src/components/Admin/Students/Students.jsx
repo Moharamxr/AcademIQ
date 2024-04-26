@@ -4,7 +4,8 @@ import Stu1 from "../../../assets/connect-teatcher (2).png";
 import styled from "@emotion/styled";
 import AddNewStudent from "./AddNewStudent";
 import { useState } from "react";
-import { getUsers } from "../../../services/admin.service";
+import { useNavigate } from "react-router-dom";
+import { getUsers } from "../../../services/user.service";
 const ListContainer = styled("div")({
   height: "38rem",
   overflowY: "auto",
@@ -32,7 +33,7 @@ const Students = () => {
   const onOpen = () => setIsOpen(true);
 
   const [students, setStudents] = useState([]);
-
+  const navigate = useNavigate();
   const getData = async () => {
     try {
       const data = await getUsers("student");
@@ -59,7 +60,8 @@ const Students = () => {
       {students.map((student, index) => (
         <div
           key={student._id}
-          className="between py-3  border-2 border-gray-200/60 rounded-md px-6"
+          className="between py-3  border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
+          onClick={()=>navigate(`/admin/user/${student._id}`)}
         >
           <div className="flex items-center gap-5">
             <span className="text-lg font-medium">{index + 1}</span>

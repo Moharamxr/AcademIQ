@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { createCourse } from "../../../services/admin.service";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateField } from "@mui/x-date-pickers/DateField";
+import { createCourse } from "../../../services/courses.service";
 
 const AddNewCourse = ({ isOpen, onClose }) => {
   const [title, setTitle] = useState("");

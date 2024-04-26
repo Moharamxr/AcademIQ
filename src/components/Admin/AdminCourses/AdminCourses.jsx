@@ -1,11 +1,10 @@
 import React from "react";
 import ThreeDots from "../../../assets/icons/ThreeDots";
-import Stu1 from "../../../assets/connect-teatcher (2).png";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import AddNewCourse from "./AddNewCourse";
-import { getGradeCourses } from "../../../services/admin.service";
 import { useEffect } from "react";
+import { getGradeCourses } from "../../../services/courses.service";
 const ListContainer = styled("div")({
   height: "38rem",
   overflowY: "auto",
@@ -61,7 +60,7 @@ const AdminCourses = () => {
         gradeCourses.map((courseData) => (
           <div
             key={courseData._id}
-            className="between py-3 border-2 border-gray-200/60 rounded-md px-6"
+            className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
           >
             <div className="flex items-center gap-5">
               <span className="text-lg font-medium">

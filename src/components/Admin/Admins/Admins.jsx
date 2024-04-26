@@ -3,7 +3,8 @@ import Stu1 from "../../../assets/connect-teatcher (2).png";
 import GrayAddImg from "../../../assets/GrayAddImg";
 import AddNewAdmin from "./AddNewAdmin";
 import { useState } from "react";
-import { getUsers } from "../../../services/admin.service";
+import { useNavigate } from "react-router-dom";
+import { getUsers } from "../../../services/user.service";
 
 const Admins = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +12,7 @@ const Admins = () => {
   const onOpen = () => setIsOpen(true);
   
   const [admins, setAdmins] = useState([]);
-
+  const navigate = useNavigate();
   const getData = async () => {
     try {
       const data = await getUsers('admin');
@@ -30,7 +31,8 @@ const Admins = () => {
         return (
           <div
             key={index}
-            className=" bg-white center flex-col p-4 gap-1 rounded-xl"
+            className=" bg-white center flex-col p-4 gap-1 rounded-xl hover:bg-slate-50 hover:cursor-pointer"
+            onClick={()=>navigate(`/admin/user/${admin._id}`)}
           >
             <img src={Stu1} alt="" />
             <span className="text-center text-gray-900 font-poppins font-medium">

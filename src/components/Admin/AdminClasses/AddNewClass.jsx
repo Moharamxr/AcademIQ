@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { createGradeClass } from "../../../services/admin.service";
+import { createGradeClass } from "../../../services/gradClass.service";
 
-const AddNewClass = ({ isOpen, onClose }) => {
+const AddNewClass = ({ isOpen, onClose, reservedClassRooms }) => {
   const [level, setLevel] = useState(1);
   const [classLetter, setClassLetter] = useState("A");
   const [classRoom, setClassRoom] = useState("Room 1");
@@ -26,7 +26,7 @@ const AddNewClass = ({ isOpen, onClose }) => {
       letter: classLetter,
       room: classRoom,
     };
-    
+
     setIsLoading(true);
     try {
       await createGradeClass(newData);
@@ -38,6 +38,14 @@ const AddNewClass = ({ isOpen, onClose }) => {
       setIsLoading(false);
       setError(error.response.data.error);
     }
+  };
+  const renderAvailableRooms = () => {
+    const availableRooms = ["Room 1"];
+
+    for (let i = 2; i <= 30; i++) {
+      availableRooms.push("Room " + i);
+    }
+    return availableRooms.filter((room) => !reservedClassRooms.includes(room));
   };
   return (
     isOpen && (
@@ -98,11 +106,11 @@ const AddNewClass = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleClassRoomChange}
               >
-                <option value="Room 1">Room 1</option>
-                <option value="Room 2">Room 2</option>
-                <option value="Room 3">Room 3</option>
-                <option value="Room 4">Room 4</option>
-                <option value="Room 5">Room 5</option>
+                {renderAvailableRooms().map((room) => (
+                  <option key={room} value={room}>
+                    {room}
+                  </option>
+                ))}
               </select>
             </form>
           </div>

@@ -1,11 +1,11 @@
 import React from "react";
 import ThreeDots from "../../../assets/icons/ThreeDots";
-import Stu1 from "../../../assets/connect-teatcher (2).png";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import AddNewClass from "./AddNewClass";
-import { getGradeClasses } from "../../../services/admin.service";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getGradeClasses } from "../../../services/gradClass.service";
 const ListContainer = styled("div")({
   height: "38rem",
   overflowY: "auto",
@@ -28,17 +28,21 @@ const AdminClasses = () => {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
   const onOpen = () => setIsOpen(true);
-  
+  const navigate = useNavigate();
   const [gradeClasses, setGradeClasses] = useState([]);
+  const [reservedClassRooms, setReservedClassRooms] = useState([]);
 
   const getData = async () => {
     try {
       const data = await getGradeClasses();
       setGradeClasses(data.gradeClasses);
+      const rooms = data.gradeClasses.map((gradeClass) => gradeClass.room);
+      setReservedClassRooms(rooms);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching grade classes: ", error);
     }
   };
+
   useEffect(() => {
     getData();
   }, []);
@@ -56,19 +60,19 @@ const AdminClasses = () => {
       </FixedTopContent>
       {Array.isArray(gradeClasses) &&
         gradeClasses.map((classData) => (
-          <div
-            key={classData._id}
-            className="between py-3 border-2 border-gray-200/60 rounded-md px-6"
-          >
-            <div className="flex items-center gap-5">
-              <span className="text-lg font-medium">
-                {classData.gradeClassId}
+          <div key={classData._id} className="class-card mb-4 hover:bg-slate-100 hover:cursor-pointer" >
+            <div className="class-info flex items-center justify-between py-3 border border-gray-200 rounded-md px-6">
+              <div className="class-details flex items-center space-x-5">
+                <span className="text-lg font-medium">
+                  {classData.gradeClassId}
+                </span>
+                <p className="font-poppins font-medium">{classData.letter}</p>
+                <p className="font-poppins font-medium">{classData.room}</p>
+              </div>
+              <span className="more-options cursor-pointer">
+                <ThreeDots />
               </span>
-              <p className="font-poppins font-medium">{classData.letter}</p>
             </div>
-            <span className="cursor-pointer">
-              <ThreeDots />
-            </span>
           </div>
         ))}
 
@@ -80,7 +84,11 @@ const AdminClasses = () => {
           Add Class
         </button>
       </FixedBottomContent>
-      <AddNewClass isOpen={isOpen} onClose={onClose} />
+      <AddNewClass
+        isOpen={isOpen}
+        onClose={onClose}
+        reservedClassRooms={reservedClassRooms}
+      />
     </ListContainer>
   );
 };

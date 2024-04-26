@@ -1,5 +1,5 @@
 import axios from "axios";
-const path = "http://13.60.57.85";
+const path = "https://academiq.onrender.com";
 export const login = async (email, password) => {
   const response = await axios.post(
     `${path}/auth/login`,

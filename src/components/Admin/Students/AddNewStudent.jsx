@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createUser } from "../../../services/admin.service";
+import { createUser } from "../../../services/user.service";
 
 const AddNewStudent = ({ isOpen, onClose }) => {
   const [day, setDay] = useState("");
