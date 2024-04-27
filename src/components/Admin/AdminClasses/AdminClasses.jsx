@@ -33,12 +33,22 @@ const AdminClasses = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [gradeClasses, setGradeClasses] = useState([]);
   const [reservedClassRooms, setReservedClassRooms] = useState([]);
+  const [selectedGrade, setSelectedGrade] = useState(0);
 
   const getData = async () => {
     try {
       setIsLoading(true);
       const data = await getGradeClasses();
-      setGradeClasses(data.gradeClasses);
+      console.log("Selected Grade:", selectedGrade);
+      if (parseInt(selectedGrade) === 0) {
+        setGradeClasses(data.gradeClasses);
+      } else {
+        setGradeClasses(
+          data?.gradeClasses?.filter(
+            (gradeClass) => gradeClass.level === parseInt(selectedGrade)
+          )
+        );
+      }
       setIsLoading(false);
       const rooms = data.gradeClasses.map((gradeClass) => gradeClass.room);
       setReservedClassRooms(rooms);
@@ -49,18 +59,39 @@ const AdminClasses = () => {
   };
 
   useEffect(() => {
+    console.log("selectedGrade: ", selectedGrade);
     getData();
-  }, []);
+  }, [selectedGrade]);
+
+  const navigateToClassDetails = (classId) => {
+    navigate(`/admin/classes/${classId}`);
+  };
+
+  const handleGradeChange = (e) => {
+    setSelectedGrade(e.target.value);
+  };
+
+  // make a filtered array of classes based on selected grade
+
   return (
     <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
       <FixedTopContent className="between bg-white  py-5">
         <h2 className="text-2xl ">Classes</h2>
         <select
-          name=""
-          id=""
+          name="grades"
+          id="grades"
           className="bg-gray-100 rounded-lg p-3 outline-none"
+          onChange={handleGradeChange}
+          value={selectedGrade}
         >
-          <option value="">Class 1</option>
+          <option value={0}>All Grades</option>
+          {Array(12)
+            .fill(0)
+            .map((arr, index) => (
+              <option key={index} value={index + 1}>
+                Grade {index + 1}
+              </option>
+            ))}
         </select>
       </FixedTopContent>
       {!isLoading ? (
@@ -69,6 +100,7 @@ const AdminClasses = () => {
           <div
             key={classData._id}
             className="class-card mb-4 hover:bg-slate-100 hover:cursor-pointer"
+            onClick={() => navigateToClassDetails(classData._id)}
           >
             <div className="class-info flex items-center justify-between py-3 border border-gray-200 rounded-md px-6">
               <div className="class-details flex items-center space-x-5">

@@ -44,3 +44,16 @@ export const createCourse = async (newData) => {
     console.log(response.data);
     return response.data;
   };
+  export const updateCourse = async (id, newData) => {
+    const token = localStorage.getItem("token");
+    const response = await axios.put(`${path}/courses/${id}`, newData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  
+    console.log(response.data.message);
+    console.log(response.data);
+    return response.data;
+  };

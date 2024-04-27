@@ -6,6 +6,7 @@ import AddNewCourse from "./AddNewCourse";
 import { useEffect } from "react";
 import { getGradeCourses } from "../../../services/courses.service";
 import { Skeleton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 const ListContainer = styled("div")({
   height: "38rem",
   overflowY: "auto",
@@ -31,33 +32,62 @@ const AdminCourses = () => {
     getData();
   };
   const onOpen = () => setIsOpen(true);
+  const [selectedGrade, setSelectedGrade] = useState(0);
 
+  const navigate = useNavigate();
   const [gradeCourses, setGradeCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const getData = async () => {
     try {
       setIsLoading(true);
       const data = await getGradeCourses();
-      setGradeCourses(data.courses);
+      console.log("Selected Grade:", selectedGrade);
+      if (parseInt(selectedGrade) === 0) {
+        setGradeCourses(data.courses);
+      } else {
+        setGradeCourses(
+          data.courses.filter(
+            (course) => parseInt(course?.gradeClass?.gradeLevel) === parseInt(selectedGrade)
+          )
+        );
+      }
       setIsLoading(false);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching grade courses: ", error);
       setIsLoading(false);
     }
   };
+  
   useEffect(() => {
     getData();
-  }, []);
+  }, [selectedGrade]);
+
+  const navigateToCourseDetails = (id) => {
+    navigate(`/admin/courses/${id}`);
+  };
+
+  const handleGradeChange = (e) => {
+    setSelectedGrade(e.target.value);
+  };
   return (
     <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
       <FixedTopContent className="between bg-white  py-5">
         <h2 className="text-2xl ">Courses</h2>
         <select
-          name=""
-          id=""
+          name="grades"
+          id="grades"
           className="bg-gray-100 rounded-lg p-3 outline-none"
+          onChange={handleGradeChange}
+          value={selectedGrade}
         >
-          <option value="">Class 1</option>
+          <option value={0}>All Grades</option>
+          {Array(12)
+            .fill(0)
+            .map((arr, index) => (
+              <option key={index} value={index + 1}>
+                Grade {index + 1}
+              </option>
+            ))}
         </select>
       </FixedTopContent>
       {!isLoading ? (
@@ -66,6 +96,7 @@ const AdminCourses = () => {
           <div
             key={courseData._id}
             className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
+            onClick={() => navigateToCourseDetails(courseData._id)}
           >
             <div className="flex items-center gap-5">
               <span className="text-lg font-medium">
