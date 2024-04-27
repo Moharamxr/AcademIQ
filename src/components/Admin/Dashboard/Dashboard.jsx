@@ -160,7 +160,7 @@ const Dashboard = () => {
           >
             <CalenderIcon />
           </div>
-          {days?.map((day, index) => (
+          {/* {days?.map((day, index) => (
             <div
               key={index}
               className={`row-start-${
@@ -169,7 +169,22 @@ const Dashboard = () => {
             >
               {day}
             </div>
-          ))}
+          ))} */}
+          <div className="row-start-2 row-span-1 col-span-1 bg-active-bg text-active center  rounded-lg">
+            Sunday
+          </div>
+          <div className="row-start-3 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+            Monday
+          </div>
+          <div className="row-start-4 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+            Tuesday
+          </div>
+          <div className="row-start-5 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+            Wednesday
+          </div>
+          <div className="row-start-6 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+            Thursday
+          </div>
           {periods?.map((period, index) => (
             <div
               key={index}
