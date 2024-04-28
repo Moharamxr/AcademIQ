@@ -8,7 +8,6 @@ import ToDoPage from "../components/Student/todo-list/ToDoPage";
 import StuAssignments from "../components/Student/assignments/StuAssignments";
 import Child from "../components/Parent/child/Child";
 import Teacher from "../components/Teacher/home/Teacher";
-import TeacherClasses from "../components/Teacher/classes/TeacherClasses";
 import TeacherGrades from "../components/Teacher/grades/TeacherGrades";
 import TeacherGradesDetails from "../components/Teacher/grades/TeacherGradesDetails";
 import TeacherExams from "../components/Teacher/exams/TeacherExams";
@@ -27,6 +26,8 @@ import AdminCourses from "../components/Admin/AdminCourses/AdminCourses";
 import UserProfile from "../components/Admin/profile/UserProfile";
 import AdminCourseDetails from "../components/Admin/AdminCourses/AdminCourseDetails";
 import AdminClassDetails from "../components/Admin/AdminClasses/AdminClassDetails";
+import UserCourses from "../components/Teacher/classes/UserCourses";
+import CourseDetailsPage from "../components/Teacher/classes/CourseDetailsPage";
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
   const routes = {
@@ -78,8 +79,12 @@ const AcademiqRoutes = () => {
         component: <StuAssignments />,
       },
       {
-        path: "/classes",
-        component: <TeacherClasses />,
+        path: "/courses",
+        component: <UserCourses />,
+      },
+      {
+        path: "/courses/details/:id",
+        component: <CourseDetailsPage />,
       },
       {
         path: "/exams",
@@ -96,12 +101,16 @@ const AcademiqRoutes = () => {
     ],
     teacher: [
       {
-        path: "/teacher",
+        path: "/home",
         component: <Teacher />,
       },
       {
-        path: "/classes",
-        component: <TeacherClasses />,
+        path: "/courses",
+        component: <UserCourses />,
+      },
+      {
+        path: "/courses/details/:id",
+        component: <CourseDetailsPage />,
       },
       {
         path: "/grades/details",

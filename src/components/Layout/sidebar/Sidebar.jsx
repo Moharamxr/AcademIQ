@@ -123,10 +123,10 @@ const Sidebar = () => {
         active: false,
       },
       {
-        name: "Classes",
+        name: "Courses",
         icon: <ClassesIcon />,
         activeIcon: <ClassesIcon active={true} />,
-        path: "/classes",
+        path: "/courses",
         active: false,
       },
       {
@@ -160,10 +160,10 @@ const Sidebar = () => {
         active: false,
       },
       {
-        name: "Classes",
+        name: "Courses",
         icon: <ClassesIcon />,
         activeIcon: <ClassesIcon active={true} />,
-        path: "/classes",
+        path: "/courses",
         active: false,
       },
       {

@@ -49,7 +49,6 @@ const AddNewStudent = ({ isOpen, onClose }) => {
     setNewStudentData({ ...newStudentData, state: e.target.value });
   };
 
-
   const handleGenderChange = (e) => {
     setNewStudentData({ ...newStudentData, gender: e.target.value });
   };
@@ -76,9 +75,15 @@ const AddNewStudent = ({ isOpen, onClose }) => {
   const isValidate = () => {
     if (newStudentData.firstName.length < 2) {
       setError("First name must be at least 2 characters");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (newStudentData.lastName.length < 2) {
       setError("Last name must be at least 2 characters");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (
       newStudentData.ssn.length < 14 &&
@@ -86,42 +91,61 @@ const AddNewStudent = ({ isOpen, onClose }) => {
         !newStudentData.ssn.startsWith("3"))
     ) {
       setError("SSN must be 14 characters and start with 2 or 3");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (
       newStudentData.phone.length < 11 &&
       !newStudentData.phone.startsWith("01")
     ) {
       setError("Phone must be 11 characters and start with 01");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (newStudentData.city.length === 0) {
       setError("City must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (newStudentData.street.length === 0) {
       setError("Street must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (newStudentData.state.length === 0) {
       setError("State must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
-    }   else if (day === "" || month === "" || year === "") {
+    } else if (day === "" || month === "" || year === "") {
       setError("Birthdate must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (newStudentData.gradeClassId.length === 0) {
       setError("Grade Class ID must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     }
-  
-    // If all validations pass, clear the error after 3 seconds
-    setTimeout(() => {
-      setError("");
-    }, 3000);
-    
     return true;
+  };
+  const closeModel = () => {
+    reset();
+    onClose();
   };
 
   const handleAddNewStudent = async () => {
-    const isValid = isValidate(); 
+    const isValid = isValidate();
     if (!isValid) {
-      return; 
+      return;
     }
     const requestData = {
       firstName: newStudentData.firstName,
@@ -297,7 +321,7 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleGenderChange}
               >
-                <option value='' >select</option>
+                <option value="">select</option>
                 <option value="male">male</option>
                 <option value="female">female</option>
               </select>
@@ -386,7 +410,7 @@ const AddNewStudent = ({ isOpen, onClose }) => {
             </button>
             <button
               className="w-64 bg-active rounded-lg p-3  text-center text-white "
-              onClick={onClose}
+              onClick={closeModel}
             >
               Cancel
             </button>

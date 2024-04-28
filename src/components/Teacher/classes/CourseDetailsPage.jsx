@@ -20,7 +20,7 @@ const TeacherClassesContainer = styled("div")({
     background: "transparent",
   },
 });
-const TeacherClasses = () => {
+const CourseDetailsPage = () => {
   const [activeTab, setActiveTab] = useState(0);
   const tabs = [
     { label: "Posts", content: <TeachersPosts /> },
@@ -64,4 +64,4 @@ const TeacherClasses = () => {
   );
 };
 
-export default TeacherClasses;
+export default CourseDetailsPage;

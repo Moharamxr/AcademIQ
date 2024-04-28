@@ -52,8 +52,11 @@ const AddNewClass = ({ isOpen, onClose, reservedClassRooms }) => {
       <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-600 bg-opacity-50">
         <section className="bg-white rounded-xl p-5 w-1/2">
           <h2 className="font-poppins text-2xl font-medium">Add New Class </h2>
-          <span className="text-center text-red-500">{error && error}</span>
-          <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
+          {error && (
+            <p className="bg-red-200 text-red-700 p-2 rounded-lg text-sm text-center">
+              {error}
+            </p>
+          )}{" "}          <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
             <form className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Level" className="text-active">
                 Level

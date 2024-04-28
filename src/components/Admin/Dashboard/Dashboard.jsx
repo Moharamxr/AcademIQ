@@ -6,7 +6,10 @@ import AdminsIcon from "../../../assets/icons/AdminsIcon";
 import ThreeDots from "../../../assets/icons/ThreeDots";
 import CalenderIcon from "../../../assets/icons/CalenderIcon";
 import CreateTimetablePeriod from "./CreateTimetablePeriod";
-import { getClassTimetable } from "../../../services/timetable.service";
+import {
+  deleteTimetablePeriod,
+  getClassTimetable,
+} from "../../../services/timetable.service";
 import { getGradeClasses } from "../../../services/gradClass.service";
 import { getUsersCounts } from "../../../services/user.service";
 import { Skeleton } from "@mui/material";
@@ -29,6 +32,7 @@ const Dashboard = () => {
   const [tableError, setTableError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteToggle, setDeleteToggle] = useState(false);
+  const [dropMenu, setDropMenu] = useState(false);
   const onClose = () => {
     setIsOpen(false);
     renderAdminTable();
@@ -39,7 +43,7 @@ const Dashboard = () => {
     setClassId(e.target.value);
   };
   const renderAdminTable = async () => {
-    const newTable = Array(30).fill({ subject: "", teacher: "" });
+    const newTable = Array(30).fill({ subject: "", teacher: "", id: "" });
     try {
       setIsTableLoading(true);
       const data = await getClassTimetable(classId);
@@ -51,6 +55,7 @@ const Dashboard = () => {
         newTable[index] = {
           subject: entry.course.title,
           teacher: fullName,
+          id: entry._id,
         };
       });
       setTable(newTable);
@@ -98,12 +103,31 @@ const Dashboard = () => {
   }, [classId]);
 
   const toggleDelete = () => {
+    if (deleteToggle) setDropMenu(false);
     setDeleteToggle(!deleteToggle);
   };
 
-  const handleDeletePeriod = async () => {
+  const toggleDropMenu = () => {
+    setDropMenu(!dropMenu);
+    setDeleteToggle(false);
+  };
+
+  const handleDeletePeriod = async (periodId) => {
+    if (!deleteToggle) return;
+    if (periodId === "") return;
+
+    const isConfirm = window.confirm(
+      "Are you sure you want to delete this period?"
+    );
+    if (!isConfirm) return;
     try {
-    } catch (error) {}
+      await deleteTimetablePeriod(classId, periodId);
+      alert("Period deleted successfully");
+      renderAdminTable();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete period");
+    }
   };
 
   return (
@@ -149,9 +173,23 @@ const Dashboard = () => {
             ))}
           </select>
 
-          <span onClick={toggleDelete}>
-            <ThreeDots />
-          </span>
+          <div className="flex center gap-3 px-3 ">
+            {dropMenu && (
+              <div
+                className={`${
+                  !deleteToggle ? "bg-white" : "bg-red-400"
+                }  shadow-lg rounded-lg p-2 z-10`}
+              >
+                <p onClick={toggleDelete} className="hover:cursor-pointer">
+                  {deleteToggle ? "Disable" : "Enable"} Delete Period
+                </p>
+              </div>
+            )}
+
+            <span onClick={toggleDropMenu} className="py-3">
+              <ThreeDots />
+            </span>
+          </div>
         </div>
         <div className="grid grid-cols-13 grid-rows-6 pt-5 gap-5">
           <div
@@ -160,29 +198,20 @@ const Dashboard = () => {
           >
             <CalenderIcon />
           </div>
-          {/* {days?.map((day, index) => (
-            <div
-              key={index}
-              className={`row-start-${
-                index + 2
-              } row-span-1 col-span-1  text-active bg-active-bg text-[15px] center  rounded-lg`}
-            >
-              {day}
-            </div>
-          ))} */}
-          <div className="row-start-2 row-span-1 col-span-1 bg-active-bg text-active center  rounded-lg">
+
+          <div className="row-start-2 row-span-1 col-span-1 bg-active-bg text-active center text-[15px]  rounded-lg">
             Sunday
           </div>
-          <div className="row-start-3 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+          <div className="row-start-3 row-span-1 col-span-1 bg-active-bg text-active center text-[15px] rounded-lg">
             Monday
           </div>
-          <div className="row-start-4 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+          <div className="row-start-4 row-span-1 col-span-1 bg-active-bg text-active center text-[15px] rounded-lg">
             Tuesday
           </div>
-          <div className="row-start-5 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+          <div className="row-start-5 row-span-1 col-span-1 bg-active-bg text-active center text-[13px] rounded-lg">
             Wednesday
           </div>
-          <div className="row-start-6 row-span-1 col-span-1 bg-active-bg text-active center rounded-lg">
+          <div className="row-start-6 row-span-1 col-span-1 bg-active-bg text-active center text-[15px] rounded-lg">
             Thursday
           </div>
           {periods?.map((period, index) => (
@@ -197,7 +226,11 @@ const Dashboard = () => {
             ? table?.map((t, index) => (
                 <div
                   key={index}
-                  className="col-span-2 bg-gray-100 text-gray-700 text-center py-2 px-4 center flex-col rounded-lg overflow-hidden"
+                  className={`col-span-2 bg-gray-100 text-gray-700 text-center py-2 px-4 center flex-col rounded-lg overflow-hidden ${
+                    deleteToggle &&
+                    "hover:cursor-pointer hover:bg-red-400 hover:text-white"
+                  }`}
+                  onClick={() => handleDeletePeriod(t.id)}
                 >
                   <span>{t.subject}</span>
                   <p className="text-gray-500">{t.teacher}</p>
@@ -206,7 +239,7 @@ const Dashboard = () => {
             : renderSkeleton()}
         </div>
       </section>
-      <CreateTimetablePeriod isOpen={isOpen} onClose={onClose} />
+      <CreateTimetablePeriod isOpen={isOpen} onClose={onClose} classId={classId} />
     </div>
   );
 };

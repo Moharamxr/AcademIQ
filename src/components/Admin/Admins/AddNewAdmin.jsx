@@ -69,43 +69,78 @@ const AddNewAdmin = ({ isOpen, onClose }) => {
     });
   };
 
+  const closeModel = () => {
+    reset();
+    onClose();
+  };
+
   const isValidate = () => {
     if (newAdminData.firstName.length < 2) {
       setError("First name must be at least 2 characters");
-      return false;
+      setTimeout(() => {
+      setError("");
+    }, 3000);
+    return false;
+      
     } else if (newAdminData.lastName.length < 2) {
       setError("Last name must be at least 2 characters");
-      return false;
+      setTimeout(() => {
+      setError("");
+    }, 3000);
+    return false;
+      
     } else if (
       newAdminData.ssn.length < 14 &&
       (!newAdminData.ssn.startsWith("2") || !newAdminData.ssn.startsWith("3"))
     ) {
       setError("SSN must be 14 characters and start with 2 or 3");
-      return false;
+      setTimeout(() => {
+      setError("");
+    }, 3000);
+    return false;
+      
     } else if (
       newAdminData.phone.length < 11 &&
       !newAdminData.phone.startsWith("01")
     ) {
       setError("Phone must be 11 characters and start with 01");
-      return false;
+      setTimeout(() => {
+      setError("");
+    }, 3000);
+    return false;
+      
     } else if (newAdminData.city.length === 0) {
       setError("City must be filled");
-      return false;
+      setTimeout(() => {
+      setError("");
+    }, 3000);
+    return false;
+      
     } else if (newAdminData.street.length === 0) {
       setError("Street must be filled");
-      return false;
+      setTimeout(() => {
+      setError("");
+    }, 3000);
+    return false;
+      
     } else if (newAdminData.state.length === 0) {
       setError("State must be filled");
-      return false;
+      setTimeout(() => {
+      setError("");
+    }, 3000);
+    return false;
+      
     } else if (day === "" || month === "" || year === "") {
       setError("Birthdate must be filled");
-      return false;
+      setTimeout(() => {
+      setError("");
+    }, 3000);
+    return false;
+      
     }
 
     // If all validations pass, clear the error after 3 seconds
-    setTimeout(() => {
-      setError("");
-    }, 3000);
+    
 
     return true;
   };
@@ -365,8 +400,8 @@ const AddNewAdmin = ({ isOpen, onClose }) => {
               Done
             </button>
             <button
-              className="w-64 bg-active rounded-lg p-3  text-center text-white "
-              onClick={onClose}
+              className="w-64 bg-white rounded-lg p-3  text-center text-active  border-active-br border-2"
+              onClick={closeModel}
             >
               Cancel
             </button>

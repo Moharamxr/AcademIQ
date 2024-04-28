@@ -3,7 +3,7 @@ import Magnifier from "../../assets/Magnifier.png";
 import LoginLogo from "../../assets/icons/LoginLogo";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/auth.service";
-import useHttpRequest from "../../hooks/useHttpRequest";
+// import useHttpRequest from "../../hooks/useHttpRequest";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Navigate } from 'react-router-dom'
 
@@ -13,8 +13,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const { isLoading, error, data, post } = useHttpRequest();
+  const [isLoading, setIsLoading] = useState(false);
+  // const { isLoading, error, data, post } = useHttpRequest();
 
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
@@ -65,14 +65,16 @@ const Login = () => {
       //   setErrorMessage(error.response.data.error);
       
       try {
-        const response = await login(email, password);
-        console.log("res", response);
+        setIsLoading(true);
+        await login(email, password);
+        setIsLoading(false);
+        // console.log("res", response);
         setErrorMessage("");
         navigate("/home");
       } catch (error) {
         console.error("ERR", error);
+        setIsLoading(false);
         setErrorMessage(error.response.data.error);
-        
       }
     }
   };

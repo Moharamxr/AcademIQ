@@ -3,7 +3,7 @@ import { createTimetablePeriod } from "../../../services/timetable.service";
 import { getGradeCourses } from "../../../services/courses.service";
 import { getTeachersByCourse } from "../../../services/user.service";
 
-const CreateTimetablePeriod = ({ isOpen, onClose }) => {
+const CreateTimetablePeriod = ({ isOpen, onClose ,classId }) => {
   const [day, setDay] = useState("");
   const [period, setPeriod] = useState("");
   const [startTime, setStartTime] = useState({ hour: 0, minute: 0 });
@@ -129,7 +129,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose }) => {
         teacherId,
         startTime,
         endTime,
-        id: "66283d3721ad54ce0d9246d3",
+        id: classId,
       };
       try {
         await createTimetablePeriod(newData);

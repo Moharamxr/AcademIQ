@@ -61,7 +61,7 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
   const handleCoursesChange = (e) => {
     // Create a new array with the updated value
     const updatedCourses = [];
-     updatedCourses.push(e.target.value); // Push the new value instead of setting it at index 0
+    updatedCourses.push(e.target.value); // Push the new value instead of setting it at index 0
 
     // Update the state with the new courses array
     setNewTeacherData({ ...newTeacherData, courses: updatedCourses });
@@ -87,12 +87,23 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
     setMonth("");
     setYear("");
   };
+
+  const closeModel = () => {
+    reset();
+    onClose();
+  };
   const isValidate = () => {
     if (newTeacherData.firstName.length < 2) {
       setError("First name must be at least 2 characters");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (newTeacherData.lastName.length < 2) {
       setError("Last name must be at least 2 characters");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (
       newTeacherData.ssn.length < 14 &&
@@ -100,47 +111,68 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
         !newTeacherData.ssn.startsWith("3"))
     ) {
       setError("SSN must be 14 characters and start with 2 or 3");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (
       newTeacherData.phone.length < 11 &&
       !newTeacherData.phone.startsWith("01")
     ) {
       setError("Phone must be 11 characters and start with 01");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (newTeacherData.city.length === 0) {
       setError("City must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (newTeacherData.street.length === 0) {
       setError("Street must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (newTeacherData.state.length === 0) {
       setError("State must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (newTeacherData.department.length === 0) {
       setError("Department must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (newTeacherData.courses.length === 0) {
       setError("Courses must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     } else if (day === "" || month === "" || year === "") {
       setError("Birthdate must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return false;
     }
-  
+
     // If all validations pass, clear the error after 3 seconds
-     setTimeout(() => {
-      setError("");
-    }, 3000);
-    
+
     return true;
   };
-  
+
   const handleAddNewTeacher = async () => {
-    const isValid = isValidate(); 
+    const isValid = isValidate();
     if (!isValid) {
-      return; 
+      return;
     }
-  
+
     const requestData = {
       firstName: newTeacherData.firstName,
       lastName: newTeacherData.lastName,
@@ -155,10 +187,10 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
       courses: newTeacherData.courses,
       role: newTeacherData.role,
     };
-  
+
     try {
       const data = await createUser(requestData);
-      console.log('New teacher added successfully!',data);
+      console.log("New teacher added successfully!", data);
       reset();
       onClose();
     } catch (error) {
@@ -170,7 +202,6 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
       }
     }
   };
-  
 
   return (
     isOpen && (
@@ -210,7 +241,7 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
             <form className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Birthdate" className="text-active">
-              Birthdate
+                Birthdate
               </label>
               <div className="between gap-5" id="Birthdate">
                 <select
@@ -424,7 +455,7 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
             </button>
             <button
               className="w-64 bg-white rounded-lg p-3 border-2 border-active-br text-center text-active "
-              onClick={onClose}
+              onClick={closeModel}
             >
               Cancel
             </button>
