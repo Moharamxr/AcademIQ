@@ -1,6 +1,6 @@
 import React from "react";
 import Stu1 from "../../../../assets/connect-teatcher (2).png";
-const TeacherStudents = () => {
+const CourseStudents = () => {
   return (
     <div className="flex flex-col px-5 gap-3">
       <div className="flex items-center gap-5">
@@ -62,4 +62,4 @@ const TeacherStudents = () => {
   );
 };
 
-export default TeacherStudents;
+export default CourseStudents;

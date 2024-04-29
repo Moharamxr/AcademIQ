@@ -3,9 +3,10 @@ import Magnifier from "../../assets/Magnifier.png";
 import LoginLogo from "../../assets/icons/LoginLogo";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/auth.service";
-// import useHttpRequest from "../../hooks/useHttpRequest";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Navigate } from 'react-router-dom'
+import { Navigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../store/slices/userSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,8 +15,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // const { isLoading, error, data, post } = useHttpRequest();
 
+  const dispatch = useDispatch();
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   const handleEmailChange = (event) => {
@@ -46,29 +47,22 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (isValidData()) {
-      // await post(
-      //   "/auth/login",
-      //   { email, password },
-      //   {
-      //     "Content-Type": "application/json",
-      //   }
-      // );
-      // if (!error && data) {
-      //   console.log("res", data);
-      //   localStorage.setItem("isLoggedIn", true);
-      //   localStorage.setItem("token", data.user.token);
-
-      //   setErrorMessage("");
-      //   navigate("/home");
-      // } else {
-      //   console.error("ERR", error);
-      //   setErrorMessage(error.response.data.error);
-      
       try {
         setIsLoading(true);
-        await login(email, password);
+        const data = await login(email, password);
+        const newUserData = {
+          name: data?.user?.name,
+          _id: data?.user?._id,
+          userId: data?.user?.userId,
+          username: data?.user?.username,
+          email: data?.user?.email,
+          role: data?.user?.role,
+          courses: data?.user?.courses,
+        };
+        dispatch(setUserData(newUserData));
         setIsLoading(false);
-        // console.log("res", response);
+        
+
         setErrorMessage("");
         navigate("/home");
       } catch (error) {

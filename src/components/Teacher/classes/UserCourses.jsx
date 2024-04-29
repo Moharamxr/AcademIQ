@@ -2,10 +2,10 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { useEffect } from "react";
-import { getGradeCourses } from "../../../services/courses.service";
 import { Skeleton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ThreeDots from "../../../assets/icons/ThreeDots";
+import { getUserById } from "../../../services/user.service";
 const ListContainer = styled("div")({
   height: "38rem",
   overflowY: "auto",
@@ -24,11 +24,12 @@ const UserCourses = () => {
   const navigate = useNavigate();
   const [gradeCourses, setGradeCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const id = localStorage.getItem("userId");
   const getData = async () => {
     try {
       setIsLoading(true);
-      const data = await getGradeCourses();
-        setGradeCourses(data.courses);
+      const data = await getUserById(id);
+        setGradeCourses(data?.user?.courses);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching grade courses: ", error);
@@ -44,9 +45,6 @@ const UserCourses = () => {
     navigate(`details/${id}`);
   };
 
-  const handleGradeChange = (e) => {
-    setSelectedGrade(e.target.value);
-  };
   return (
     <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
       <FixedTopContent className="between bg-white  py-5">
@@ -57,7 +55,7 @@ const UserCourses = () => {
         Array.isArray(gradeCourses) &&
         gradeCourses.map((courseData, index) => (
           <div
-            key={courseData._id}
+            key={index}
             className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
             onClick={() => navigateToCourseDetails(courseData._id)}
           >

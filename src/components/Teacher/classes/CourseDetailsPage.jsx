@@ -1,9 +1,9 @@
 import React from "react";
 import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
-import TeachersPosts from "./Posts/TeachersPosts";
-import TeacherFiles from "./Files/TeacherFiles";
-import TeacherStudents from "./Students/TeacherStudents";
-import TeacherAssignments from "./Assignments/TeacherAssignments";
+import CoursePosts from "./Posts/CoursePosts";
+import CourseFiles from "./Files/CourseFiles";
+import CourseStudents from "./Students/CourseStudents";
+import CourseAssignments from "./Assignments/CourseAssignments";
 import { useState } from "react";
 import styled from "@emotion/styled";
 
@@ -23,11 +23,12 @@ const TeacherClassesContainer = styled("div")({
 const CourseDetailsPage = () => {
   const [activeTab, setActiveTab] = useState(0);
   const tabs = [
-    { label: "Posts", content: <TeachersPosts /> },
-    { label: "Files", content: <TeacherFiles /> },
-    { label: "Students", content: <TeacherStudents /> },
-    { label: "Assignment", content: <TeacherAssignments /> },
+    { label: "Posts", content: <CoursePosts /> },
+    { label: "Files", content: <CourseFiles /> },
+    { label: "Students", content: <CourseStudents /> },
+    { label: "Assignment", content: <CourseAssignments /> },
   ];
+  
   return (
     <>
       <div className="w-full lg:w-8/12 ">
@@ -52,9 +53,7 @@ const CourseDetailsPage = () => {
               ))}
             </div>
           </FixedTopContent>
-          <div className="pt-7 ">
-              {tabs[activeTab].content}
-          </div>
+          <div className="pt-7 ">{tabs[activeTab].content}</div>
         </TeacherClassesContainer>
       </div>
       <aside className="w-full lg:w-4/12 hidden md:block">
