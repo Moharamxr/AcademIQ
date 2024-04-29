@@ -17,6 +17,7 @@ const PostCard = ({ post, getPostsData, courseId }) => {
 
   const [isLiked, setIsLiked] = useState(post?.isLiked);
   const [likesCount, setLikesCount] = useState(post?.likes?.length);
+  const [commentsCount, setCommentsCount] = useState(post?.comments?.length);
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
@@ -39,7 +40,7 @@ const PostCard = ({ post, getPostsData, courseId }) => {
   }, []);
 
   const toggleComments = () => {
-    if (post?.comments?.length === 0) return;
+    if (commentsCount === 0) return;
     setShowComments(!showComments);
   };
 
@@ -49,6 +50,7 @@ const PostCard = ({ post, getPostsData, courseId }) => {
       const data = await getPostComments(post._id);
       setIsCommentsLoading(false);
       setComments(data?.postComments);
+      setCommentsCount(data?.postComments?.length);
     } catch (error) {
       console.error("Error fetching comments: ", error);
       setIsCommentsLoading(false);
@@ -56,7 +58,7 @@ const PostCard = ({ post, getPostsData, courseId }) => {
   };
 
   useEffect(() => {
-    if (showComments && post?.comments?.length > 0) {
+    if (showComments && commentsCount > 0) {
       getComments();
     }
   }, [showComments]);
@@ -75,7 +77,7 @@ const PostCard = ({ post, getPostsData, courseId }) => {
       setAddingComment(false);
       setAddCommentToggle(false);
       setComment("");
-      getPostsData();
+      getComments();
     } catch (error) {
       console.error("Error adding comment: ", error);
       setAddingComment(false);
@@ -87,7 +89,6 @@ const PostCard = ({ post, getPostsData, courseId }) => {
     setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
     try {
       const data = await likePost(post._id);
-
       setLikesCount(data?.post?.likes?.length);
     } catch (error) {
       console.error("Error toggling like: ", error);
@@ -128,9 +129,9 @@ const PostCard = ({ post, getPostsData, courseId }) => {
           className="font-poppins text-gray-400 text-sm  cursor-pointer select-none "
           onClick={toggleComments}
         >
-          {post?.comments?.length === 0
+          {commentsCount === 0
             ? "No Comments"
-            : `${post?.comments?.length} Comments`}
+            : `${commentsCount} Comments`}
         </span>
         <span
           className="font-poppins text-gray-400 text-sm cursor-pointer select-none"

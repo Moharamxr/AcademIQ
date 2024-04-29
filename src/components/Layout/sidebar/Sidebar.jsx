@@ -25,7 +25,7 @@ import StudentsIcon from "../../../assets/icons/StudentsIcon.jsx";
 
 const Sidebar = () => {
   const location = useLocation();
-  const role = localStorage.getItem('role');
+  const role = localStorage.getItem("role");
   const [nav, setNav] = useState({
     admin: [
       {
@@ -37,14 +37,14 @@ const Sidebar = () => {
       },
       {
         name: "Courses",
-        icon: <ClassesIcon  />,
+        icon: <ClassesIcon />,
         activeIcon: <ClassesIcon active={true} />,
         path: "/admin/courses",
         active: false,
       },
       {
         name: "Classes",
-        icon: <ClassesIcon  />,
+        icon: <ClassesIcon />,
         activeIcon: <ClassesIcon active={true} />,
         path: "/admin/classes",
         active: false,
@@ -228,7 +228,7 @@ const Sidebar = () => {
           ...prevNavBar,
           [role]: prevNavBar[role].map((item) => ({
             ...item,
-            active: item.path === path,
+            active: path.includes(item.path),
           })),
         };
         return updatedNav;

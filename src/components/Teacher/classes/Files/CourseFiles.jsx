@@ -4,29 +4,11 @@ import Pdf from "../../../../assets/vscode-icons_file-type-pdf2.png";
 import { getCourseById } from "../../../../services/courses.service";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@mui/material";
-const CourseFiles = () => {
-  const [materials, setMaterials] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const { id } = useParams();
-  const fetchMaterials = async () => {
-    try {
-      const data = await getCourseById(id);
-      setMaterials(data?.course?.materials);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching materials: ", error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchMaterials();
-  }, []);
-
+const CourseFiles = ({ materials, isLoading }) => {
   return (
     <div className="w-full divide-y-2 px-4 py-3">
       {materials?.length > 0
-        ? !loading &&
+        ? !isLoading &&
           materials.map((file, index) => (
             <div className="flex gap-3 py-2">
               <img src={Pdf} alt="Pdf" />
@@ -38,10 +20,10 @@ const CourseFiles = () => {
               </p>
             </div>
           ))
-        : !loading && (
+        : !isLoading && (
             <p className="text-center font-poppins">No files available</p>
           )}
-      {loading && (
+      {isLoading && (
         <div className="flex gap-3 py-2">
           <Skeleton variant="rounded" width={40} height={40} />
           <Skeleton variant="text" width={300} height={40} />
