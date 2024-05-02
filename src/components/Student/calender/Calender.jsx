@@ -15,6 +15,7 @@ function Calendar() {
       dayOfMonth: currentDate.toLocaleDateString("en-US", { day: "2-digit" }),
     };
   });
+  
 
   const [activeIndex, setActiveIndex] = useState(
     days.findIndex((day) => day.dayOfMonth === currentDate)
@@ -58,8 +59,8 @@ function Calendar() {
             }`}
           >
             <div className="flex flex-col">
-              <p className="text-lg">{dayOfWeek}</p>
-              <p className="text-center">{dayOfMonth}</p>
+              <p className="text-lg select-none">{dayOfWeek}</p>
+              <p className="text-center select-none">{dayOfMonth}</p>
             </div>
           </div>
         ))}

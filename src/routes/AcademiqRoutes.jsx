@@ -28,6 +28,7 @@ import AdminCourseDetails from "../components/Admin/AdminCourses/AdminCourseDeta
 import AdminClassDetails from "../components/Admin/AdminClasses/AdminClassDetails";
 import UserCourses from "../components/Teacher/classes/UserCourses";
 import CourseDetailsPage from "../components/Teacher/classes/CourseDetailsPage";
+import ClassesForAttendance from "../components/Teacher/attendance/ClassesForAttendance";
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
   const routes = {
@@ -126,6 +127,10 @@ const AcademiqRoutes = () => {
       },
       {
         path: "/attendance",
+        component: <ClassesForAttendance />,
+      },
+      {
+        path: "/attendance/:id",
         component: <Attendance />,
       },
       {
@@ -133,7 +138,7 @@ const AcademiqRoutes = () => {
         component: <QuestionBank />,
       },
       {
-        path: "/question-bank/unit",
+        path: "/question-bank/unit/:id",
         component: <UnitBank />,
       },
       {

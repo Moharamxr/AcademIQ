@@ -60,3 +60,34 @@ export const UpdateGradeClass = async (id,newData) => {
   console.log(response.data);
   return response.data;
 };
+
+export const takeAttendance = async (id,newData) => {
+  const token = localStorage.getItem("token");
+  console.log(newData);
+  const response = await axios.post(`${path}/gradeClasses/${id}/attendance`, newData, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(response.data.message);
+
+  console.log(response.data);
+  return response.data;
+}
+
+export const getGradeClassByCourse = async (id) => {
+  const token = localStorage.getItem("token");
+  const response = await axios.get(`${path}/gradeClasses/course/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(response.data.message);
+
+  console.log(response.data);
+  return response.data;
+}

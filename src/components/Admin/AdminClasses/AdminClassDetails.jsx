@@ -95,29 +95,32 @@ const AdminClassDetails = () => {
                   <div className="center gap-1 col-span-1" key={index}>
                     <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
                       <span className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2">
-                        {c}
+                        {c.title}
                       </span>
                     </p>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="flex gap-5 py-2 px-1">
-              <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-                students of this Class :
-              </p>
-              <div className="grid grid-cols-4 gap-5">
-                {classData?.students?.map((s, index) => (
-                  <div className="center gap-1 col-span-1" key={index}>
-                    <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-                      <span className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2">
-                        {s}
-                      </span>
-                    </p>
-                  </div>
-                ))}
+            {classData?.students.length > 0 && (
+              <div className="flex gap-5 py-2 px-1">
+                <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
+                  students of this Class :
+                </p>
+
+                <div className="grid grid-cols-4 gap-5">
+                  {classData?.students?.map((s, index) => (
+                    <div className="center gap-1 col-span-1" key={index}>
+                      <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
+                        <span className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2">
+                          {s?.name?.first} {s?.name?.last}
+                        </span>
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <FixedBottomContent className="bg-white py-5 px-4 flex flex-row-reverse">
             <button
@@ -127,7 +130,12 @@ const AdminClassDetails = () => {
               Edit Class
             </button>
           </FixedBottomContent>
-          <UpdateClass isOpen={isOpen} onClose={onClose} classData={classData} id={id} />
+          <UpdateClass
+            isOpen={isOpen}
+            onClose={onClose}
+            classData={classData}
+            id={id}
+          />
         </>
       )}
     </div>

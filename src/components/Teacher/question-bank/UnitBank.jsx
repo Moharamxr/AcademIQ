@@ -1,117 +1,177 @@
-import RightArrow from "../../../assets/icons/RightArrow";
+import React, { useEffect, useRef } from "react";
 import ThreeDots from "../../../assets/icons/ThreeDots";
+import styled from "@emotion/styled";
+import { useState } from "react";
+import { Skeleton } from "@mui/material";
+import AddNewQuestion from "./AddNewQuestion";
+import { useParams } from "react-router-dom";
+import { getQuestionBankById } from "../../../services/questionBank.service";
+import EditPen from "../../../assets/icons/EditPen";
+import DeleteQIcon from "../../../assets/icons/DeleteQIcon";
+import ViewQuestion from "./ViewQuestion";
 
-import classes from "./Questionbank.module.css";
+const ListContainer = styled("div")({
+  height: "38rem",
+  overflowY: "auto",
+  "&::-webkit-scrollbar": {
+    width: "0",
+    background: "transparent",
+  },
+});
 
-function UnitBank() {
+const FixedTopContent = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 1;
+`;
+
+const FixedBottomContent = styled.div`
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: ${({ top }) => `${top + 25}px`};
+  left: ${({ left }) => `${left - 40}px`};
+  background-color: #fff;
+  border-radius: 6px;
+  z-index: 10;
+`;
+
+const UnitBank = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => {
+    setIsOpen(false);
+    getData();
+  };
+
+  const onOpen = () => setIsOpen(true);
+  const [viewQuestion, setViewQuestion] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(''); 
+  const closeViewQuestion = () => setViewQuestion(false);
+  const openViewQuestion = (id) => {
+    setSelectedQuestion(id)
+    setViewQuestion(true);
+  }
+  const { id } = useParams();
+  const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [openedIndex, setOpenedIndex] = useState(null); 
+  const dropdownRef = useRef(null);
+
+  const getData = async () => {
+    try {
+      setIsLoading(true);
+      const data = await getQuestionBankById(id);
+      setQuestions(data?.questionBank?.questions);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching grade courses: ", error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        closeDropMenu();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const toggleDropMenu = (index, event) => {
+    event.stopPropagation();
+    const rect = event.currentTarget.getBoundingClientRect();
+    setOpenedIndex(index === openedIndex ? null : index);
+    setMenuPosition({
+      top: rect.top + window.scrollY,
+      left: rect.left + window.scrollX,
+    });
+  };
+
+  const closeDropMenu = () => {
+    setOpenedIndex(null);
+  };
+
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+
   return (
-    <div className="bg-white w-full px-3 rounded-xl">
-      <h3 className="py-3 font-poppins text-lg font-normal leading-10 tracking-normal">
-        Unit 1 Bank
-      </h3>
+    <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
+      <FixedTopContent className="between bg-white  py-5">
+        <h2 className="text-2xl ">Unit Bank</h2>
+      </FixedTopContent>
+      {!isLoading ? (
+        Array.isArray(questions) &&
+        questions.map((question, index) => (
+          <div
+            key={question._id}
+            className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:cursor-pointer hover:bg-gray-100"
+            onClick={()=>openViewQuestion(question._id)}
+          >
+            <div className="flex items-center gap-5">
+              {index + 1}
+              <span className="text-gray-600 ">
+                {question.text}
+              </span>
+            </div>
+            <div
+              className="cursor-pointer center flex-col gap-3"
+              onClick={(e) => toggleDropMenu(index, e)}
+              ref={dropdownRef}
+            >
+              <span>
+                <ThreeDots />
+              </span>
+              {openedIndex === index && (
+                <DropdownMenu top={menuPosition.top} left={menuPosition.left}>
+                  <div className="flex flex-col divide-y-[0.5px] divide-gray-400 bg-gray-200/55 text-center rounded-md text-sm ">
+                    <div className="flex gap-2 px-2 pt-3 pb-2 hover:bg-gray-300 rounded-t-md">
+                      <EditPen /> <span className="font-medium">Edit</span>
+                    </div>
+                    <div className="flex gap-2 px-2 pb-3 pt-2 hover:bg-gray-300 rounded-b-md">
+                      <DeleteQIcon /> <span className="font-medium">Delete</span>
+                    </div>
+                  </div>
+                </DropdownMenu>
+              )}
+            </div>
+          </div>
+        ))
+      ) : (
+        <>
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={50} />
+        </>
+      )}
 
-      <div className="flex gap-3 ">
-        <p
-          className={`${classes.txt} poppins text-xs font-normal leading-5 tracking-normal `}
+      <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
+        <button
+          className="bg-active text-white rounded-lg py-3 px-6"
+          onClick={onOpen}
         >
-          Question bank
-        </p>
-        <div className="flex items-center ">
-          <RightArrow />
-        </div>
-        <div className="font-poppins text-sm font-xs leading-5 tracking-normal text-gray-500">
-          <p>Unit 1 bank</p>
-        </div>
-      </div>
-
-      <div className="py-14">
-        <div className="flex justify-center py-2">
-          <div
-            className={`${classes.card} flex justify-between  border border-gray-200 rounded-lg`}
-          >
-            <div>
-              <p className="p-2 font-poppins text-base font-normal leading-6 tracking-normal">
-                Which of the following aspects of our did you find most
-                impressive ...?
-              </p>
-            </div>
-            <div className="flex items-center pe-5">
-              <ThreeDots />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-center py-2">
-          <div
-            className={`${classes.card} flex justify-between  border border-gray-200 rounded-lg`}
-          >
-            <div>
-              <p className="p-2 font-poppins text-base font-normal leading-6 tracking-normal">
-                Which of the following aspects of our did you find most
-                impressive ...?
-              </p>
-            </div>
-            <div className="flex items-center pe-5">
-              <ThreeDots />
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-center py-2">
-          <div
-            className={`${classes.card} flex justify-between  border border-gray-200 rounded-lg`}
-          >
-            <div>
-              <p className="p-2 font-poppins text-base font-normal leading-6 tracking-normal">
-                Which of the following aspects of our did you find most
-                impressive ...?
-              </p>
-            </div>
-            <div className="flex items-center pe-5">
-              <ThreeDots />
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-center py-2">
-          <div
-            className={`${classes.card} flex justify-between  border border-gray-200 rounded-lg`}
-          >
-            <div>
-              <p className="p-2 font-poppins text-base font-normal leading-6 tracking-normal">
-                Which of the following aspects of our did you find most
-                impressive ...?
-              </p>
-            </div>
-            <div className="flex items-center pe-5">
-              <ThreeDots />
-            </div>
-          </div>
-        </div>
-        x``
-        <div className="flex justify-center py-2">
-          <div
-            className={`${classes.card} flex justify-between  border border-gray-200 rounded-lg`}
-          >
-            <div>
-              <p className="p-2 font-poppins text-base font-normal leading-6 tracking-normal">
-                Which of the following aspects of our did you find most
-                impressive ...?
-              </p>
-            </div>
-            <div className="flex items-center pe-5">
-              <ThreeDots />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="flex justify-center items-center sm:justify-end py-5 ">
-        <div className="flex">
-          <button className="bg-active text-white rounded-lg px-8 py-1 m-0 p-0">
-            Add Question
-          </button>
-        </div>
-      </div>
-    </div>
+          Add Class
+        </button>
+      </FixedBottomContent>
+      <AddNewQuestion isOpen={isOpen} onClose={onClose} id={id} />
+      <ViewQuestion isOpen={viewQuestion} onClose={closeViewQuestion} bankId={id} selectedQuestion={selectedQuestion} />
+    </ListContainer>
   );
-}
+};
+
 export default UnitBank;

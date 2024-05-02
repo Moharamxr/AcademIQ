@@ -131,7 +131,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="w-full hidden lg:block">
+    <div className="w-full ">
       <section className="grid grid-cols-12 gap-5">
         <div className="col-span-10">
           <Announcements />

@@ -5,7 +5,6 @@ import childPhoto from "../../../assets/connect-teatcher (2).png";
 import { getUserById } from "../../../services/user.service";
 const UserProfile = () => {
   const { id } = useParams();
-  console.log(id);
   const [userData, setUserData] = useState({});
 
   const getData = async () => {
@@ -36,7 +35,7 @@ const UserProfile = () => {
         <div className="flex flex-col gap-y-1 divide-y-2 divide-gray-100 bg-white rounded-lg p-3">
           <div className="flex gap-5 py-2 px-1">
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-              Name:{" "}
+              Name:
               <span className="text-gray-600 text-base font-medium">
                 {userData.name.first} {userData.name.last}
               </span>
@@ -44,7 +43,7 @@ const UserProfile = () => {
           </div>
           <div className="flex gap-5 py-2 px-1">
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-              Role :{" "}
+              Role :
               <span className="text-gray-600 text-base font-medium">
                 {userData.role}
               </span>
@@ -52,7 +51,7 @@ const UserProfile = () => {
           </div>
           <div className="flex gap-5 py-2 px-1">
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-              Email:{" "}
+              Email:
               <span className="text-gray-600 text-base font-medium">
                 {userData.email}
               </span>
@@ -60,7 +59,7 @@ const UserProfile = () => {
           </div>
           <div className="flex gap-5 py-2 px-1">
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-              Username:{" "}
+              Username:
               <span className="text-gray-600 text-base font-medium">
                 {userData.username}
               </span>
@@ -68,7 +67,7 @@ const UserProfile = () => {
           </div>
           <div className="flex gap-5 py-2 px-1">
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-              User Id:{" "}
+              User Id:
               <span className="text-gray-600 text-base font-medium">
                 {userData.userId}
               </span>
@@ -77,7 +76,7 @@ const UserProfile = () => {
           {userData.role === "teacher" && (
             <div className="flex gap-5 py-2 px-1">
               <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-                Department:{" "}
+                Department:
                 <span className="text-gray-600 text-base font-medium">
                   {userData.department}
                 </span>
@@ -86,7 +85,7 @@ const UserProfile = () => {
           )}
           <div className="flex gap-5 py-2 px-1">
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-              Gender:{" "}
+              Gender:
               <span className="text-gray-600 text-base font-medium">
                 {userData.gender}
               </span>
@@ -94,7 +93,7 @@ const UserProfile = () => {
           </div>
           <div className="flex gap-5 py-2 px-1">
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-              Birthdate :{" "}
+              Birthdate :
               <span className="text-gray-600 text-base font-medium">
                 {userData.birthdate.slice(0, 10)}
               </span>
@@ -102,22 +101,24 @@ const UserProfile = () => {
           </div>
           <div className="flex gap-5 py-2 px-1">
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-              SSN :{" "}
+              SSN :
               <span className="text-gray-600 text-base font-medium">
                 {userData.ssn}
               </span>
             </p>
           </div>
-          {userData.role!=='admin'&&<div className="flex gap-5 py-2 px-1">
-            <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-              Address :{" "}
-              <span className="text-gray-600 text-base font-medium">
-                {userData.contactInformation?.address.street} ,
-                {userData.contactInformation?.address.city} ,
-                {userData.contactInformation?.address.state}{" "}
-              </span>
-            </p>
-          </div>}
+          {userData.role !== "admin" && (
+            <div className="flex gap-5 py-2 px-1">
+              <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
+                Address :
+                <span className="text-gray-600 text-base font-medium">
+                  {userData.contactInformation?.address.street} ,
+                  {userData.contactInformation?.address.city} ,
+                  {userData.contactInformation?.address.state}
+                </span>
+              </p>
+            </div>
+          )}
           {userData.role === "teacher" && (
             <div className="flex gap-5 py-2 px-1">
               <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
@@ -126,15 +127,31 @@ const UserProfile = () => {
               <div className="flex gap-3">
                 {userData.courses.map((course, index) => (
                   <div className="center gap-1" key={index}>
-                    <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
+                    <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400 bg-active-bg rounded-lg p-1 px-2">
                       <span className="text-gray-600 text-base font-medium">
-                        {course}
+                        {course.title}
                       </span>
                     </p>
                   </div>
                 ))}
               </div>
             </div>
+          )}
+          {userData.role === "student" && userData.parents.father && (
+            <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
+              Father :
+              <span className="text-gray-600 text-base font-medium">
+                {userData?.parents?.father?.email} 
+              </span>
+            </p>
+          )}
+          {userData.role === "student" && userData.parents.mother && (
+            <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
+              Mother :
+              <span className="text-gray-600 text-base font-medium">
+                {userData?.parents?.mother?.email} 
+              </span>
+            </p>
           )}
         </div>
       </div>

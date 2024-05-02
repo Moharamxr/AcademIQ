@@ -38,6 +38,20 @@ const BottomBar = () => {
         active: false,
       },
       {
+        name: "Courses",
+        icon: <ClassesIcon />,
+        activeIcon: <ClassesIcon active={true} />,
+        path: "/admin/courses",
+        active: false,
+      },
+      {
+        name: "Classes",
+        icon: <ClassesIcon />,
+        activeIcon: <ClassesIcon active={true} />,
+        path: "/admin/classes",
+        active: false,
+      },
+      {
         name: "Teachers",
         icon: <TeachersIcon color={"#94A3B8"} />,
         activeIcon: <TeachersIcon color={"#00769E"} />,
@@ -74,6 +88,7 @@ const BottomBar = () => {
         activeIcon: <ChildIcon active={true} />,
         path: "/child",
         active: false,
+        
       },
       {
         name: "Connect",
@@ -99,10 +114,10 @@ const BottomBar = () => {
         active: false,
       },
       {
-        name: "Classes",
+        name: "Courses",
         icon: <ClassesIcon />,
         activeIcon: <ClassesIcon active={true} />,
-        path: "/classes",
+        path: "/courses",
         active: false,
       },
       {
@@ -119,7 +134,13 @@ const BottomBar = () => {
         path: "/assignments",
         active: false,
       },
-      
+      {
+        name: "Exams",
+        icon: <ExamsIcon />,
+        activeIcon: <ExamsIcon active={true} />,
+        path: "/exams",
+        active: false,
+      },
     ],
     teacher: [
       {
@@ -130,10 +151,10 @@ const BottomBar = () => {
         active: false,
       },
       {
-        name: "Classes",
+        name: "Courses",
         icon: <ClassesIcon />,
         activeIcon: <ClassesIcon active={true} />,
-        path: "/classes",
+        path: "/courses",
         active: false,
       },
       {
@@ -175,7 +196,7 @@ const BottomBar = () => {
           ...prevNavBar,
           [role]: prevNavBar[role].map((item) => ({
             ...item,
-            active: item.path === path,
+            active: path.includes(item.path),
           })),
         };
         return updatedNav;

@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Word from "../../../../assets/vscode-icons_file-type-word.png";
 import Pdf from "../../../../assets/vscode-icons_file-type-pdf2.png";
-import { getCourseById } from "../../../../services/courses.service";
-import { useParams } from "react-router-dom";
 import { Skeleton } from "@mui/material";
 const CourseFiles = ({ materials, isLoading }) => {
   return (
@@ -29,8 +27,8 @@ const CourseFiles = ({ materials, isLoading }) => {
           <Skeleton variant="text" width={300} height={40} />
         </div>
       )}
-      {/* 
-      <div className="flex gap-3 py-2">
+      
+       {/*<div className="flex gap-3 py-2">
         <img src={Pdf} alt="Pdf" />
         <p className="font-poppins">
           Chapter 1 , Lesson 5 <br />

@@ -27,8 +27,9 @@ const CourseDetailsPage = () => {
   const [courseAssignments, setCourseAssignments] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
   const { id } = useParams();
-  // const [courseStudents , setCourseStudents] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const [gradeClassId, setGradeClassId] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
   const getCourseData = async () => {
     try {
@@ -36,6 +37,7 @@ const CourseDetailsPage = () => {
       const data = await getCourseById(id);
       setCourseFiles(data?.course?.materials);
       setCourseAssignments(data?.course?.assessments);
+      setGradeClassId(data?.course?.gradeClass?.gradeClassId);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching course data: ", error);
@@ -57,7 +59,7 @@ const CourseDetailsPage = () => {
         />
       ),
     },
-    { label: "Students", content: <CourseStudents /> },
+    { label: "Students", content: <CourseStudents gradeClassId={gradeClassId}/> },
     {
       label: "Assignment",
       content: (
@@ -76,7 +78,7 @@ const CourseDetailsPage = () => {
         <TeacherClassesContainer className="bg-white w-full rounded-xl  ">
           <FixedTopContent className="bg-white">
             <h2 className="font-poppins font-medium text-2xl leading-10 p-3 text-gray-800">
-              Class Details
+              Course Details
             </h2>
             <div className="center gap-14 w-full border-gray-300 border-b-[1px] pt-7 pb-0">
               {tabs.map((tab, index) => (

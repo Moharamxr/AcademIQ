@@ -19,7 +19,7 @@ const useHttpRequest = () => {
     setLoading(true);
     setError(null);
     setData(null);
-    const fullUrl = `http://13.60.57.85${url}`;
+    const fullUrl = `https://academiq.onrender.com${url}`;
     try {
       const response = await axios({
         method,

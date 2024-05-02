@@ -8,15 +8,15 @@ import {
   likePost,
 } from "../../../../services/discussion.service";
 import { CircularProgress, Skeleton } from "@mui/material";
-const PostCard = ({ post, getPostsData, courseId }) => {
+const PostCard = ({ post, courseId }) => {
   const formatDate = (time) => {
     const date = new Date(time);
     const options = { year: "numeric", month: "short", day: "2-digit" };
     return date.toLocaleDateString("en-US", options);
   };
 
-  const [isLiked, setIsLiked] = useState(post?.isLiked);
-  const [likesCount, setLikesCount] = useState(post?.likes?.length);
+  const [isLiked, setIsLiked] = useState(post?.isLiked || false);
+  const [likesCount, setLikesCount] = useState(post?.likes?.length || 0);
   const [commentsCount, setCommentsCount] = useState(post?.comments?.length);
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState("");
@@ -37,7 +37,14 @@ const PostCard = ({ post, getPostsData, courseId }) => {
     };
     const generatedColor = randomColor();
     setBgColor(generatedColor);
+    
   }, []);
+
+  useEffect(() => {
+    setIsLiked(post?.isLiked);
+    setLikesCount(post?.likes?.length);
+    setCommentsCount(post?.comments?.length);
+  }, [post]);
 
   const toggleComments = () => {
     if (commentsCount === 0) return;
@@ -88,10 +95,11 @@ const PostCard = ({ post, getPostsData, courseId }) => {
     setIsLiked(!isLiked);
     setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
     try {
-      const data = await likePost(post._id);
-      setLikesCount(data?.post?.likes?.length);
+      await likePost(post._id);
     } catch (error) {
       console.error("Error toggling like: ", error);
+      setIsLiked(!isLiked);
+      setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
     }
   };
   return (
@@ -129,9 +137,7 @@ const PostCard = ({ post, getPostsData, courseId }) => {
           className="font-poppins text-gray-400 text-sm  cursor-pointer select-none "
           onClick={toggleComments}
         >
-          {commentsCount === 0
-            ? "No Comments"
-            : `${commentsCount} Comments`}
+          {commentsCount === 0 ? "No Comments" : `${commentsCount} Comments`}
         </span>
         <span
           className="font-poppins text-gray-400 text-sm cursor-pointer select-none"

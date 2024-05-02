@@ -7,13 +7,13 @@ const TopBar = () => {
   const userEmail = localStorage.getItem("email");
   return (
     <div className="between mb-4 pt-0 h-16">
-      <div className="xl:w-8/12  w-full md:ms-10   lg:   h-12 pb-2 ">
-        <div className="bg-white flex  me-2  p-3 px-4 rounded-xl">
-          <div className="bg-gray-200 bg-opacity-30 container center p-1 rounded-lg">
+      <div className="w-full h-12 pb-2 ">
+        <div className="bg-white flex w-full  p-3 px-4 rounded-xl">
+          <div className="bg-gray-200 bg-opacity-30  center p-1 rounded-lg">
             <div className=" w-8 h-6 center rounded-md hover:shadow-gray-300 hover:bg-gray-200 hover:shadow-sm">
               <SearchIcon />
             </div>
-            <div className="container">
+            <div className="">
               <input
                 type="text"
                 name="topSearch"
