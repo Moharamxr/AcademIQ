@@ -6,32 +6,26 @@ const TopBar = () => {
   const fullName = localStorage.getItem("fullName");
   const userEmail = localStorage.getItem("email");
   return (
-    <div className="between mb-4 pt-0 h-16">
-      <div className="w-full h-12 pb-2 ">
-        <div className="bg-white flex w-full  p-3 px-4 rounded-xl">
-          <div className="bg-gray-200 bg-opacity-30  center p-1 rounded-lg">
-            <div className=" w-8 h-6 center rounded-md hover:shadow-gray-300 hover:bg-gray-200 hover:shadow-sm">
-              <SearchIcon />
-            </div>
-            <div className="">
-              <input
-                type="text"
-                name="topSearch"
-                id="topSearch"
-                placeholder="Search number , customer name..."
-                className="bg-transparent w-full h-6 rounded-lg text-center font-dubai font-normal text-sm leading-6 text-gray-500 outline-none"
-              />
-            </div>
+    <div className="flex justify-between mb-4 pt-0  w-full ">
+      <div className="bg-white center w-[66%]  h-14 pb-2 p-3 px-4 rounded-xl ">
+        <div className="w-full bg-gray-200 bg-opacity-30  center p-1 rounded-lg">
+          <div className=" w-6 h-6 center rounded-md hover:shadow-gray-300 hover:bg-gray-200 hover:shadow-sm">
+            <SearchIcon />
+          </div>
+          <div className="w-full">
+            <input
+              type="text"
+              name="topSearch"
+              id="topSearch"
+              placeholder="Search number , customer name..."
+              className="bg-transparent w-full h-6 rounded-lg text-center font-dubai font-normal text-sm leading-6 text-gray-500 outline-none"
+            />
           </div>
         </div>
       </div>
-      <div className="xl:w-4/12 w-5/12  md:w- container  h-11 flex  justify-end  ">
-        <div className="flex gap-x-1">
-          <img
-            src={AvatarPic}
-            alt="AvatarPic"
-            className="aspect-square mx-2"
-          />
+      <div className=" w-4/12  h-14 flex  justify-end">
+        <div className="flex gap-x-1 pe-6">
+          <img src={AvatarPic} alt="AvatarPic" className="aspect-square mx-2" />
           <div className="bg-white xl:py-3 xl:px-4 md:py-1 md:px-1  lg:flex hidden  flex-col justify-center items-center rounded-xl">
             <p className="font-poppins font-normal lg:text-sm text-xs leading-6 text-black ">
               {fullName}

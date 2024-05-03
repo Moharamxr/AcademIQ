@@ -13,9 +13,7 @@ const SkeletonPostCard = () => {
           <Skeleton variant="text" width={100} height={20} />
           <br />
         </div>
-        <span className="pe-4">
-          <ThreeDots />
-        </span>
+        
       </div>
       <span className="my-5 pt-6 ps-3">
         <Skeleton variant="text" width={300} height={25} />

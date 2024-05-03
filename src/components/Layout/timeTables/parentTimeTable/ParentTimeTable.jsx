@@ -14,7 +14,7 @@ const ParentTimeTable = () => {
         <TableCard isActive={false}/>
         <TableCard isActive={false}/>
         <TableCard isActive={false}/>
-        <TableCard isActive={false}/>
+        {/* <TableCard isActive={false}/> */}
       </div>
     </div>
   );

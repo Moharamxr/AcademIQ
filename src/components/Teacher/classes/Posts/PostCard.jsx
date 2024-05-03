@@ -83,6 +83,7 @@ const PostCard = ({ post, courseId }) => {
       await addComment(post._id, commentData);
       setAddingComment(false);
       setAddCommentToggle(false);
+      setShowComments(true);
       setComment("");
       getComments();
     } catch (error) {

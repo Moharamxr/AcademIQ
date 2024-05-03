@@ -61,13 +61,13 @@ const UserCourses = () => {
               onClick={() => navigateToCourseDetails(courseData._id)}
             >
               <div className="flex items-center gap-5">
-                <span className="text-lg font-medium">
-                  {index + 1} {courseData.title}
+                {index + 1}.<span className="">
+                   {courseData.title}
                 </span>
               </div>
-              <span className="cursor-pointer">
+              {/* <span className="cursor-pointer">
                 <ThreeDots />
-              </span>
+              </span> */}
             </div>
           ))
         ) : (
