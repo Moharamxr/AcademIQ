@@ -1,96 +1,106 @@
 import axios from "axios";
 const path = "https://academiq.onrender.com";
 
-export const getQuestionBanks = async (level) => {
+const axiosInstance = axios.create();
+
+const handleRequest = async (config) => {
   const token = localStorage.getItem("token");
-  const response = await axios.get(`${path}/questionBanks?level=${level}`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+};
 
+axiosInstance.interceptors.request.use(handleRequest, (error) => {
+  return Promise.reject(error);
+});
+
+const handleResponse = (response) => {
   console.log(response.data.message);
-
   console.log(response.data);
   return response.data;
 };
+
+const handleError = (error) => {
+  if (error.response && error.response.status === 401) {
+    console.log("User is unauthorized. Logging out...");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("role");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("fullName");
+    localStorage.removeItem("email");
+
+    window.location.href = "/login";
+  } else {
+    console.error("Error occurred:", error);
+    throw error;
+  }
+};
+
+export const getQuestionBanks = async (level) => {
+  try {
+    const response = await axiosInstance.get(
+      `${path}/questionBanks?level=${level}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
 export const getQuestionBankById = async (id) => {
-  const token = localStorage.getItem("token");
-  const response = await axios.get(`${path}/questionBanks/${id}`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  console.log(response.data.message);
-
-  console.log(response.data);
-  return response.data;
+  try {
+    const response = await axiosInstance.get(`${path}/questionBanks/${id}`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const createQuestionBank = async (newData) => {
-  const token = localStorage.getItem("token");
-  const response = await axios.post(`${path}/questionBanks/`, newData, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  console.log(response.data.message);
-
-  console.log(response.data);
-  return response.data;
+  try {
+    const response = await axiosInstance.post(
+      `${path}/questionBanks/`,
+      newData
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const updateQuestionBank = async (id, newData) => {
-  const token = localStorage.getItem("token");
-  const response = await axios.put(`${path}/gradeClasses/${id}`, newData, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  console.log(response.data.message);
-
-  console.log(response.data);
-  return response.data;
+  try {
+    const response = await axiosInstance.put(
+      `${path}/questionBanks/${id}`,
+      newData
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const addQuestion = async (id, newData) => {
-  const token = localStorage.getItem("token");
-  console.log(newData);
-  const response = await axios.post(
-    `${path}/questionBanks/${id}/questions`,
-    newData,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
-  console.log(response.data.message);
-
-  console.log(response.data);
-  return response.data;
+  try {
+    const response = await axiosInstance.post(
+      `${path}/questionBanks/${id}/questions`,
+      newData
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
 };
 
-export const getQuestionById = async (bankId,questionId) => {
-  const token = localStorage.getItem("token");
-  const response = await axios.get(`${path}/questionBanks/${bankId}/questions/${questionId}`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  console.log(response.data.message);
-
-  console.log(response.data);
-  return response.data;
+export const getQuestionById = async (bankId, questionId) => {
+  try {
+    const response = await axiosInstance.get(
+      `${path}/questionBanks/${bankId}/questions/${questionId}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
 };

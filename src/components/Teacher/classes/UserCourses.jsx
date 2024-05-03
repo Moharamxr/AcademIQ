@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Skeleton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import ThreeDots from "../../../assets/icons/ThreeDots";
 import { getUserById } from "../../../services/user.service";
 import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
 const ListContainer = styled("div")({
@@ -65,9 +64,7 @@ const UserCourses = () => {
                    {courseData.title}
                 </span>
               </div>
-              {/* <span className="cursor-pointer">
-                <ThreeDots />
-              </span> */}
+              
             </div>
           ))
         ) : (

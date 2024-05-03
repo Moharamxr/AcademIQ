@@ -49,9 +49,9 @@ const ClassesForAttendance = () => {
 
   return (
     <>
-      <ListContainer className="w-full lg:w-8/12 flex flex-col px-5 gap-3 bg-white rounded-xl ">
+      <ListContainer className="w-full xl:w-8/12 flex flex-col px-5 gap-3 bg-white rounded-xl ">
         <FixedTopContent className="between bg-white  py-5">
-          <h2 className="text-2xl ">classes</h2>
+          <h2 className="text-2xl font-poppins">Classes</h2>
         </FixedTopContent>
         {!isLoading ? (
           Array.isArray(gradeClasses) &&
@@ -81,7 +81,7 @@ const ClassesForAttendance = () => {
           </>
         )}
       </ListContainer>
-      <aside className="w-full lg:w-4/12 hidden md:block">
+      <aside className="w-full xl:w-4/12 hidden md:block">
         <ParentTimeTable />
       </aside>
     </>

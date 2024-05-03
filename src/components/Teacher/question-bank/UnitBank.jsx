@@ -165,7 +165,7 @@ const UnitBank = () => {
           className="bg-active text-white rounded-lg py-3 px-6"
           onClick={onOpen}
         >
-          Add Class
+          Add Question
         </button>
       </FixedBottomContent>
       <AddNewQuestion isOpen={isOpen} onClose={onClose} id={id} />

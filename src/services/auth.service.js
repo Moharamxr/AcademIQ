@@ -23,6 +23,7 @@ export const login = async (email, password) => {
   localStorage.setItem("fullName", fullName);
   localStorage.setItem("email", response.data.user.email);
   
+  
   console.log(response.data);
   return response.data;
 };

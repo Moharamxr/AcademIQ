@@ -2,6 +2,7 @@ import React from "react";
 import Exams from "./Exams";
 import { useState } from "react";
 import styled from "@emotion/styled";
+import {  useNavigate } from "react-router-dom";
 
 const FixedTopContent = styled.div`
   position: sticky;
@@ -24,6 +25,7 @@ const TeacherExams = () => {
     { label: "Pending Exams", content: <Exams /> },
     { label: "Upcoming Exams", content: <Exams /> },
   ];
+  const navigate = useNavigate();
   return (
     <div className="w-full bg-white rounded-xl">
       <TeacherExamsContainer className=" bg-white rounded-xl ">
@@ -59,7 +61,7 @@ const TeacherExams = () => {
           {tabs[activeTab].content}
         </div>
         <div className=" flex flex-row-reverse pt-12 pe-5">
-          <button className=" float-right bg-active text-white p-2 rounded-md px-4 font-poppins ">
+          <button className=" float-right bg-active text-white p-2 rounded-md px-4 font-poppins " onClick={()=>navigate('/exams/create')}>
             Create Exam
           </button>
         </div>

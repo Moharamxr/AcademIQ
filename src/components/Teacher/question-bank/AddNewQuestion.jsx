@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { addQuestion } from "../../../services/questionBank.service";
+import { CircularProgress } from "@mui/material";
 
 const ListContainer = styled("div")({
   overflowY: "auto",
@@ -119,12 +120,12 @@ const AddNewQuestion = ({ isOpen, onClose, id }) => {
       await addQuestion(id, questionData);
       setIsLoading(false);
       reset();
+      onClose();
     } catch (error) {
       console.error(error);
+      setError( error?.response?.data?.error || error.message || "An error occurred while adding question");
       setIsLoading(false);
     }
-    // Clear form fields or close modal
-   onClose();
   };
 
   return (
@@ -211,9 +212,14 @@ const AddNewQuestion = ({ isOpen, onClose, id }) => {
             <div className="between">
               <button
                 type="submit"
-                className="bg-active text-white rounded-md px-8 py-2 mt-3 "
+                className={`bg-active text-white rounded-md px-10 py-2 mt-3 ${isLoading?'px-14':''}`}
+                disabled={isLoading}
               >
-                Submit
+                {isLoading ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : (
+                  "Submit"
+                )}
               </button>
               <button
                 type="submit"

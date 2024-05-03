@@ -3,7 +3,7 @@ import React from "react";
 const DisabledTimeTableIcon = () => {
   return (
     <svg
-    className="ms-1 me-1"
+    className="ms-[7px] mt-3 me-1"
       width="24"
       height="24"
       viewBox="0 0 24 24"

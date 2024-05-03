@@ -7,6 +7,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../store/slices/userSlice";
+import { CircularProgress } from "@mui/material";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -129,7 +130,7 @@ const Login = () => {
               onClick={handleLogin}
               disabled={isLoading}
             >
-              {isLoading ? "Loading..." : "Login"}
+              {isLoading ? <CircularProgress size={16} color="inherit" /> : "Login"}
             </button>
           </div>
         </div>

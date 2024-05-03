@@ -238,11 +238,17 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     localStorage.setItem("isLoggedIn", false);
-    localStorage.setItem("token", "");
+    localStorage.removeItem("token", "");
+    localStorage.removeItem("role", "");
+    localStorage.removeItem("userId", "");
+    localStorage.removeItem("fullName", "");
+    localStorage.removeItem("email", "");
+    window.location.href = "/";
+
   };
 
   return (
-    <nav className="w-full min-w-[fit-content] min-h-full bg-white rounded-2xl">
+    <nav className="w-full min-w-[fit-content]  max-h-min bg-white rounded-2xl">
       <div className="py-10 flex justify-center items-center">
         <Logo />
       </div>
@@ -320,7 +326,7 @@ const Sidebar = () => {
 
       <hr />
 
-      <div className="flex flex-col gap-4 mx-auto px-6 pt-6 pb-2">
+      <div className="flex flex-col gap-4 mx-auto px-6 pt-6 pb-[48px]">
         {staticNavBar.map((item) => (
           <NavLink
             key={item.path}
