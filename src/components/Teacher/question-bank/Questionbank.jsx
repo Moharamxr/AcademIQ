@@ -50,7 +50,7 @@ const Questionbank = () => {
   const navigate = useNavigate();
   const [gradeCourses, setGradeCourses] = useState([]);
 
-  const handleCourseChange = (e) => {
+  const handleLevelChange = (e) => {
     setSelectedLevel(parseInt(e.target.value));
   };
   const getCourses = async () => {
@@ -100,7 +100,7 @@ const Questionbank = () => {
           name="grades"
           id="grades"
           className="border-2 border-gray-100 bg-white rounded-lg p-3 outline-none"
-          onChange={handleCourseChange}
+          onChange={handleLevelChange}
           value={selectedLevel}
         >
           <option value={0}>Select Grade</option>

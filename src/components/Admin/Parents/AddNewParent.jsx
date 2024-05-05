@@ -5,6 +5,7 @@ import {
   getGradeClassStudents,
   getGradeClasses,
 } from "../../../services/gradClass.service";
+import { CircularProgress } from "@mui/material";
 
 const ListContainer = styled("div")({
   overflowY: "auto",
@@ -24,7 +25,7 @@ const AddNewParent = ({ isOpen, onClose }) => {
     birthdate: "",
     ssn: "",
     role: "parent",
-    gender: "male",
+    gender: "",
     phone: "",
     city: "",
     street: "",
@@ -32,6 +33,7 @@ const AddNewParent = ({ isOpen, onClose }) => {
     jobRole: "engineer",
     children: [],
   });
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   const [students, setStudents] = useState([]);
   const [selectedChildren, setSelectedChildren] = useState([]);
@@ -46,6 +48,7 @@ const AddNewParent = ({ isOpen, onClose }) => {
   };
 
   const fetchGradeClasses = async () => {
+    if (!isOpen) return;
     setIsGradeClassesLoading(true);
     try {
       const data = await getGradeClasses();
@@ -58,7 +61,7 @@ const AddNewParent = ({ isOpen, onClose }) => {
   
   useEffect(() => {
     fetchGradeClasses();
-  }, []);
+  }, [isOpen]);
 
   const fetchStudents = async () => {
     setIsStudentsLoading(true);
@@ -257,6 +260,7 @@ const AddNewParent = ({ isOpen, onClose }) => {
     if (!isValid) {
       return;
     }
+    setSubmitLoading(true);
     const requestData = {
       firstName: newParentData.firstName,
       lastName: newParentData.lastName,
@@ -274,9 +278,9 @@ const AddNewParent = ({ isOpen, onClose }) => {
 
     console.log(requestData);
     try {
-      const data = await createUser(requestData);
-      console.log(data);
-      reset();
+      await createUser(requestData);
+      setSubmitLoading(false);
+            reset();
       onClose();
     } catch (error) {
       console.error(error);
@@ -285,6 +289,7 @@ const AddNewParent = ({ isOpen, onClose }) => {
       } else {
         setError("Something went wrong");
       }
+      setSubmitLoading(false);
     }
   };
   const renderDayOptions = () => {
@@ -297,7 +302,6 @@ const AddNewParent = ({ isOpen, onClose }) => {
         </option>
       );
     }
-
     return [
       <option key="" value="">
         Day
@@ -490,7 +494,7 @@ const AddNewParent = ({ isOpen, onClose }) => {
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
             <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Classes" className="text-active">
-                Classes
+               Children Classes
               </label>
               <select
                 name="Classes"
@@ -574,8 +578,9 @@ const AddNewParent = ({ isOpen, onClose }) => {
             <button
               className="w-64 bg-active rounded-lg p-3  text-center text-white "
               onClick={handleAddNewParent}
+              disabled={submitLoading}
             >
-              {"Done"}
+              {submitLoading?<CircularProgress size={16} color='inherit' /> :"Done"}
             </button>
             <button
               className="w-64 bg-white border-2 border-active-br rounded-lg p-3  text-center text-active "

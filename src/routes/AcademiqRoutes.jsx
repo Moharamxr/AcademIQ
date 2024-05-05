@@ -30,6 +30,7 @@ import UserCourses from "../components/Teacher/classes/UserCourses";
 import CourseDetailsPage from "../components/Teacher/classes/CourseDetailsPage";
 import ClassesForAttendance from "../components/Teacher/attendance/ClassesForAttendance";
 import Parents from "../components/Admin/Parents/Parents";
+import SelectQuestions from "../components/Teacher/exams/SelectQuestions";
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
   const routes = {
@@ -151,8 +152,12 @@ const AcademiqRoutes = () => {
         component: <TeacherExamDetails />,
       },
       {
-        path: "/exams/create",
+        path: "/exams/create/:id",
         component: <ExamCreation />,
+      },
+      {
+        path: "/exams/create/:id/select-questions",
+        component: <SelectQuestions />,
       },
     ],
     parent: [

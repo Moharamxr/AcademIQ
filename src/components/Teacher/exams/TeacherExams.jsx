@@ -3,6 +3,7 @@ import Exams from "./Exams";
 import { useState } from "react";
 import styled from "@emotion/styled";
 import {  useNavigate } from "react-router-dom";
+import { createAssessment } from "../../../services/assessment.service";
 
 const FixedTopContent = styled.div`
   position: sticky;
@@ -26,6 +27,19 @@ const TeacherExams = () => {
     { label: "Upcoming Exams", content: <Exams /> },
   ];
   const navigate = useNavigate();
+
+  const handleCreateExam = async() => {
+    const requestBody = {
+      type: "exam",
+    };
+    try {
+      const data = await createAssessment(requestBody);
+      const assessmentData=data?.assessment;
+      navigate(`/exams/create/${assessmentData._id}`);
+    } catch (error) {
+      console.error("Error creating exam: ", error);
+    }
+  }
   return (
     <div className="w-full bg-white rounded-xl">
       <TeacherExamsContainer className=" bg-white rounded-xl ">
@@ -61,7 +75,7 @@ const TeacherExams = () => {
           {tabs[activeTab].content}
         </div>
         <div className=" flex flex-row-reverse pt-12 pe-5">
-          <button className=" float-right bg-active text-white p-2 rounded-md px-4 font-poppins " onClick={()=>navigate('/exams/create')}>
+          <button className=" float-right bg-active text-white p-2 rounded-md px-4 font-poppins " onClick={handleCreateExam}>
             Create Exam
           </button>
         </div>
