@@ -1,110 +1,204 @@
 import React, { useEffect, useState } from "react";
 import { createUser } from "../../../services/user.service";
-import { getGradeClasses } from "../../../services/gradClass.service";
+import styled from "@emotion/styled";
+import {
+  getGradeClassStudents,
+  getGradeClasses,
+} from "../../../services/gradClass.service";
 
-const AddNewStudent = ({ isOpen, onClose }) => {
+const ListContainer = styled("div")({
+  overflowY: "auto",
+  "&::-webkit-scrollbar": {
+    width: "0",
+    background: "transparent",
+  },
+});
+
+const AddNewParent = ({ isOpen, onClose }) => {
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
-  const [newStudentData, setNewStudentData] = useState({
+  const [newParentData, setNewParentData] = useState({
     firstName: "",
     lastName: "",
     birthdate: "",
     ssn: "",
-    role: "student",
+    role: "parent",
     gender: "male",
     phone: "",
     city: "",
     street: "",
     state: "",
-    gradeClassId: "",
+    jobRole: "engineer",
+    children: [],
   });
 
-  const [gradeClasses, setGradeClasses] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [selectedChildren, setSelectedChildren] = useState([]);
+  const [isStudentsLoading, setIsStudentsLoading] = useState(false);
+
+  const [selectedGradeClassId, setSelectedGradeClassId] = useState("");
+  const [gradClasses, setGradeClasses] = useState([]);
+  const [isGradeClassesLoading, setIsGradeClassesLoading] = useState(false);
+
+  const handleGradeClassChange = (e) => {
+    setSelectedGradeClassId(e.target.value);
+  };
 
   const fetchGradeClasses = async () => {
+    setIsGradeClassesLoading(true);
     try {
       const data = await getGradeClasses();
       setGradeClasses(data.gradeClasses);
     } catch (error) {
       console.error(error);
     }
+    setIsGradeClassesLoading(false);
   };
-
+  
   useEffect(() => {
     fetchGradeClasses();
   }, []);
 
+  const fetchStudents = async () => {
+    setIsStudentsLoading(true);
+    try {
+      const data = await getGradeClassStudents(selectedGradeClassId, false);
+      const students = data?.students.filter(
+        (student) =>
+          (newParentData.gender === "male" &&
+            student.parents.fatherId === null) ||
+          (newParentData.gender === "female" &&
+            student.parents.motherId === null)
+      );
+      setStudents(students);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsStudentsLoading(false);
+  };
+
+  useEffect(() => {
+    if (selectedGradeClassId !== "") {
+      fetchStudents();
+    }
+  }, [selectedGradeClassId]);
+
   const [error, setError] = useState("");
 
   const handleFirstNameChange = (e) => {
-    setNewStudentData({ ...newStudentData, firstName: e.target.value });
+    setNewParentData({ ...newParentData, firstName: e.target.value });
   };
 
   const handleLastNameChange = (e) => {
-    setNewStudentData({ ...newStudentData, lastName: e.target.value });
+    setNewParentData({ ...newParentData, lastName: e.target.value });
   };
 
   const handleSSNChange = (e) => {
-    setNewStudentData({ ...newStudentData, ssn: e.target.value });
+    setNewParentData({ ...newParentData, ssn: e.target.value });
   };
 
   const handlePhoneChange = (e) => {
-    setNewStudentData({ ...newStudentData, phone: e.target.value });
+    setNewParentData({ ...newParentData, phone: e.target.value });
   };
 
   const handleCityChange = (e) => {
-    setNewStudentData({ ...newStudentData, city: e.target.value });
+    setNewParentData({ ...newParentData, city: e.target.value });
   };
 
   const handleStreetChange = (e) => {
-    setNewStudentData({ ...newStudentData, street: e.target.value });
+    setNewParentData({ ...newParentData, street: e.target.value });
   };
 
   const handleStateChange = (e) => {
-    setNewStudentData({ ...newStudentData, state: e.target.value });
+    setNewParentData({ ...newParentData, state: e.target.value });
   };
 
   const handleGenderChange = (e) => {
-    setNewStudentData({ ...newStudentData, gender: e.target.value });
+    setNewParentData({ ...newParentData, gender: e.target.value });
   };
 
-  const handleGradeClassIdChange = (e) => {
-    setNewStudentData({ ...newStudentData, gradeClassId: e.target.value });
+  const handleJobRoleChange = (e) => {
+    setNewParentData({ ...newParentData, jobRole: e.target.value });
+  };
+
+  const handleStudentsChange = (e) => {
+    if (newParentData.gender === "") {
+      setError("select the gender first");
+      setTimeout(() => {
+        setError("");
+      }, 5000);
+      return;
+    }
+    const selectedStudentId = e.target.value;
+    const isExist = newParentData?.children?.find(
+      (childId) => childId === selectedStudentId
+    );
+    if (isExist) {
+      return;
+    }
+    setNewParentData({
+      ...newParentData,
+      children: [...newParentData.children, selectedStudentId],
+    });
+    const selectedStudent = students.find(
+      (student) => student._id === selectedStudentId
+    );
+    setSelectedChildren([...selectedChildren, selectedStudent]);
+  };
+
+  const handleRemoveStudent = (id) => {
+    const updatedChildren = selectedChildren.filter(
+      (child) => child._id !== id
+    );
+    setSelectedChildren(updatedChildren);
+    const updatedChildrenIds = newParentData.children.filter(
+      (childId) => childId !== id
+    );
+    setNewParentData({ ...newParentData, children: updatedChildrenIds });
   };
 
   const reset = () => {
-    setNewStudentData({
+    setNewParentData({
       firstName: "",
       lastName: "",
       birthdate: "",
       ssn: "",
-      role: "student",
+      role: "parent",
       phone: "",
       city: "",
       street: "",
       state: "",
       gradeClassId: "",
+      children: [],
+      jobRole: "",
     });
+    setDay("");
+    setMonth("");
+    setYear("");
+    setSelectedChildren([]);
+    setSelectedGradeClassId("");
+    setGradeClasses([]);
+    setStudents([]);
+    setError("");
   };
 
   const isValidate = () => {
-    if (newStudentData.firstName.length < 2) {
+    if (newParentData.firstName.length < 2) {
       setError("First name must be at least 2 characters");
       setTimeout(() => {
         setError("");
       }, 3000);
       return false;
-    } else if (newStudentData.lastName.length < 2) {
+    } else if (newParentData.lastName.length < 2) {
       setError("Last name must be at least 2 characters");
       setTimeout(() => {
         setError("");
       }, 3000);
       return false;
     } else if (
-      newStudentData.ssn.length < 14 &&
-      (!newStudentData.ssn.startsWith("2") ||
-        !newStudentData.ssn.startsWith("3"))
+      newParentData.ssn.length < 14 &&
+      (!newParentData.ssn.startsWith("2") || !newParentData.ssn.startsWith("3"))
     ) {
       setError("SSN must be 14 characters and start with 2 or 3");
       setTimeout(() => {
@@ -112,27 +206,27 @@ const AddNewStudent = ({ isOpen, onClose }) => {
       }, 3000);
       return false;
     } else if (
-      newStudentData.phone.length < 11 &&
-      !newStudentData.phone.startsWith("01")
+      newParentData.phone.length < 11 &&
+      !newParentData.phone.startsWith("01")
     ) {
       setError("Phone must be 11 characters and start with 01");
       setTimeout(() => {
         setError("");
       }, 3000);
       return false;
-    } else if (newStudentData.city.length === 0) {
+    } else if (newParentData.city.length === 0) {
       setError("City must be filled");
       setTimeout(() => {
         setError("");
       }, 3000);
       return false;
-    } else if (newStudentData.street.length === 0) {
+    } else if (newParentData.street.length === 0) {
       setError("Street must be filled");
       setTimeout(() => {
         setError("");
       }, 3000);
       return false;
-    } else if (newStudentData.state.length === 0) {
+    } else if (newParentData.state.length === 0) {
       setError("State must be filled");
       setTimeout(() => {
         setError("");
@@ -144,8 +238,8 @@ const AddNewStudent = ({ isOpen, onClose }) => {
         setError("");
       }, 3000);
       return false;
-    } else if (newStudentData.gradeClassId.length === 0) {
-      setError("Grade Class ID must be filled");
+    } else if (newParentData.children.length === 0) {
+      setError("Add at least one child");
       setTimeout(() => {
         setError("");
       }, 3000);
@@ -158,23 +252,24 @@ const AddNewStudent = ({ isOpen, onClose }) => {
     onClose();
   };
 
-  const handleAddNewStudent = async () => {
+  const handleAddNewParent = async () => {
     const isValid = isValidate();
     if (!isValid) {
       return;
     }
     const requestData = {
-      firstName: newStudentData.firstName,
-      lastName: newStudentData.lastName,
+      firstName: newParentData.firstName,
+      lastName: newParentData.lastName,
       birthdate: `${year}-${month}-${day}`,
-      ssn: newStudentData.ssn,
-      gender: newStudentData.gender,
-      phone: newStudentData.phone,
-      city: newStudentData.city,
-      street: newStudentData.street,
-      state: newStudentData.state,
-      gradeClassId: newStudentData.gradeClassId,
-      role: newStudentData.role,
+      ssn: newParentData.ssn,
+      gender: newParentData.gender,
+      phone: newParentData.phone,
+      city: newParentData.city,
+      street: newParentData.street,
+      state: newParentData.state,
+      role: newParentData.role,
+      jobRole: newParentData.jobRole,
+      children: newParentData.children,
     };
 
     console.log(requestData);
@@ -192,22 +287,37 @@ const AddNewStudent = ({ isOpen, onClose }) => {
       }
     }
   };
+  const renderDayOptions = () => {
+    const days = [];
+    for (let i = 1; i <= 31; i++) {
+      const day = i < 10 ? `0${i}` : `${i}`;
+      days.push(
+        <option key={day} value={day}>
+          {day}
+        </option>
+      );
+    }
+
+    return [
+      <option key="" value="">
+        Day
+      </option>,
+      ...days,
+    ];
+  };
 
   return (
     isOpen && (
       <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-600 bg-opacity-50">
-        <section className="bg-white rounded-xl p-5 w-1/2">
-          <h2 className="font-poppins text-2xl font-medium">
-            Add New Student{" "}
-          </h2>
+        <ListContainer className="bg-white rounded-xl p-5 w-2/3 max-h-[95vh]">
+          <h2 className="font-poppins text-2xl font-medium">Add New Parent</h2>
           {error && (
             <p className="bg-red-200 text-red-700 p-2 rounded-lg text-sm text-center ">
               {error}
             </p>
           )}
-
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="FirstName" className="text-active">
                 First Name
               </label>
@@ -217,8 +327,8 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleFirstNameChange}
               />
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="LastName" className="text-active">
                 Last Name
               </label>
@@ -228,10 +338,10 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleLastNameChange}
               />
-            </form>
+            </div>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="date" className="text-active">
                 Date
               </label>
@@ -244,38 +354,7 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                     setDay(e.target.value);
                   }}
                 >
-                  <option value="">Day</option>
-                  <option value="01">01</option>
-                  <option value="02">02</option>
-                  <option value="03">03</option>
-                  <option value="04">04</option>
-                  <option value="05">05</option>
-                  <option value="06">06</option>
-                  <option value="07">07</option>
-                  <option value="08">08</option>
-                  <option value="09">09</option>
-                  <option value="10">10</option>
-                  <option value="11">11</option>
-                  <option value="12">12</option>
-                  <option value="13">13</option>
-                  <option value="14">14</option>
-                  <option value="15">15</option>
-                  <option value="16">16</option>
-                  <option value="17">17</option>
-                  <option value="18">18</option>
-                  <option value="19">19</option>
-                  <option value="20">20</option>
-                  <option value="21">21</option>
-                  <option value="22">22</option>
-                  <option value="23">23</option>
-                  <option value="24">24</option>
-                  <option value="25">25</option>
-                  <option value="26">26</option>
-                  <option value="27">27</option>
-                  <option value="28">28</option>
-                  <option value="29">29</option>
-                  <option value="30">30</option>
-                  <option value="31">31</option>
+                  {renderDayOptions()}
                 </select>
                 <select
                   name="Month"
@@ -317,8 +396,8 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                   })}
                 </select>
               </div>
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Gender" className="text-active">
                 Gender
               </label>
@@ -332,10 +411,10 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                 <option value="male">male</option>
                 <option value="female">female</option>
               </select>
-            </form>
+            </div>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="SSN" className="text-active">
                 SSN
               </label>
@@ -346,8 +425,8 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleSSNChange}
               />
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Phone" className="text-active">
                 Phone
               </label>
@@ -358,10 +437,10 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handlePhoneChange}
               />
-            </form>
+            </div>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="City" className="text-active">
                 City
               </label>
@@ -371,8 +450,8 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleCityChange}
               />
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Street" className="text-active">
                 Street
               </label>
@@ -382,10 +461,10 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleStreetChange}
               />
-            </form>
+            </div>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="State" className="text-active">
                 State
               </label>
@@ -395,31 +474,108 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleStateChange}
               />
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
-              <label htmlFor="GradeClass" className="text-active">
-                Grade Class
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
+              <label htmlFor="jobRole" className="text-active">
+                Jop Role
+              </label>
+              <input
+                name="jobRole"
+                id="jobRole"
+                className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
+                onChange={handleJobRoleChange}
+              />
+            </div>
+          </div>
+          <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
+              <label htmlFor="Classes" className="text-active">
+                Classes
               </label>
               <select
-                name="GradeClass"
-                id="GradeClass"
+                name="Classes"
+                id="Classes"
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
-                onClick={handleGradeClassIdChange}
+                onChange={handleGradeClassChange}
+                value={selectedGradeClassId}
               >
-                {gradeClasses.map((gradeClass, index) => (
-                  <option key={index} value={gradeClass._id}>
-                    Class {gradeClass.letter} {gradeClass.level}
+                <option value="">select</option>
+                {!isGradeClassesLoading ? (
+                  gradClasses?.map((cl, index) => (
+                    <option key={index} value={cl._id}>
+                      Class {cl.letter} {cl.level}
+                    </option>
+                  ))
+                ) : (
+                  <option value="" disabled>
+                    loading...
                   </option>
-                ))}
+                )}
               </select>
-            </form>
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
+              <label htmlFor="Children" className="text-active">
+                Children
+              </label>
+              <select
+                name="Children"
+                id="Children"
+                className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
+                onChange={handleStudentsChange}
+              >
+                <option value="">select</option>
+                {!isStudentsLoading ? (
+                  students.length > 0 ? (
+                    students.map((stu, index) => (
+                      <option key={index} value={stu._id}>
+                        {stu.name.first} {stu.name.last}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      No available students in this class
+                    </option>
+                  )
+                ) : (
+                  isStudentsLoading && (
+                    <option value="" disabled>
+                      loading...
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 w-full mt-5">
+            <label htmlFor="Children" className="text-active">
+              Selected Children
+            </label>
+
+            <div className="grid grid-cols-4 gap-2 col-span-1">
+              {selectedChildren.length > 0 ? (
+                selectedChildren.map((child, index) => (
+                  <span
+                    key={index}
+                    className="col-span-1 p-1 bg-active-bg text-center rounded-lg cursor-pointer"
+                    onClick={() => handleRemoveStudent(child._id)}
+                  >
+                    {child?.name?.first?.slice(0, 8)}{" "}
+                    {child?.name?.last?.slice(0, 8)}
+                  </span>
+                ))
+              ) : (
+                <span className="col-span-1 p-1 bg-gray-100 text-gray-500 text-center rounded-lg cursor-pointer">
+                  No children selected
+                </span>
+              )}
+            </div>
           </div>
           <div className="between pt-8 pb-4">
             <button
               className="w-64 bg-active rounded-lg p-3  text-center text-white "
-              onClick={handleAddNewStudent}
+              onClick={handleAddNewParent}
             >
-              Done
+              {"Done"}
             </button>
             <button
               className="w-64 bg-white border-2 border-active-br rounded-lg p-3  text-center text-active "
@@ -428,10 +584,10 @@ const AddNewStudent = ({ isOpen, onClose }) => {
               Cancel
             </button>
           </div>
-        </section>
+        </ListContainer>
       </div>
     )
   );
 };
 
-export default AddNewStudent;
+export default AddNewParent;

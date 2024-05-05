@@ -6,8 +6,9 @@ import { Skeleton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { getUserById } from "../../../services/user.service";
 import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
+import { getCourseByGradeClass } from "../../../services/courses.service";
 const ListContainer = styled("div")({
-  height: "38rem",
+  height: "34.5rem",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -25,11 +26,18 @@ const UserCourses = () => {
   const [gradeCourses, setGradeCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const id = localStorage.getItem("userId");
+  const gradeClassId = localStorage.getItem("gradeClassId");
+  const role = localStorage.getItem("role");
   const getData = async () => {
     try {
       setIsLoading(true);
-      const data = await getUserById(id);
-      setGradeCourses(data?.user?.courses);
+      if (role === "student") {
+        const data = await getCourseByGradeClass(gradeClassId);
+        setGradeCourses(data?.courses);
+      } else {
+        const data = await getUserById(id);
+        setGradeCourses(data?.user?.courses);
+      }
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching grade courses: ", error);
@@ -60,11 +68,8 @@ const UserCourses = () => {
               onClick={() => navigateToCourseDetails(courseData._id)}
             >
               <div className="flex items-center gap-5">
-                {index + 1}.<span className="">
-                   {courseData.title}
-                </span>
+                {index + 1}.<span className="">{courseData.title}</span>
               </div>
-              
             </div>
           ))
         ) : (

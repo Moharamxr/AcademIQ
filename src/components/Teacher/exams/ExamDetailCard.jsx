@@ -67,6 +67,7 @@ const ExamDetailCard = () => {
       [questionIndex]: optionId
     }));
   };
+  
 
   return (
     <div className="w-full">

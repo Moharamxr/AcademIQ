@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import TableCard from "./TableCard";
-import { getTeacherTimetable } from "../../../../services/timetable.service";
+import {
+  getClassTimetable,
+  getTeacherTimetable,
+} from "../../../../services/timetable.service";
 import SkeletonTimeTableCard from "./SkeletonTimeTableCard";
 
 const ParentTimeTable = () => {
@@ -8,24 +11,49 @@ const ParentTimeTable = () => {
   const [activeTimeTable, setActiveTimeTable] = useState(Array(6).fill(null));
   const [isLoading, setIsLoading] = useState(false);
 
-  const getTimeTableData = async () => {
+  const role = localStorage.getItem("role");
+
+  const fetchTimetable = async () => {
     setIsLoading(true);
     try {
-      const data = await getTeacherTimetable(userId);
+      let data;
+      if (role === "teacher") {
+        data = await getTeacherTimetable(userId);
+      } else if (role === "student") {
+        const gradeClassId = localStorage.getItem("gradeClassId");
+        data = await getClassTimetable(gradeClassId);
+      } else {
+        return;
+      }
       console.log("data", data);
       const timeTableData = data?.timetable;
       console.log("timeTableData", timeTableData);
       if (timeTableData) {
         // Initialize activeTimeTable with break periods
         const activeTimeTables = Array(6).fill(null);
+        const date = new Date();
+        const dayOfWeek = date.getDay();
+        const days = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+        // const dayName = days[dayOfWeek];
+        const dayName = "Sunday";
 
-        // Sort the timetable by the period
-        timeTableData.sort((a, b) => a.period - b.period);
-        console.log("sorted timeTableData", timeTableData);
+        const filteredTimeTable = timeTableData.filter(
+          (item) => item.day === dayName
+        );
 
-        // Populate activeTimeTable with timetable data
-        timeTableData.forEach((item) => {
-          const index = item.period - 1; // Adjust for zero-based index
+        filteredTimeTable.sort((a, b) => a.period - b.period);
+        console.log("sorted timeTableData", filteredTimeTable);
+
+        filteredTimeTable.forEach((item) => {
+          const index = item.period - 1; 
           activeTimeTables[index] = item;
         });
 
@@ -39,7 +67,7 @@ const ParentTimeTable = () => {
   };
 
   useEffect(() => {
-    getTimeTableData();
+    fetchTimetable();
   }, []);
 
   return (

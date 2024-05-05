@@ -29,6 +29,7 @@ import AdminClassDetails from "../components/Admin/AdminClasses/AdminClassDetail
 import UserCourses from "../components/Teacher/classes/UserCourses";
 import CourseDetailsPage from "../components/Teacher/classes/CourseDetailsPage";
 import ClassesForAttendance from "../components/Teacher/attendance/ClassesForAttendance";
+import Parents from "../components/Admin/Parents/Parents";
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
   const routes = {
@@ -40,6 +41,10 @@ const AcademiqRoutes = () => {
       {
         path: "/admin/students",
         component: <Students />,
+      },
+      {
+        path: "/admin/parents",
+        component: <Parents />,
       },
       {
         path: "/admin/admins",
@@ -152,7 +157,7 @@ const AcademiqRoutes = () => {
     ],
     parent: [
       {
-        path: "/parent",
+        path: "/home",
         component: <Parent />,
       },
       {

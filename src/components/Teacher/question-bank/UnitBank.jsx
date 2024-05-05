@@ -9,6 +9,7 @@ import { getQuestionBankById } from "../../../services/questionBank.service";
 import EditPen from "../../../assets/icons/EditPen";
 import DeleteQIcon from "../../../assets/icons/DeleteQIcon";
 import ViewQuestion from "./ViewQuestion";
+import UpdateBankQuestion from "./UpdateBankQuestion";
 
 const ListContainer = styled("div")({
   height: "38rem",
@@ -41,6 +42,12 @@ const DropdownMenu = styled.div`
 `;
 
 const UnitBank = () => {
+  const { id } = useParams();
+  const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [openedIndex, setOpenedIndex] = useState(null);
+  const dropdownRef = useRef(null);
+
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => {
     setIsOpen(false);
@@ -48,18 +55,27 @@ const UnitBank = () => {
   };
 
   const onOpen = () => setIsOpen(true);
+
+  const [openedQuestion, setOpenedQuestion] = useState({});
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
+  const onCloseEdit = () => {
+    setIsOpenEdit(false);
+    getData();
+  };
+
+  const onOpenEdit = (i) => {
+    console.log(i);
+    setIsOpenEdit(true);
+    setOpenedQuestion(questions[i]);
+  };
+
   const [viewQuestion, setViewQuestion] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState(''); 
+  const [selectedQuestion, setSelectedQuestion] = useState("");
   const closeViewQuestion = () => setViewQuestion(false);
   const openViewQuestion = (id) => {
-    setSelectedQuestion(id)
+    setSelectedQuestion(id);
     setViewQuestion(true);
-  }
-  const { id } = useParams();
-  const [questions, setQuestions] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [openedIndex, setOpenedIndex] = useState(null); 
-  const dropdownRef = useRef(null);
+  };
 
   const getData = async () => {
     try {
@@ -77,18 +93,18 @@ const UnitBank = () => {
     getData();
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        closeDropMenu();
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  //       closeDropMenu();
+  //     }
+  //   };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
 
   const toggleDropMenu = (index, event) => {
     event.stopPropagation();
@@ -108,7 +124,10 @@ const UnitBank = () => {
 
   return (
     <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
-      <FixedTopContent className="between bg-white  py-5">
+      <FixedTopContent
+        className="between bg-white py-5"
+        onClick={closeDropMenu}
+      >
         <h2 className="text-2xl ">Unit Bank</h2>
       </FixedTopContent>
       {!isLoading ? (
@@ -117,13 +136,11 @@ const UnitBank = () => {
           <div
             key={question._id}
             className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:cursor-pointer hover:bg-gray-100"
-            onClick={()=>openViewQuestion(question._id)}
+            onClick={() => openViewQuestion(question._id)}
           >
             <div className="flex items-center gap-5">
               {index + 1}
-              <span className="text-gray-600 ">
-                {question.text}
-              </span>
+              <span className="text-gray-600 ">{question.text}</span>
             </div>
             <div
               className="cursor-pointer center flex-col gap-3"
@@ -136,12 +153,16 @@ const UnitBank = () => {
               {openedIndex === index && (
                 <DropdownMenu top={menuPosition.top} left={menuPosition.left}>
                   <div className="flex flex-col divide-y-[0.5px] divide-gray-400 bg-gray-200/55 text-center rounded-md text-sm ">
-                    <div className="flex gap-2 px-2 pt-3 pb-2 hover:bg-gray-300 rounded-t-md">
-                      <EditPen /> <span className="font-medium">Edit</span>
+                    <div
+                      className="flex gap-2 px-2 pt-3 pb-2 hover:bg-gray-300 rounded-t-md"
+                      onClick={() => onOpenEdit(index)}
+                    >
+                      <EditPen /> <span className="font-medium z-50">Edit</span>
                     </div>
-                    <div className="flex gap-2 px-2 pb-3 pt-2 hover:bg-gray-300 rounded-b-md">
-                      <DeleteQIcon /> <span className="font-medium">Delete</span>
-                    </div>
+                    {/* <div className="flex gap-2 px-2 pb-3 pt-2 hover:bg-gray-300 rounded-b-md">
+                      <DeleteQIcon />{" "}
+                      <span className="font-medium">Delete</span>
+                    </div> */}
                   </div>
                 </DropdownMenu>
               )}
@@ -160,7 +181,10 @@ const UnitBank = () => {
         </>
       )}
 
-      <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
+      <FixedBottomContent
+        className="bg-white py-5 flex flex-row-reverse"
+        onClick={closeDropMenu}
+      >
         <button
           className="bg-active text-white rounded-lg py-3 px-6"
           onClick={onOpen}
@@ -169,7 +193,18 @@ const UnitBank = () => {
         </button>
       </FixedBottomContent>
       <AddNewQuestion isOpen={isOpen} onClose={onClose} id={id} />
-      <ViewQuestion isOpen={viewQuestion} onClose={closeViewQuestion} bankId={id} selectedQuestion={selectedQuestion} />
+      <ViewQuestion
+        isOpen={viewQuestion}
+        onClose={closeViewQuestion}
+        bankId={id}
+        selectedQuestion={selectedQuestion}
+      />
+      <UpdateBankQuestion
+        isOpen={isOpenEdit}
+        onClose={onCloseEdit}
+        id={id}
+        question={openedQuestion}
+      />
     </ListContainer>
   );
 };

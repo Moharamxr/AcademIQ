@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./style.css"; // Import custom CSS file for scrollbar styling
+import "./style.css"; 
 
 function Calendar() {
   const listRef = useRef(null);
@@ -7,11 +7,11 @@ function Calendar() {
     day: "2-digit",
   });
 
-  // Generate calendar data with day of the week
   const days = Array.from({ length: 365 }, (_, i) => {
     const currentDate = new Date(new Date().getFullYear(), 0, i + 1);
+    const currentWeekDay = new Date(new Date().getFullYear(), 0, i + 3);
     return {
-      dayOfWeek: currentDate.toLocaleDateString("en-US", { weekday: "short" }),
+      dayOfWeek: currentWeekDay.toLocaleDateString("en-US", { weekday: "short" }),
       dayOfMonth: currentDate.toLocaleDateString("en-US", { day: "2-digit" }),
     };
   });
@@ -42,13 +42,13 @@ function Calendar() {
           scrollPosition = activeElementOffsetLeft - (screenWidth - activeElementWidth) / 2;
         }
 
-        listRef.current.scrollTo({ left: scrollPosition});
+        listRef.current.scrollTo({ left: scrollPosition, behavior: 'smooth' }); // Added behavior: 'smooth'
       }
     }
   }, [activeIndex]); // Add activeIndex as a dependency to useEffect
 
   return (
-    <div className="scroll-container bg-white rounded-lg p-2" ref={listRef}>
+    <div className="scroll-container bg-white rounded-lg p-2 overflow-x-auto" ref={listRef}>
       <div className="inline-flex justify-center gap-2">
         {days.map(({ dayOfWeek, dayOfMonth }, index) => (
           <div

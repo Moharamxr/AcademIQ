@@ -10,6 +10,7 @@ const ClassesIcon = ({active}) => {
       viewBox="0 0 22 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className="mt-1"
     >
       <path
         opacity="0.4"

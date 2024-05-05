@@ -77,6 +77,28 @@ export const UpdateGradeClass = async (id, newData) => {
   }
 };
 
+export const getGradeClassByCourse = async (id) => {
+  try {
+    const response = await axiosInstance.get(
+      `${path}/gradeClasses/course/${id}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getGradeClassStudents = async (id, isPoints) => {
+  try {
+    const response = await axiosInstance.get(
+      `${path}/gradeClasses/${id}/students?points=${isPoints || false}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
 export const takeAttendance = async (id, newData) => {
   try {
     const response = await axiosInstance.post(
@@ -89,10 +111,22 @@ export const takeAttendance = async (id, newData) => {
   }
 };
 
-export const getGradeClassByCourse = async (id) => {
+export const reTakeAttendance = async (id, newData) => {
+  try {
+    const response = await axiosInstance.patch(
+      `${path}/gradeClasses/${id}/attendance`,
+      newData
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getAttendance = async (id, date, period) => {
   try {
     const response = await axiosInstance.get(
-      `${path}/gradeClasses/course/${id}`
+      `${path}/gradeClasses/${id}/attendance?date=${date}&period=${period}`
     );
     return handleResponse(response);
   } catch (error) {

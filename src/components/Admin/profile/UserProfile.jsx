@@ -20,7 +20,7 @@ const UserProfile = () => {
   }, []);
 
   return (
-    userData.name && (
+    userData?.name && (
       <div className="bg-white p-2 rounded-xl w-full ">
         <div className="center flex-col  py-10 gap-2">
           <img
@@ -119,29 +119,30 @@ const UserProfile = () => {
               </p>
             </div>
           )}
-          {userData.role === "teacher" && (
-            <div className="flex gap-5 py-2 px-1">
-              <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-                Courses Id:
-              </p>
-              <div className="flex gap-3">
-                {userData.courses.map((course, index) => (
-                  <div className="center gap-1" key={index}>
-                    <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400 bg-active-bg rounded-lg p-1 px-2">
-                      <span className="text-gray-600 text-base font-medium">
-                        {course.title}
-                      </span>
-                    </p>
-                  </div>
-                ))}
+          {(userData.role === "teacher" || userData.role === "student") &&
+            userData?.courses.length > 0 && (
+              <div className="flex gap-5 py-2 px-1">
+                <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
+                  Courses Ids:
+                </p>
+                <div className="flex gap-3">
+                  {userData?.courses?.map((course, index) => (
+                    <div className="center gap-1" key={index}>
+                      <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400 bg-active-bg rounded-lg p-1 px-2">
+                        <span className="text-gray-600 text-base font-medium">
+                          {course.title}
+                        </span>
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
           {userData.role === "student" && userData.parents.father && (
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
               Father :
               <span className="text-gray-600 text-base font-medium">
-                {userData?.parents?.father?.email} 
+                {userData?.parents?.father?.email}
               </span>
             </p>
           )}
@@ -149,7 +150,7 @@ const UserProfile = () => {
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
               Mother :
               <span className="text-gray-600 text-base font-medium">
-                {userData?.parents?.mother?.email} 
+                {userData?.parents?.mother?.email}
               </span>
             </p>
           )}

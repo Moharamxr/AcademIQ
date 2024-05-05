@@ -64,6 +64,14 @@ export const getCourseById = async (id) => {
     handleError(error);
   }
 };
+export const getCourseByGradeClass = async (id) => {
+  try {
+    const response = await axiosInstance.get(`${path}/courses/gradeClasses/${id}`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
 
 export const updateCourse = async (id, newData) => {
   try {

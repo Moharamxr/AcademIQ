@@ -56,7 +56,8 @@ const AddNewClass = ({ isOpen, onClose, reservedClassRooms }) => {
             <p className="bg-red-200 text-red-700 p-2 rounded-lg text-sm text-center">
               {error}
             </p>
-          )}{" "}          <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
+          )}
+          <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
             <form className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Level" className="text-active">
                 Level
@@ -117,7 +118,6 @@ const AddNewClass = ({ isOpen, onClose, reservedClassRooms }) => {
               </select>
             </form>
           </div>
-
           <div className="between pt-8 pb-4">
             <button
               className="w-64 bg-active rounded-lg p-3  text-center text-white "

@@ -1,15 +1,14 @@
-import React from 'react'
+import React from "react";
 import { styled } from "@mui/material/styles";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 import LeaderStudent1 from "../../../assets/leader (1).png";
 
-
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
   borderRadius: 5,
-  width : '100%',
+  width: "100%",
   [`&.${linearProgressClasses.colorPrimary}`]: {
     backgroundColor:
       theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
@@ -21,27 +20,26 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
-const LeaderCard = () => {
+const LeaderCard = ({ student, index }) => {
   return (
     <div className="between">
-    <div className="flex items-center">
-      <div className="bg-red-600 text-white rounded-full h-7 w-7  text-center m-1">
-        1
-      </div>
-      <div className="flex w-96">
-        <img
-          className="w-12 m-3"
-          src={LeaderStudent1}
-          alt="LeaderStudent1"
-        />
-        <div className="flex flex-col w-full">
-          <p className="font-poppins font-medium text-base leading-6 py-2">
-            Ahmed Khaled
-          </p>
-          <div className="flex-grow md:w-full w-48">
-            <BorderLinearProgress variant="determinate" value={50} />
-          </div>
-          <div className="flex gap-x-3">
+      <div className="flex items-center">
+        <div className="bg-red-600 text-white rounded-full h-7 w-7  text-center m-1">
+          {index + 1}
+        </div>
+        <div className="flex w-96">
+          <img className="w-12 m-3" src={LeaderStudent1} alt="LeaderStudent1" />
+          <div className="flex flex-col w-full">
+            <p className="font-poppins font-medium text-base leading-6 py-2">
+              {student?.name?.first} {student?.name?.last}
+            </p>
+            <div className="flex-grow md:w-full w-48">
+              <BorderLinearProgress
+                variant="determinate"
+                value={student?.points}
+              />
+            </div>
+            {/* <div className="flex gap-x-3">
             <p className="font-poppins font-light text-xs leading-6 text-gray-600">
               37 lessons
             </p>
@@ -51,15 +49,15 @@ const LeaderCard = () => {
             <p className="font-poppins font-light text-xs leading-6 text-gray-600">
               4 assignments
             </p>
+          </div> */}
           </div>
         </div>
       </div>
+      <p className="font-poppins font-medium text-xs leading-6 text-black pb-10">
+        ({student?.points} points)
+      </p>
     </div>
-    <p className="font-poppins font-medium text-xs leading-6 text-black pb-10">
-      (405 points)
-    </p>
-  </div>
-  )
-}
+  );
+};
 
-export default LeaderCard
+export default LeaderCard;

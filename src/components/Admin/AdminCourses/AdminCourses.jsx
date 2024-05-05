@@ -8,7 +8,7 @@ import { getGradeCourses } from "../../../services/courses.service";
 import { Skeleton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 const ListContainer = styled("div")({
-  height: "38rem",
+  maxHeight: "38rem",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -47,7 +47,9 @@ const AdminCourses = () => {
       } else {
         setGradeCourses(
           data.courses.filter(
-            (course) => parseInt(course?.gradeClass?.gradeLevel) === parseInt(selectedGrade)
+            (course) =>
+              parseInt(course?.gradeClass?.gradeLevel) ===
+              parseInt(selectedGrade)
           )
         );
       }
@@ -57,7 +59,7 @@ const AdminCourses = () => {
       setIsLoading(false);
     }
   };
-  
+
   useEffect(() => {
     getData();
   }, [selectedGrade]);
@@ -83,7 +85,7 @@ const AdminCourses = () => {
           <option value={0}>All Grades</option>
           {Array(12)
             .fill(0)
-            .map((arr, index) => (
+            .map((_, index) => (
               <option key={index} value={index + 1}>
                 Grade {index + 1}
               </option>
@@ -91,23 +93,27 @@ const AdminCourses = () => {
         </select>
       </FixedTopContent>
       {!isLoading ? (
-        Array.isArray(gradeCourses) &&
-        gradeCourses.map((courseData, index) => (
-          <div
-            key={courseData._id}
-            className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
-            onClick={() => navigateToCourseDetails(courseData._id)}
-          >
-            <div className="flex items-center gap-5">
-              <span className="text-lg font-medium">
-                {index + 1} {courseData.title}
+        Array.isArray(gradeCourses) && gradeCourses.length > 0 ? (
+          gradeCourses.map((courseData, index) => (
+            <div
+              key={courseData._id}
+              className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
+              onClick={() => navigateToCourseDetails(courseData._id)}
+            >
+              <div className="flex items-center gap-5">
+                {index + 1}
+                <span className="text-lg font-medium">{courseData.title}</span>
+              </div>
+              <span className="cursor-pointer">
+                <ThreeDots />
               </span>
             </div>
-            <span className="cursor-pointer">
-              <ThreeDots />
-            </span>
+          ))
+        ) : (
+          <div className="text-center text-lg text-gray-400">
+            No courses available for this grade
           </div>
-        ))
+        )
       ) : (
         <>
           <Skeleton variant="rounded" height={50} />
@@ -125,7 +131,7 @@ const AdminCourses = () => {
           className="bg-active text-white rounded-lg py-3 px-6"
           onClick={onOpen}
         >
-          Add Class
+          Add Course
         </button>
       </FixedBottomContent>
       <AddNewCourse isOpen={isOpen} onClose={onClose} />

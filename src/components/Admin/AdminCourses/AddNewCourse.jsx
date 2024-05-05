@@ -1,19 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { createCourse } from "../../../services/courses.service";
+import { getGradeClasses } from "../../../services/gradClass.service";
 
 const AddNewCourse = ({ isOpen, onClose }) => {
   const [title, setTitle] = useState("");
   const [department, setDepartment] = useState("");
-  const [gradeClassId, setGradeClassId] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const [selectedGradeClassId, setSelectedGradeClassId] = useState("");
+  const [gradClasses, setGradeClasses] = useState([]);
+  const [isGradeClassesLoading, setIsGradeClassesLoading] = useState(false);
+
+  const handleGradeClassChange = (e) => {
+    setSelectedGradeClassId(e.target.value);
+  };
+
+  const fetchGradeClasses = async () => {
+    setIsGradeClassesLoading(true);
+    try {
+      const data = await getGradeClasses();
+      setGradeClasses(data.gradeClasses);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsGradeClassesLoading(false);
+  };
+
+  useEffect(() => {
+    fetchGradeClasses();
+  }, []);
 
   const closeModal = () => {
     reset();
@@ -25,9 +48,6 @@ const AddNewCourse = ({ isOpen, onClose }) => {
   };
   const handleDepartmentChange = (e) => {
     setDepartment(e.target.value);
-  };
-  const handleGradeClassIdChange = (e) => {
-    setGradeClassId(e.target.value);
   };
   const handleStartDateChange = (e) => {
     setStartDate(e);
@@ -49,7 +69,7 @@ const AddNewCourse = ({ isOpen, onClose }) => {
         setError("");
       }, 3000);
       return false;
-    } else if (gradeClassId === "") {
+    } else if (selectedGradeClassId === "") {
       setError("Grade Class ID must be filled");
       setTimeout(() => {
         setError("");
@@ -75,7 +95,7 @@ const AddNewCourse = ({ isOpen, onClose }) => {
   const reset = () => {
     setTitle("");
     setDepartment("");
-    setGradeClassId("");
+    setSelectedGradeClassId("");
     setStartDate(null);
     setEndDate(null);
     setError("");
@@ -89,7 +109,7 @@ const AddNewCourse = ({ isOpen, onClose }) => {
     const newData = {
       title: title,
       department: department,
-      gradeClassId: gradeClassId,
+      gradeClassId: selectedGradeClassId,
       startDate: startDate ? startDate.format("YYYY-MM-DD") : null,
       endDate: endDate ? endDate.format("YYYY-MM-DD") : null,
     };
@@ -111,7 +131,7 @@ const AddNewCourse = ({ isOpen, onClose }) => {
     isOpen && (
       <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-600 bg-opacity-50">
         <section className="bg-white rounded-xl p-5 w-1/2">
-          <h2 className="font-poppins text-2xl font-medium">Add New Class </h2>
+          <h2 className="font-poppins text-2xl font-medium">Add New Course </h2>
           {error && (
             <p className="bg-red-200 text-red-700 p-2 rounded-lg text-sm text-center ">
               {error}
@@ -167,20 +187,31 @@ const AddNewCourse = ({ isOpen, onClose }) => {
               </LocalizationProvider>
             </form>
           </div>
-          <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
-              <label htmlFor="GradeClassId" className="text-active">
-                Grade Class ID
+          <div className="flex flex-col gap-2 w-full md:w-1/2">
+              <label htmlFor="Classes" className="text-active">
+                Classes
               </label>
-              <input
-                name="GradeClassId"
-                id="GradeClassId"
-                type="text"
+              <select
+                name="Classes"
+                id="Classes"
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
-                onChange={handleGradeClassIdChange}
-              />
-            </form>
-          </div>
+                onChange={handleGradeClassChange}
+                value={selectedGradeClassId}
+              >
+                <option value="">select</option>
+                {!isGradeClassesLoading ? (
+                  gradClasses?.map((cl, index) => (
+                    <option key={index} value={cl._id}>
+                      Class {cl.letter} {cl.level}
+                    </option>
+                  ))
+                ) : (
+                  <option value="" disabled>
+                    loading...
+                  </option>
+                )}
+              </select>
+            </div>
           <div className="between pt-8 pb-4">
             <button
               className="w-64 bg-active rounded-lg p-3  text-center text-white "

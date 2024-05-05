@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getGradeClasses } from "../../../services/gradClass.service";
 import { Skeleton } from "@mui/material";
 const ListContainer = styled("div")({
-  height: "38rem",
+  maxHeight: "38rem",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -87,7 +87,7 @@ const AdminClasses = () => {
           <option value={0}>All Grades</option>
           {Array(12)
             .fill(0)
-            .map((arr, index) => (
+            .map((_, index) => (
               <option key={index} value={index + 1}>
                 Grade {index + 1}
               </option>
@@ -95,7 +95,7 @@ const AdminClasses = () => {
         </select>
       </FixedTopContent>
       {!isLoading ? (
-        Array.isArray(gradeClasses) &&
+        Array.isArray(gradeClasses) && gradeClasses.length > 0 ? (
         gradeClasses.map((classData, index) => (
           <div
             key={classData._id}
@@ -114,7 +114,12 @@ const AdminClasses = () => {
               </span>
             </div>
           </div>
-        ))
+        )) 
+      ) : (
+        <div className="text-center text-lg text-gray-400">
+          No Classes available for this grade
+        </div>
+      )
       ) : (
         <>
           <Skeleton variant="rounded" height={50} />

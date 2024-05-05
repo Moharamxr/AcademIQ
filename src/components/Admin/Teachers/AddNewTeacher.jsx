@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createUser } from "../../../services/user.service";
+import { getGradeCourses } from "../../../services/courses.service";
 
 const AddNewTeacher = ({ isOpen, onClose }) => {
   const [day, setDay] = useState("");
@@ -19,6 +20,28 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
     department: "",
     courses: [],
   });
+
+  const [courses, setCourses] = useState([]);
+  const [courseId, setCourseId] = useState("");
+
+  const handleCourseIdChange = (e) => {
+    setCourseId(e.target.value);
+  };
+  const getCourses = async () => {
+    if (!isOpen) {
+      return;
+    }
+    try {
+      const data = await getGradeCourses();
+      setCourses(data.courses);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getCourses();
+  }, [isOpen]);
 
   const [error, setError] = useState("");
 
@@ -58,14 +81,7 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
     setNewTeacherData({ ...newTeacherData, gender: e.target.value });
   };
 
-  const handleCoursesChange = (e) => {
-    // Create a new array with the updated value
-    const updatedCourses = [];
-    updatedCourses.push(e.target.value); // Push the new value instead of setting it at index 0
-
-    // Update the state with the new courses array
-    setNewTeacherData({ ...newTeacherData, courses: updatedCourses });
-  };
+  
 
   const reset = () => {
     setNewTeacherData({
@@ -73,7 +89,7 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
       lastName: "",
       birthdate: "",
       ssn: "",
-      role: "teacher", // Reset to "teacher"
+      role: "teacher", 
       gender: "",
       phone: "",
       city: "",
@@ -426,23 +442,23 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
             </form>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
-              <label htmlFor="courses" className="text-active">
-                courses
+          <form className="flex flex-col gap-2 w-full md:w-1/2">
+              <label htmlFor="courseId" className="text-active">
+                Course
               </label>
               <select
-                name="courses"
-                id="courses"
-                className="bg-gray-100 text-gray-500 text-sm p-2 rounded-lg outline-none"
-                onChange={handleCoursesChange}
+                name="courseId"
+                id="courseId"
+                className="bg-gray-100 text-gray-500 p-2 rounded-lg outline-none"
+                onChange={handleCourseIdChange}
+                value={courseId}
               >
-                <option value="">Select a course</option>
-                <option value="65f8ac273cc2799220c31ede">Biology</option>
-                <option value="65f8ac273cc2799220c31edf">Math</option>
-                <option value="65f8ac273cc2799220c31ee0">Physics</option>
-                <option value="65f8ac273cc2799220c31ee1">Chemistry</option>
-                <option value="65f8ac273cc2799220c31ee2">History</option>
-                {/* Add more options as needed */}
+                <option value="">select</option>
+                {courses.map((course) => (
+                  <option key={course._id} value={course._id}>
+                    {course.title}
+                  </option>
+                ))}
               </select>
             </form>
           </div>

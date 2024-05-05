@@ -22,7 +22,8 @@ import ClassesIcon from "../../../assets/icons/ClassesIcon.jsx";
 import TeachersIcon from "../../../assets/icons/TeachersIcon.jsx";
 import AdminsIcon from "../../../assets/icons/AdminsIcon.jsx";
 import StudentsIcon from "../../../assets/icons/StudentsIcon.jsx";
-
+import FamilyRestroomIcon from "@mui/icons-material/FamilyRestroom";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 const Sidebar = () => {
   const location = useLocation();
   const role = localStorage.getItem("role");
@@ -37,8 +38,8 @@ const Sidebar = () => {
       },
       {
         name: "Courses",
-        icon: <ClassesIcon />,
-        activeIcon: <ClassesIcon active={true} />,
+        icon: <MenuBookIcon sx={{ color: "#94A3B8" }} />,
+        activeIcon: <MenuBookIcon sx={{ color: "#00769E" }} />,
         path: "/admin/courses",
         active: false,
       },
@@ -61,6 +62,13 @@ const Sidebar = () => {
         icon: <StudentsIcon color={"#94A3B8"} />,
         activeIcon: <StudentsIcon color={"#00769E"} />,
         path: "/admin/students",
+        active: false,
+      },
+      {
+        name: "Parents",
+        icon: <FamilyRestroomIcon sx={{ color: "#94A3B8" }} />,
+        activeIcon: <FamilyRestroomIcon sx={{ color: "#00769E" }} />,
+        path: "/admin/parents",
         active: false,
       },
       {
@@ -244,11 +252,10 @@ const Sidebar = () => {
     localStorage.removeItem("fullName", "");
     localStorage.removeItem("email", "");
     window.location.href = "/";
-
   };
 
   return (
-    <nav className="w-full min-w-[fit-content]  max-h-min bg-white rounded-2xl">
+    <nav className="w-full min-w-[fit-content] h-full  max-h-[45rem] min-h-min bg-white rounded-2xl">
       <div className="py-10 flex justify-center items-center">
         <Logo />
       </div>

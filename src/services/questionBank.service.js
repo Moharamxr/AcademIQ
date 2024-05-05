@@ -41,7 +41,7 @@ const handleError = (error) => {
 export const getQuestionBanks = async (level) => {
   try {
     const response = await axiosInstance.get(
-      `${path}/questionBanks?level=${level}`
+      `${path}/questionBanks?level=${level||''}`
     );
     return handleResponse(response);
   } catch (error) {
@@ -93,6 +93,19 @@ export const addQuestion = async (id, newData) => {
     handleError(error);
   }
 };
+
+export const updateQuestion = async (bankId, questionId, newData) => {
+  try {
+    const response = await axiosInstance.put(
+      `${path}/questionBanks/${bankId}/questions/${questionId}`,
+      newData
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
 
 export const getQuestionById = async (bankId, questionId) => {
   try {

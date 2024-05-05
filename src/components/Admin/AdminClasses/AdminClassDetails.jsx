@@ -102,7 +102,7 @@ const AdminClassDetails = () => {
                 ))}
               </div>
             </div>
-            {classData?.students.length > 0 && (
+            {classData?.students?.length > 0 && (
               <div className="flex gap-5 py-2 px-1">
                 <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
                   students of this Class :

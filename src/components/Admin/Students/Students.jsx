@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../../services/user.service";
 import { Skeleton } from "@mui/material";
 const ListContainer = styled("div")({
-  height: "38rem",
+  maxHeight: "38rem",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -53,14 +53,14 @@ const Students = () => {
   return (
     <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
       <FixedTopContent className="between bg-white  py-5">
-        <h2 className="text-2xl ">Students</h2>
-        <select
+        <h2 className="text-2xl">Students</h2>
+        {/* <select
           name=""
           id=""
           className="bg-gray-100 rounded-lg p-3 outline-none"
         >
           <option value="">Class 1</option>
-        </select>
+        </select> */}
       </FixedTopContent>
       {!isLoading ? (
         students.map((student, index) => (
@@ -70,13 +70,13 @@ const Students = () => {
             onClick={() => navigate(`/admin/user/${student._id}`)}
           >
             <div className="flex items-center gap-5">
-              <span className="text-lg font-medium">{index + 1}</span>
+              <span className="">{index + 1}</span>
               <img src={Stu1} alt="" className="w-9 h-9" />
               <p className="font-poppins font-medium">{student.username}</p>
             </div>
-            <span className="cursor-pointer   ">
+            {/* <span className="cursor-pointer   ">
               <ThreeDots />
-            </span>
+            </span> */}
           </div>
         ))
       ) : (

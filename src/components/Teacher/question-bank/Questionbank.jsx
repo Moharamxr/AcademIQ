@@ -28,11 +28,23 @@ const Questionbank = () => {
     getBanks();
   };
   const onOpen = () => {
-    
     setIsOpen(true);
   };
-  const levels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-  const [selectedLevel, setSelectedLevel] = useState('');
+  const levels = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+  ];
+  const [selectedLevel, setSelectedLevel] = useState("");
   const [questionBanks, setQuestionBanks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -40,7 +52,6 @@ const Questionbank = () => {
 
   const handleCourseChange = (e) => {
     setSelectedLevel(parseInt(e.target.value));
-    
   };
   const getCourses = async () => {
     try {
@@ -55,12 +66,16 @@ const Questionbank = () => {
   }, []);
 
   const getBanks = async () => {
-    if (selectedLevel === 0) return;
     setIsLoading(true);
     try {
-      console.log(selectedLevel)
-      const questionBankData = await getQuestionBanks(selectedLevel);
-      setQuestionBanks(questionBankData.questionBanks);
+      if (selectedLevel === "") {
+        const questionBankData = await getQuestionBanks();
+        setQuestionBanks(questionBankData.questionBanks);
+      } else {
+        const questionBankData = await getQuestionBanks(selectedLevel);
+        setQuestionBanks(questionBankData.questionBanks);
+      }
+
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching question banks: ", error);
@@ -80,7 +95,7 @@ const Questionbank = () => {
     <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
       <FixedTopContent className="between bg-white  py-5">
         <h2 className="text-2xl ">Questionbank</h2>
-        
+
         <select
           name="grades"
           id="grades"
@@ -91,7 +106,7 @@ const Questionbank = () => {
           <option value={0}>Select Grade</option>
           {levels.map((level, index) => (
             <option key={index} value={level}>
-             Grade {level}
+              Grade {level}
             </option>
           ))}
         </select>
@@ -139,7 +154,11 @@ const Questionbank = () => {
         </>
       )}
 
-      <AddNewBank isOpen={isOpen} onClose={onClose} gradeCourses={gradeCourses} />
+      <AddNewBank
+        isOpen={isOpen}
+        onClose={onClose}
+        gradeCourses={gradeCourses}
+      />
     </ListContainer>
   );
 };

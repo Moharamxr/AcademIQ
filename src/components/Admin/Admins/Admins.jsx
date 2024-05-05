@@ -39,7 +39,7 @@ const Admins = () => {
         return (
           <div
             key={index}
-            className=" bg-white center flex-col p-4 gap-1 rounded-xl hover:bg-slate-50 hover:cursor-pointer"
+            className=" bg-white center flex-col p-4 gap-1 rounded-xl hover:bg-slate-50 hover:cursor-pointer overflow-hidden"
             onClick={() => navigate(`/admin/user/${admin._id}`)}
           >
             <img src={Stu1} alt="" />

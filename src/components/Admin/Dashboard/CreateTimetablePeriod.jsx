@@ -199,7 +199,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose ,classId }) => {
           <div className="between flex flex-col md:flex-row py-4 md:gap-10">
             <form className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="courseId" className="text-active">
-                Course ID
+                Course
               </label>
               <select
                 name="courseId"

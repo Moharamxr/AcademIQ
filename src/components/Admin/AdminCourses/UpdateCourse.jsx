@@ -4,29 +4,49 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { updateCourse } from "../../../services/courses.service";
 import dayjs from "dayjs";
+import { getGradeClasses } from "../../../services/gradClass.service";
 
 const UpdateCourse = ({ isOpen, onClose, id, courseData }) => {
   if (!courseData) return null;
 
-  const {
-    title,
-    department,
-    gradeClass,
-    schedule,
-  } = courseData;
+  const { title, department, gradeClass, schedule } = courseData;
 
-  console.log(courseData)
-  console.log(schedule?.startDate)
   const [courseTitle, setCourseTitle] = useState(title);
   const [courseDepartment, setCourseDepartment] = useState(department);
-  const [courseGradeClassId, setCourseGradeClassId] = useState(gradeClass?.gradeClassId);
-  const [courseStartDate, setCourseStartDate] = useState(dayjs(schedule?.startDate));
+
+  const [courseStartDate, setCourseStartDate] = useState(
+    dayjs(schedule?.startDate)
+  );
   const [courseEndDate, setCourseEndDate] = useState(dayjs(schedule?.endDate));
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  console.log(courseTitle)
+  const [selectedGradeClassId, setSelectedGradeClassId] = useState(
+    gradeClass?.gradeClassId
+  );
+  const [gradClasses, setGradeClasses] = useState([]);
+  const [isGradeClassesLoading, setIsGradeClassesLoading] = useState(false);
+
+  const handleGradeClassChange = (e) => {
+    setSelectedGradeClassId(e.target.value);
+  };
+
+  const fetchGradeClasses = async () => {
+    setIsGradeClassesLoading(true);
+    try {
+      const data = await getGradeClasses();
+      setGradeClasses(data.gradeClasses);
+    } catch (error) {
+      console.error(error);
+    }
+    setIsGradeClassesLoading(false);
+  };
+
+  useEffect(() => {
+    fetchGradeClasses();
+  }, []);
+
   useEffect(() => {
     if (schedule && schedule.startDate) {
       setCourseStartDate(dayjs(schedule.startDate));
@@ -36,7 +56,7 @@ const UpdateCourse = ({ isOpen, onClose, id, courseData }) => {
     }
     setCourseTitle(title);
     setCourseDepartment(department);
-    setCourseGradeClassId(gradeClass?.gradeClassId);
+    setSelectedGradeClassId(gradeClass?.gradeClassId);
     setCourseStartDate(dayjs(schedule?.startDate));
     setCourseEndDate(dayjs(schedule?.endDate));
   }, [courseData]);
@@ -52,10 +72,6 @@ const UpdateCourse = ({ isOpen, onClose, id, courseData }) => {
 
   const handleDepartmentChange = (e) => {
     setCourseDepartment(e.target.value);
-  };
-
-  const handleGradeClassIdChange = (e) => {
-    setCourseGradeClassId(e.target.value);
   };
 
   const handleStartDateChange = (date) => {
@@ -79,7 +95,7 @@ const UpdateCourse = ({ isOpen, onClose, id, courseData }) => {
         setError("");
       }, 3000);
       return false;
-    } else if (courseGradeClassId === "") {
+    } else if (selectedGradeClassId === "") {
       setError("Grade Class ID must be filled");
       setTimeout(() => {
         setError("");
@@ -105,10 +121,11 @@ const UpdateCourse = ({ isOpen, onClose, id, courseData }) => {
   const reset = () => {
     setCourseTitle(title);
     setCourseDepartment(department);
-    setCourseGradeClassId(gradeClass?.gradeClassId);
+    setSelectedGradeClassId(gradeClass?.gradeClassId);
     setCourseStartDate(dayjs(schedule?.startDate));
     setCourseEndDate(dayjs(schedule?.endDate));
     setError("");
+    setIsLoading(false);
   };
 
   const handleUpdateCourse = async () => {
@@ -119,7 +136,7 @@ const UpdateCourse = ({ isOpen, onClose, id, courseData }) => {
     const newData = {
       title: courseTitle,
       department: courseDepartment,
-      gradeClassId: courseGradeClassId,
+      gradeClassId: selectedGradeClassId,
       startDate: courseStartDate ? courseStartDate.format("YYYY-MM-DD") : null,
       endDate: courseEndDate ? courseEndDate.format("YYYY-MM-DD") : null,
     };
@@ -184,7 +201,6 @@ const UpdateCourse = ({ isOpen, onClose, id, courseData }) => {
                   format="YYYY-MM-DD"
                   onChange={handleStartDateChange}
                   className="bg-gray-100 rounded-md text-active border-0 outline-none"
-
                 />
               </LocalizationProvider>
             </form>
@@ -200,20 +216,30 @@ const UpdateCourse = ({ isOpen, onClose, id, courseData }) => {
               </LocalizationProvider>
             </form>
           </div>
-          <div className="between flex flex-col md:flex-row py-4 md:gap-10">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
-              <label htmlFor="GradeClassId" className="text-active">
-                Grade Class ID
-              </label>
-              <input
-                name="GradeClassId"
-                id="GradeClassId"
-                type="text"
-                className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
-                onChange={handleGradeClassIdChange}
-                value={courseGradeClassId}
-              />
-            </form>
+          <div className="flex flex-col gap-2 w-full md:w-1/2">
+            <label htmlFor="Classes" className="text-active">
+              Classes
+            </label>
+            <select
+              name="Classes"
+              id="Classes"
+              className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
+              onChange={handleGradeClassChange}
+              value={selectedGradeClassId}
+            >
+              <option value="">select</option>
+              {!isGradeClassesLoading ? (
+                gradClasses?.map((cl, index) => (
+                  <option key={index} value={cl._id}>
+                    Class {cl.letter} {cl.level}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>
+                  loading...
+                </option>
+              )}
+            </select>
           </div>
           <div className="between pt-8 pb-4">
             <button

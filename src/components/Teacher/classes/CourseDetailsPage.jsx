@@ -59,7 +59,7 @@ const CourseDetailsPage = () => {
         />
       ),
     },
-    { label: "Students", content: <CourseStudents gradeClassId={gradeClassId}/> },
+    { label: "Students", content: <CourseStudents gradeClassId={gradeClassId} /> },
     {
       label: "Assignment",
       content: (

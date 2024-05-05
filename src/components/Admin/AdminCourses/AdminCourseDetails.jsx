@@ -72,22 +72,24 @@ const AdminCourseDetails = () => {
             </p>
           </div>
 
-          <div className="flex gap-5 py-2 px-1">
-            <p className="font-poppins font-normal text-sm leading-6 text-gray-400">
-              Teachers of this course :
-            </p>
-            <div className="grid grid-cols-4 gap-5">
-              {courseData?.teachers?.map((t, index) => (
-                <div className="center  col-span-1" key={index}>
-                  <p className="font-poppins font-normal text-sm leading-6 text-gray-400">
-                    <span className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2">
-                      {t?.name?.first.slice(0,8)} {t?.name?.last.slice(0,8)}
-                    </span>
-                  </p>
-                </div>
-              ))}
+          {courseData?.teachers?.length > 0 && (
+            <div className="flex gap-5 py-2 px-1">
+              <p className="font-poppins font-normal text-sm leading-6 text-gray-400">
+                Teachers of this course :
+              </p>
+              <div className="grid grid-cols-4 gap-5">
+                {courseData?.teachers?.map((t, index) => (
+                  <div className="center  col-span-1" key={index}>
+                    <p className="font-poppins font-normal text-sm leading-6 text-gray-400">
+                      <span className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2">
+                        {t?.name?.first.slice(0, 8)} {t?.name?.last.slice(0, 8)}
+                      </span>
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <FixedBottomContent className="bg-white py-5 pe-4 flex flex-row-reverse">
           <button
@@ -95,9 +97,14 @@ const AdminCourseDetails = () => {
             onClick={onOpen}
           >
             Edit Course
-            </button>
+          </button>
         </FixedBottomContent>
-        <UpdateCourse isOpen={isOpen} onClose={onClose} courseData={courseData}  id={id} />
+        <UpdateCourse
+          isOpen={isOpen}
+          onClose={onClose}
+          courseData={courseData}
+          id={id}
+        />
       </div>
     )
   );
