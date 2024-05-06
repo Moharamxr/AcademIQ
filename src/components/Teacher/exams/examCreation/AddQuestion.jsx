@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { CircularProgress } from "@mui/material";
-import { addNewQuestionToAssessment } from "../../../services/assessment.service";
+import { addNewQuestionToAssessment } from "../../../../services/assessment.service";
 
 const ListContainer = styled("div")({
   overflowY: "auto",
@@ -225,6 +225,7 @@ const AddQuestion = ({ isOpen, onClose, id }) => {
                 type="submit"
                 className={`bg-active text-white rounded-md px-10 py-2 mt-3 ${isLoading?'px-14':''}`}
                 disabled={isLoading}
+                onClick={handleSubmit}
               >
                 {isLoading ? (
                   <CircularProgress size={16} color="inherit" />

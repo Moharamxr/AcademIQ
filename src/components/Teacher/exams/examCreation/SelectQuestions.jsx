@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import {
   getQuestionBankById,
   getQuestionBanks,
-} from "../../../services/questionBank.service";
+} from "../../../../services/questionBank.service";
 import { CircularProgress, Skeleton } from "@mui/material";
-import CheckedIcon from "../../../assets/icons/CheckedIcon";
+import CheckedIcon from "../../../../assets/icons/CheckedIcon";
 
-import { addMultiQuestionsToAssessment } from "../../../services/assessment.service";
+import { addMultiQuestionsToAssessment } from "../../../../services/assessment.service";
 import styled from "@emotion/styled";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ListContainer = styled("div")({
   maxHeight: "40.5rem",
@@ -23,7 +24,8 @@ const FixedTopContent = styled.div`
   z-index: 1;
 `;
 
-const SelectQuestions = ({ level, id }) => {
+const SelectQuestions = () => {
+  const { id } = useParams();
   const [questionBanks, setQuestionBanks] = useState([]);
   const [selectedBank, setSelectedBank] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -31,15 +33,15 @@ const SelectQuestions = ({ level, id }) => {
   const [questions, setQuestions] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
 
+  const navigate = useNavigate();
+
   const handleBankChange = (e) => {
     setSelectedBank(e.target.value);
   };
 
   const getBanks = async () => {
-    if (level === "") return;
     try {
-      const questionBankData =
-        level === "" ? await getQuestionBanks() : await getQuestionBanks(level);
+      const questionBankData = await getQuestionBanks();
       setQuestionBanks(questionBankData.questionBanks);
     } catch (error) {
       console.error("Error fetching question banks: ", error);
@@ -48,7 +50,7 @@ const SelectQuestions = ({ level, id }) => {
 
   useEffect(() => {
     getBanks();
-  }, [level]);
+  }, []);
 
   const fetchQuestionBankById = async () => {
     setIsLoading(true);
@@ -64,6 +66,7 @@ const SelectQuestions = ({ level, id }) => {
           options: question.options,
           paragraph: question.paragraph,
           checked: false,
+          points: question.points,
         }));
         setQuestions(tempQuestions);
       } else {
@@ -97,7 +100,12 @@ const SelectQuestions = ({ level, id }) => {
     const updatedSelectedQuestions = questions
       .filter((q) => q.checked)
       .map((q) => q.id);
-    setSelectedQuestions(updatedSelectedQuestions);
+    setSelectedQuestions(
+      updatedSelectedQuestions.map((questionId) => ({
+        questionId,
+        points: 1,
+      }))
+    );
   }, [questions]);
 
   const selectAll = () => {
@@ -130,10 +138,16 @@ const SelectQuestions = ({ level, id }) => {
       return;
     }
     setIsSubmitting(true);
+    const requestBody = {
+      questionBankId: selectedBank,
+      questions: selectedQuestions,
+    };
+    console.log("requestBody", requestBody);
     try {
-      await addMultiQuestionsToAssessment(id, selectedQuestions);
+      await addMultiQuestionsToAssessment(id, requestBody);
       setIsSubmitting(false);
       reset();
+      navigate("/exams");
     } catch (error) {
       setError(error.response.data.error);
       setTimeout(() => {

@@ -71,7 +71,17 @@ export const getAssessmentById = async (id) => {
 export const getAssessmentByCourse = async (id) => {
   try {
     const response = await axiosInstance.get(
-      `${path}/assessments/course/${id}`
+      `${path}/assessments/courses/${id}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+export const getAssessmentByStatus = async (status) => {
+  try {
+    const response = await axiosInstance.get(
+      `${path}/assessments?status=${status}`
     );
     return handleResponse(response);
   } catch (error) {
@@ -81,7 +91,7 @@ export const getAssessmentByCourse = async (id) => {
 
 export const addMultiQuestionsToAssessment = async (id, newData) => {
   try {
-    const response = await axiosInstance.post(
+    const response = await axiosInstance.patch(
       `${path}/assessments/${id}/questions`,
       newData
     );

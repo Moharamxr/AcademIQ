@@ -10,9 +10,7 @@ import Child from "../components/Parent/child/Child";
 import Teacher from "../components/Teacher/home/Teacher";
 import TeacherGrades from "../components/Teacher/grades/TeacherGrades";
 import TeacherGradesDetails from "../components/Teacher/grades/TeacherGradesDetails";
-import TeacherExams from "../components/Teacher/exams/TeacherExams";
-import TeacherExamDetails from "../components/Teacher/exams/TeacherExamDetails";
-import ExamCreation from "../components/Teacher/exams/ExamCreation";
+import ExamCreation from "../components/Teacher/exams/examCreation/ExamCreation";
 import Teachers from "../components/Admin/Teachers/Teachers";
 import Students from "../components/Admin/Students/Students";
 import Admins from "../components/Admin/Admins/Admins";
@@ -30,7 +28,9 @@ import UserCourses from "../components/Teacher/classes/UserCourses";
 import CourseDetailsPage from "../components/Teacher/classes/CourseDetailsPage";
 import ClassesForAttendance from "../components/Teacher/attendance/ClassesForAttendance";
 import Parents from "../components/Admin/Parents/Parents";
-import SelectQuestions from "../components/Teacher/exams/SelectQuestions";
+import SelectQuestions from "../components/Teacher/exams/examCreation/SelectQuestions";
+import TeacherExamsPage from "../components/Teacher/exams/TeacherExamsPage";
+import ExamDetails from "../components/Teacher/exams/examDetailsPage/ExamDetails";
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
   const routes = {
@@ -95,11 +95,11 @@ const AcademiqRoutes = () => {
       },
       {
         path: "/exams",
-        component: <TeacherExams />,
+        component: <TeacherExamsPage />,
       },
       {
-        path: "/exams/details",
-        component: <TeacherExamDetails />,
+        path: "/exams/details/:id",
+        component: <ExamDetails />,
       },
       {
         path: "todolist",
@@ -129,7 +129,7 @@ const AcademiqRoutes = () => {
       },
       {
         path: "/exams",
-        component: <TeacherExams />,
+        component: <TeacherExamsPage />,
       },
       {
         path: "/attendance",
@@ -148,8 +148,8 @@ const AcademiqRoutes = () => {
         component: <UnitBank />,
       },
       {
-        path: "/exams/details",
-        component: <TeacherExamDetails />,
+        path: "/exams/details/:id",
+        component: <ExamDetails />,
       },
       {
         path: "/exams/create/:id",
@@ -186,7 +186,7 @@ const AcademiqRoutes = () => {
         {routes[role]?.map((route, index) => (
           <Route key={index} path={route.path} element={route.component} />
         ))}
-        <Route path="*" element={<Login />} />
+        {/* <Route path="*" element={<Login />} /> */}
       </Routes>
     </>
   );
