@@ -8,7 +8,7 @@ import {
   getAssessmentByCourse,
   getAssessmentByStatus,
 } from "../../../services/assessment.service";
-import { CircularProgress, Skeleton } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { getGradeCourses } from "../../../services/courses.service";
 
 const FixedTopContent = styled.div`
@@ -32,7 +32,8 @@ const TeacherExamsContainer = styled("div")({
     background: "transparent",
   },
 });
-const TeacherExamsPage = () => {
+const ExamsPage = () => {
+  const role = localStorage.getItem("role");
   const [courses, setCourses] = useState([]);
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(courses[0]?._id || "");
@@ -55,13 +56,28 @@ const TeacherExamsPage = () => {
   const [lastExams, setLastExams] = useState([]);
   const [pendingExams, setPendingExams] = useState([]);
   const [upcomingExams, setUpcomingExams] = useState([]);
+  const [activeExams, setActiveExams] = useState([]);
   const [loadingExams, setLoadingExams] = useState(false);
 
-  const fetchDrafts = async () => {
+  const fetchExamsByStatus = async () => {
     setLoadingExams(true);
     try {
-      const data = await getAssessmentByStatus("draft");
-      setPendingExams(data?.assessments);
+      if (role === "teacher") {
+        const data = await getAssessmentByStatus("draft");
+        setPendingExams(data?.assessments);
+      } else {
+        const data = await getAssessmentByStatus();
+        const examsData = data?.assessments;
+        const activeExamsData = examsData.filter(
+          (exam) => exam.status === "published"
+        );
+        const upcomingExamsData = examsData.filter(
+          (exam) => exam.status === "pending"
+        );
+        setUpcomingExams(upcomingExamsData);
+        setActiveExams(activeExamsData);
+      }
+
       setLoadingExams(false);
     } catch (error) {
       console.error("Error fetching drafts: ", error);
@@ -70,10 +86,10 @@ const TeacherExamsPage = () => {
   };
 
   useEffect(() => {
-    fetchDrafts();
+    fetchExamsByStatus();
   }, []);
 
-  const fetchExams = async () => {
+  const fetchExamsByCourse = async () => {
     if (!selectedCourse) return;
     setLoadingExams(true);
     try {
@@ -94,10 +110,10 @@ const TeacherExamsPage = () => {
     }
   };
   useEffect(() => {
-    fetchExams();
+      fetchExamsByCourse();
   }, [selectedCourse]);
   const [activeTab, setActiveTab] = useState(0);
-  const tabs = [
+  const teacherTabs = [
     {
       label: "Last Exams",
       content: <Exams exams={lastExams} isLoading={loadingExams} />,
@@ -111,6 +127,21 @@ const TeacherExamsPage = () => {
       content: <Exams exams={upcomingExams} isLoading={loadingExams} />,
     },
   ];
+  const studentTabs = [
+    // {
+    //   label: "Last Exams",
+    //   content: <Exams exams={lastExams} isLoading={loadingExams} />,
+    // },
+    {
+      label: "Active Exams",
+      content: <Exams exams={activeExams} isLoading={loadingExams} />,
+    },
+    {
+      label: "Upcoming Exams",
+      content: <Exams exams={upcomingExams} isLoading={loadingExams} />,
+    },
+  ];
+  const tabs = role === "teacher" ? teacherTabs : studentTabs;
   const navigate = useNavigate();
   const [isCreatingExam, setIsCreatingExam] = useState(false);
 
@@ -179,23 +210,25 @@ const TeacherExamsPage = () => {
           {tabs[activeTab].content}
         </div>
 
-        <FixedBottomContent className=" flex flex-row-reverse pt-12 pe-5 pb-5">
-          <button
-            className={`float-right bg-active text-white p-2 rounded-md  font-poppins ${
-              isCreatingExam ? "px-12" : "px-4"
-            }`}
-            onClick={handleCreateExam}
-          >
-            {isCreatingExam ? (
-              <CircularProgress size={16} color="inherit" />
-            ) : (
-              "Create Exam"
-            )}
-          </button>
-        </FixedBottomContent>
+        {role === "teacher" && (
+          <FixedBottomContent className=" flex flex-row-reverse pt-12 pe-5 pb-5">
+            <button
+              className={`float-right bg-active text-white p-2 rounded-md  font-poppins ${
+                isCreatingExam ? "px-12" : "px-4"
+              }`}
+              onClick={handleCreateExam}
+            >
+              {isCreatingExam ? (
+                <CircularProgress size={16} color="inherit" />
+              ) : (
+                "Create Exam"
+              )}
+            </button>
+          </FixedBottomContent>
+        )}
       </TeacherExamsContainer>
     </div>
   );
 };
 
-export default TeacherExamsPage;
+export default ExamsPage;

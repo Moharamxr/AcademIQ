@@ -5,6 +5,7 @@ import DoneIcon from "../../../assets/icons/DoneIcon";
 import { LinearProgress, Skeleton } from "@mui/material";
 import MissingIcon from "../../../assets/icons/MissingIcon";
 import AddTodo from "./AddTodo";
+import ViewTodoItem from "./ViewTodoItem";
 
 const TodoListContainer = styled("div")({
   overflowY: "auto",
@@ -22,14 +23,14 @@ const BorderLinearProgress = styled(LinearProgress)({
   height: 10,
   borderRadius: 5,
   width: "100%",
-  backgroundColor: "rgba(0, 0, 0, 0.12)", // Example static color
+  backgroundColor: "rgba(0, 0, 0, 0.12)",
   "& .MuiLinearProgress-bar": {
     borderRadius: 5,
-    backgroundColor: "#029e2e", // Example static color
+    backgroundColor: "#029e2e",
   },
 });
 
-const ToDoLists = ({ status, todos,isLoading ,fetchTodos }) => {
+const ToDoLists = ({ status, todos, isLoading, fetchTodos }) => {
   const [isOpen, setIsOpen] = useState(false);
   const openAddTodo = () => {
     setIsOpen(true);
@@ -42,7 +43,18 @@ const ToDoLists = ({ status, todos,isLoading ,fetchTodos }) => {
     if (todos.length === 0) return 0;
     const total = todos?.length;
     const done = todos?.filter((todo) => todo.completed).length;
-    return (done / total) * 100;
+    const progress = (done / total) * 100;
+    return progress.toFixed(0);
+  };
+  const [isView, setIsView] = useState(false);
+  const [viewTodo, setViewTodo] = useState({});
+  const openView = (todo) => {
+    setViewTodo(todo);
+    setIsView(true);
+  };
+  const closeView = () => {
+    setIsView(false);
+    fetchTodos(); 
   };
 
   return (
@@ -70,7 +82,10 @@ const ToDoLists = ({ status, todos,isLoading ,fetchTodos }) => {
           <div className="w-full flex flex-col">
             <p>Your Progress !</p>
             <div className="between gap-x-1">
-              <BorderLinearProgress variant="determinate" value={calculateProgress()} />
+              <BorderLinearProgress
+                variant="determinate"
+                value={calculateProgress()}
+              />
               <p>{calculateProgress()}%</p>
             </div>
           </div>
@@ -78,34 +93,40 @@ const ToDoLists = ({ status, todos,isLoading ,fetchTodos }) => {
       </FixedTopContent>
 
       <div className="flex flex-col py-1 gap-y-2">
-        {isLoading&&
-        <Skeleton variant="rounded" height={70}  />
-        }
-        {todos?.length>0 ? 
-        todos?.map((todo, index) => (
-          <div className="bg-gray-100 rounded-2xl p-3" key={index}>
-            <div className="flex gap-x-3 items-center">
-              {status !== "Missing" ? (
-                <DoneIcon color={status === "Done"} />
-              ) : (
-                <MissingIcon />
-              )}
-              <div className="flex flex-col">
-                <p className="font-inter font-normal text-lg leading-7 text-gray-700">
-                  {todo?.title}
-                </p>
-                <p className="font-poppins font-normal text-xs leading-6 text-gray-500 flex items-end">
-                  {todo?.description}
-                </p>
+        {isLoading && <Skeleton variant="rounded" height={70} />}
+        {todos?.length > 0
+          ? !isLoading &&
+            todos?.map((todo) => (
+              <div
+                className="bg-gray-100 rounded-2xl p-3 cursor-pointer hover:bg-gray-200"
+                key={todo._id}
+                onClick={() => openView(todo)}
+              >
+                <div className="flex gap-x-3 items-center">
+                  {status !== "Missing" ? (
+                    <DoneIcon color={status === "Done"} />
+                  ) : (
+                    <MissingIcon />
+                  )}
+                  <div className="flex flex-col">
+                    <p className="font-inter font-normal text-lg leading-7 text-gray-700">
+                      {todo?.title}
+                    </p>
+                    <p className="font-poppins font-normal text-xs leading-6 text-gray-500 flex items-end">
+                      {todo?.description}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))
-        : <p className="text-center text-gray-500">No todos available</p>}
+            ))
+          : !isLoading && (
+              <p className="text-center text-gray-500">No todos available</p>
+            )}
       </div>
       {status === "Assigned" && (
         <AddTodo onClose={closeAddTodo} isOpen={isOpen} />
       )}
+      <ViewTodoItem isOpen={isView} onClose={closeView} todoItem={viewTodo} />
     </TodoListContainer>
   );
 };

@@ -108,7 +108,7 @@ const PostCard = ({ post, courseId }) => {
       <div className="between p-4">
         <div className="flex gap-2">
           <div
-            className="w-10 h-10 text-white text-xl rounded-full center mr-2"
+            className="w-10 h-10 text-white text-xl rounded-full center mr-2 select-none"
             style={{ backgroundColor: bgColor }}
           >
             {initials}

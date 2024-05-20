@@ -39,9 +39,10 @@ const handleError = (error) => {
 };
 
 export const getQuestionBanks = async (level) => {
+  const levelParam = level ? `?level=${level}` : "";
   try {
     const response = await axiosInstance.get(
-      `${path}/questionBanks?level=${level||''}`
+      `${path}/questionBanks${levelParam}`
     );
     return handleResponse(response);
   } catch (error) {
@@ -105,7 +106,6 @@ export const updateQuestion = async (bankId, questionId, newData) => {
     handleError(error);
   }
 };
-
 
 export const getQuestionById = async (bankId, questionId) => {
   try {

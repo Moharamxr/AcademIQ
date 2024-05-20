@@ -79,9 +79,10 @@ export const getAssessmentByCourse = async (id) => {
   }
 };
 export const getAssessmentByStatus = async (status) => {
+  const statusQueryParam = status ? `?status=${status}` : "";
   try {
     const response = await axiosInstance.get(
-      `${path}/assessments?status=${status}`
+      `${path}/assessments${statusQueryParam}`
     );
     return handleResponse(response);
   } catch (error) {
@@ -112,3 +113,80 @@ export const addNewQuestionToAssessment = async (id, question) => {
     handleError(error);
   }
 };
+
+export const createSubmission = async (id) => {
+  try {
+    const response = await axiosInstance.post(
+      `${path}/submissions/assessments/${id}`,
+      {}
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const submitExamAnswers = async (id, answers) => {
+  console.log(answers)
+  try {
+    const response = await axiosInstance.patch(
+      `${path}/submissions/assessments/${id}/submit`,
+      answers
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getStartedSubmission = async (id) => {
+  try {
+    const response = await axiosInstance.get(`${path}/submissions/assessments/${id}/started`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getSubmissionById = async (id) => {
+  try {
+    const response = await axiosInstance.get(`${path}/submissions/${id}`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getSubmissionByAssessment = async (id) => {
+  try {
+    const response = await axiosInstance.get(
+      `${path}/submissions/assessments/${id}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getSubmissionsByStudent = async (id) => {
+  try {
+    const response = await axiosInstance.get(
+      `${path}/submissions/students/${id}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getStudentSubmissionByAssessment  = async (assessmentId,studentId) => {
+  try {
+    const response = await axiosInstance.get(
+      `${path}/submissions/assessments/${assessmentId}students/${studentId}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+

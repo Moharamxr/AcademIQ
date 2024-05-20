@@ -50,6 +50,7 @@ const Attendance = () => {
   const [period, setPeriod] = useState(0);
   const handleSetPeriod = () => {
     const hour = new Date().getHours();
+    console.log("Hour: ", hour)
     if (hour >= 8 && hour < 9) {
       setPeriod(1);
     } else if (hour >= 9 && hour < 10) {
@@ -117,13 +118,14 @@ const Attendance = () => {
   }, [students]);
 
   const isValidate = () => {
-    if (period === 0) {
-      setError("You can only take attendance between 8:00 AM and 2:00 PM");
-      setTimeout(() => {
-        setError(null);
-      }, 3000);
-      return false;
-    } else if (attendedStudents.length === 0) {
+    // if (period === 0) {
+    //   setError("You can only take attendance between 8:00 AM and 2:00 PM");
+    //   setTimeout(() => {
+    //     setError(null);
+    //   }, 3000);
+    //   return false;
+    // } else
+     if (attendedStudents.length === 0) {
       setError("Please select at least one student.");
       setTimeout(() => {
         setError(null);
@@ -143,8 +145,8 @@ const Attendance = () => {
     setAttendanceLoading(true);
     const newData = {
       students: attendedStudents,
-      period,
-      courseId,
+      period: 7,
+      courseId ,
     };
     console.log(newData);
     try {
@@ -154,6 +156,9 @@ const Attendance = () => {
     } catch (error) {
       console.error(error);
       setError(error.response.data.error);
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
       setAttendanceLoading(false);
     }
   };

@@ -5,17 +5,10 @@ import ParentTimeTable from "../Layout/timeTables/parentTimeTable/ParentTimeTabl
 
 const Connect = () => {
   return (
-    <>
-      <div className="w-full lg:w-8/12 ">
-        <div className="w-full flex md:flex-row flex-col gap-4 ">
-          <ConnectList />
-          <ConnectChat />
-        </div>
-      </div>
-      <aside className="w-full lg:w-4/12  hidden md:block">
-        <ParentTimeTable />
-      </aside>
-    </>
+    <div className="w-full flex md:flex-row flex-col gap-4 ">
+      <ConnectList />
+      <ConnectChat />
+    </div>  
   );
 };
 

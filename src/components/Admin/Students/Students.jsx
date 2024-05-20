@@ -41,7 +41,7 @@ const Students = () => {
       setIsLoading(true);
       const data = await getUsers("student");
       setIsLoading(false);
-      setStudents(data.users);
+      setStudents(data?.users);
     } catch (error) {
       console.error(error);
       setIsLoading(false);
@@ -63,7 +63,7 @@ const Students = () => {
         </select> */}
       </FixedTopContent>
       {!isLoading ? (
-        students.map((student, index) => (
+        students?.map((student, index) => (
           <div
             key={student._id}
             className="between py-3  border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"

@@ -41,7 +41,7 @@ const Parents = () => {
       setIsLoading(true);
       const data = await getUsers("parent");
       setIsLoading(false);
-      setParents(data.users);
+      setParents(data?.users);
     } catch (error) {
       console.error(error);
       setIsLoading(false);
@@ -63,7 +63,7 @@ const Parents = () => {
         </select> */}
       </FixedTopContent>
       {!isLoading ? (
-        parents.map((parent, index) => (
+        parents?.map((parent, index) => (
           <div
             key={parent._id}
             className="between py-3  border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"

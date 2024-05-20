@@ -47,9 +47,10 @@ export const createTodoItem = async (newData) => {
   }
 };
 
-export const getStudentToDos = async (newData) => {
+export const getStudentToDos = async (date) => {
+  const dateParam = date ? `?date=${date}` : "";
   try {
-    const response = await axiosInstance.get(`${path}/todos`, newData);
+    const response = await axiosInstance.get(`${path}/todos${dateParam}`);
     return handleResponse(response);
   } catch (error) {
     handleError(error);

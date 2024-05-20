@@ -17,20 +17,25 @@ const LeaderBoard = () => {
   const [leaders, setLeaders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const gradeClassId = localStorage.getItem("gradeClassId");
+
   const fetchLeaders = async () => {
+    if (!gradeClassId || gradeClassId === "undefined") {
+      return;
+    }
     setIsLoading(true);
     try {
       const data = await getGradeClassStudents(gradeClassId, true);
       setLeaders(data.students);
-      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching leaders: ", error);
+    } finally {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     fetchLeaders();
-  }, []);
+  }, [gradeClassId]);
   return (
     <LeaderBoardContainer className="bg-white rounded-2xl p-4 overflow-hidden ">
       <h3 className="font-poppins font-medium text-2xl leading-10 pt-0 text-black bg-white">
@@ -45,6 +50,11 @@ const LeaderBoard = () => {
           <SkeletonLeaderBoard />
           <SkeletonLeaderBoard />
           <SkeletonLeaderBoard />
+        </div>
+      )}
+      {leaders.length === 0 && !isLoading && (
+        <div className="text-center text-gray-500 mt-5">
+          No students in this class
         </div>
       )}
     </LeaderBoardContainer>

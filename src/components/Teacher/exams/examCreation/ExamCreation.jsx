@@ -6,6 +6,7 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { updateAssessment } from "../../../../services/assessment.service";
+import { CircularProgress } from "@mui/material";
 
 const ExamCreation = () => {
   const { id } = useParams();
@@ -16,6 +17,8 @@ const ExamCreation = () => {
   const [endDate, setEndDate] = useState(dayjs());
   const [duration, setDuration] = useState("");
   const [title, setTitle] = useState("");
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -102,24 +105,26 @@ const ExamCreation = () => {
     }
     const requestBody = {
       title,
-      description: "",
       startDate: new Date(startDate).toISOString(),
       endDate: new Date(endDate).toISOString(),
       duration,
       courseId: selectedCourse,
     };
     console.log("requestBody", requestBody);
+    setIsSubmitting(true);
     try {
       await updateAssessment(id, requestBody);
+      setIsSubmitting(false);
       navigate("/exams");
     } catch (error) {
-      console.error("Error creating exam: ", error);
+      console.error("Error updating assessment: ", error);
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="w-full bg-white rounded-xl p-4">
-      <h2 className="font-poppins text-2xl font-medium">Exam Creation </h2>
+      <h2 className="font-poppins text-2xl font-medium">Exam Creation</h2>
       {error && (
         <p className="bg-red-200 text-red-700 p-2 rounded-lg text-sm text-center mt-2">
           {error}
@@ -230,8 +235,13 @@ const ExamCreation = () => {
         <button
           className="w-56 bg-active rounded-lg p-3  text-center text-white "
           onClick={handleSubmit}
+          disabled={isSubmitting}
         >
-          Submit Exam Details
+          {isSubmitting ? (
+            <CircularProgress size={16} color="inherit" />
+          ) : (
+            "Submit Exam Details"
+          )}
         </button>
       </div>
     </div>

@@ -27,4 +27,12 @@ select {
 
 p, h1, h2, h3, h4, h5, h6, a, button, label, input, select, option, textarea, span, div,{
   font-family: Poppins, sans-serif;
+  
+}
+.custom-paragraph {
+  /* max-width: 80%; */
+  display: flex;
+  word-break: break-word;
+  overflow: hidden;
+  white-space: normal;
 }

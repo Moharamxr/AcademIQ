@@ -1,26 +1,20 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getAssessmentById } from "../../../../services/assessment.service";
+import {
+  getAssessmentById,
+  getStartedSubmission,
+  submitExamAnswers,
+} from "../../../../services/assessment.service";
 import QuestionCard from "./QuestionCard";
-import { Skeleton } from "@mui/material";
+import { CircularProgress, Skeleton, duration } from "@mui/material";
 import AddQuestion from "../examCreation/AddQuestion";
-
-const FixedTopContent = styled.div`
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background-color: white;
-`;
-const FixedBottomContent = styled.div`
-  position: sticky;
-  bottom: 0;
-  z-index: 1;
-  background-color: white;
-`;
+import StudentQuestionCard from "./StudentQuestionCard";
+import { useDispatch, useSelector } from "react-redux";
+import { resetState } from "../../../../store/slices/ExamSlice";
 
 const TeacherExamsContainer = styled("div")({
-  maxHeight: "52rem",
+  height: "100hv",
   width: "100%",
   backgroundColor: "white",
   borderRadius: "0.75rem",
@@ -34,6 +28,12 @@ const TeacherExamsContainer = styled("div")({
 const ExamDetails = () => {
   const { id } = useParams();
 
+  const role = localStorage.getItem("role");
+
+  const examStartDate = new Date (localStorage.getItem("examStartDate"));
+
+  const answers = useSelector((state) => state.examData.examSubmission.answers);
+
   const [isAddOpen, setIsAddOpen] = useState(false);
   const onAddClose = () => setIsAddOpen(false);
   const onAddOpen = () => setIsAddOpen(true);
@@ -43,15 +43,20 @@ const ExamDetails = () => {
   const [exam, setExam] = useState({});
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  // const [submissionId, setSubmissionId] = useState("");
+
   const fetchExam = async () => {
     setLoading(true);
     try {
       const examData = await getAssessmentById(id);
       setExam(examData?.assessment);
+      
       setQuestions(examData?.assessment?.questions);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching exam: ", error);
+      setError(error.response?.data?.error);
       setLoading(false);
     }
   };
@@ -63,11 +68,60 @@ const ExamDetails = () => {
     navigate(`/exams/create/${id}/select-questions`);
   };
 
+  const dispatch = useDispatch();
+
+  const submitAnswers = async () => {
+    console.log("submitting answers", answers);
+    const requestedBody = {
+      answers: answers,
+    };
+    setSubmitting(true);
+    try {
+      // const submissionData = await getStartedSubmission(id);
+      // setSubmissionId(submissionData?.submission?._id);
+      await submitExamAnswers(id, requestedBody);
+      setSubmitting(false);
+      dispatch(resetState());
+      navigate("/exams");
+    } catch (error) {
+      setError(error.response?.data?.error);
+      setTimeout(() => {
+        setError("");
+      } , 5000)
+      setSubmitting(false);
+    }
+  };
+
+  
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     submitAnswers();
+  //   }, exam?.duration * 60 * 1000);
+
+  //   if (exam?.endDate && new Date(exam?.endDate) < new Date()) {
+  //     submitAnswers();
+  //   }
+  // }, []);
+  
+
+  // useEffect(() => {
+  //   const handlePopstate = () => {
+  //     console.log("Navigating back or forward...");
+  //     submitAnswers();
+  //   };
+
+  //   window.addEventListener("popstate", handlePopstate);
+
+  //   return () => {
+  //     window.removeEventListener("popstate", handlePopstate);
+  //   };
+  // }, [dispatch]);
+
   return (
-    <TeacherExamsContainer>
-      <FixedTopContent className="bg-white w-full rounded-xl p-5 pb-0 border-b-2 rounded-b-none px-6">
+    <TeacherExamsContainer className="fixed top-0 right-0 bottom-0 left-0 w-screen h-screen">
+      <div className="bg-white w-full rounded-xl p-5 pb-0 border-b-2 rounded-b-none px-6">
         <h2 className="font-poppins text-2xl font-medium">
-          {exam?.title ? exam?.title : "Exam Title"}{" "}
+          {exam?.title ? exam?.title : "Exam Title"}
         </h2>
         <div className="grid grid-cols-3  py-4">
           <div className="col-span-1 flex gap-2">
@@ -142,7 +196,7 @@ const ExamDetails = () => {
             )}
           </div>
         </div>
-      </FixedTopContent>
+      </div>
 
       <div className="flex flex-col gap-5 p-5">
         {loading && (
@@ -154,42 +208,74 @@ const ExamDetails = () => {
             <Skeleton variant="text" height={20} width={200} />
           </>
         )}
-        {questions?.length > 0 ? (
-          <>
-            <h5 className="font-poppins text-lg font-medium">Mcq</h5>
-
-            {!loading &&
-              questions?.map((question,index) => (
-                <QuestionCard question={question} key={question._id}index={index} />
-              ))}
-          </>
-        ) : (
-          !loading && (
-            <div className="center w-full h-full">
-              <h3 className="text-gray-500">No questions available</h3>
-            </div>
-          )
-        )}
+        {questions?.length > 0
+          ? !loading &&
+            questions?.map((question, index) =>
+              role === "teacher" ? (
+                <QuestionCard
+                  key={question._id ? question._id : question.id}
+                  question={question}
+                  index={index}
+                />
+              ) : (
+                <StudentQuestionCard
+                  key={question._id ? question._id : question.id}
+                  question={question}
+                  index={index}
+                  examId={id}
+                />
+              )
+            )
+          : !loading && (
+              <div className="center w-full h-full">
+                <h3 className="text-gray-500">No questions available</h3>
+              </div>
+            )}
       </div>
-      <FixedBottomContent className="bg-white w-full rounded-xl p-5 px-6">
-        <h3 className="text-gray-700 text-xl py-4">Do you want to...</h3>
-        <div className="center gap-7 py-4">
-          <button
-            className="bg-active border-2 border-active-br p-4 rounded-lg text-white"
-            onClick={handleGoToSelectQuestions}
-          >
-            Choose From Question Bank ?
-          </button>
-          <span className="p-2 px-7 text-gray-600 text-lg">Or</span>
-          <button
-            className="bg-active-bg  border-2 border-active-br p-4 2  rounded-lg text-active"
-            onClick={onAddOpen}
-          >
-            Add New Question ?
-          </button>
+      {!loading && (
+        <div className="bg-white w-full rounded-xl p-5 px-6">
+          {role === "teacher" ? (
+            <>
+              <h3 className="text-gray-700 text-xl py-4">Do you want to...</h3>
+              <div className="center gap-7 py-4">
+                <button
+                  className="bg-active border-2 border-active-br p-4 rounded-lg text-white"
+                  onClick={handleGoToSelectQuestions}
+                >
+                  Choose From Question Bank ?
+                </button>
+                <span className="p-2 px-7 text-gray-600 text-lg">Or</span>
+                <button
+                  className="bg-active-bg  border-2 border-active-br p-4 2  rounded-lg text-active"
+                  onClick={onAddOpen}
+                >
+                  Add New Question ?
+                </button>
+              </div>
+              <AddQuestion isOpen={isAddOpen} onClose={onAddClose} id={id} />
+            </>
+          ) : (
+            <div className="center flex-col pb-4 gap-3 ">
+              {error && (
+                <span className="text-red-700 p-1 bg-red-200 rounded-md px-2">
+                  {error}
+                </span>
+              )}
+              <button
+                className="bg-active border-2 border-active-br p-4 px-8 rounded-lg text-white"
+                onClick={submitAnswers}
+                disabled={submitting}
+              >
+                {submitting ? (
+                  <CircularProgress size={16} color="inherit" />
+                ) : (
+                  "Submit Exam"
+                )}
+              </button>
+            </div>
+          )}
         </div>
-        <AddQuestion isOpen={isAddOpen} onClose={onAddClose} id={id} />
-      </FixedBottomContent>
+      )}
     </TeacherExamsContainer>
   );
 };

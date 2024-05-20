@@ -67,7 +67,6 @@ const Dashboard = () => {
   };
 
   const renderSkeleton = () => {
-    console.log("renderSkeleton");
     return Array(30)
       .fill(0)
       .map((_, index) => (

@@ -151,7 +151,7 @@ const UpdateBankQuestion = ({ isOpen, onClose, id ,question }) => {
     isOpen && (
       <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-600 bg-opacity-50">
         <ListContainer className="bg-white rounded-xl p-5 w-1/2 overflow-y-auto max-h-[95vh]">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3 p-2">
+          <div className="flex flex-col gap-3 p-2">
             <span className="text-xl font-medium pb-4">
               Edit Multiple Choice Question
             </span>
@@ -230,7 +230,7 @@ const UpdateBankQuestion = ({ isOpen, onClose, id ,question }) => {
             </span>
             <div className="between">
               <button
-                type="submit"
+                onClick={handleSubmit}
                 className={`bg-active text-white rounded-md px-10 py-2 mt-3 ${isLoading?'px-14':''}`}
                 disabled={isLoading}
               >
@@ -248,7 +248,7 @@ const UpdateBankQuestion = ({ isOpen, onClose, id ,question }) => {
                 Cancel
               </button>
             </div>
-          </form>
+          </div>
         </ListContainer>
       </div>
     )

@@ -1,13 +1,13 @@
-import { Skeleton } from '@mui/material'
-import React from 'react'
+import { Skeleton } from '@mui/material';
+import React from 'react';
 
 const SkeletonTimeTableCard = () => {
   return (
-    <div className='between'>
-        <Skeleton variant='circular' width={50} height={50} />
-        <Skeleton variant='rounded' width={300} height={50} />
+    <div className='flex gap-3'>
+      <Skeleton variant='circular' width={57} height={50} />
+      <Skeleton variant='rounded' height={50} width="100%" />
     </div>
-  )
-}
+  );
+};
 
-export default SkeletonTimeTableCard
+export default SkeletonTimeTableCard;

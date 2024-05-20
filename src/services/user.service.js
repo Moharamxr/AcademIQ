@@ -86,3 +86,14 @@ export const getUsersCounts = async () => {
     handleError(error);
   }
 };
+
+export const getChildrenByParent = async (id) => {
+  try {
+    const response = await axiosInstance.get(
+      `${path}/users/students/parents/${id}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};

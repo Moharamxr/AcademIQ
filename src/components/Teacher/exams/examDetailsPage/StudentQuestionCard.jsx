@@ -1,7 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import RadioBtn from "../../../../assets/icons/RadioBtn";
+import { useDispatch, useSelector } from "react-redux";
+import { setStudentAnswers } from "../../../../store/slices/ExamSlice";
 
-const QuestionCard = ({ question, index }) => {
+const StudentQuestionCard = ({ question, index, examId }) => {
+  const dispatch = useDispatch();
+
+  const studentId = localStorage.getItem("userId");
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const handleOptionClick = (optionId) => {
+    setSelectedOption(optionId);
+    dispatch(
+      setStudentAnswers({
+        questionId: question.id,
+        optionId: optionId,
+        examId,
+        studentId,
+      })
+    );
+  };
+
   return (
     <div className="w-full border-b-2 pb-5">
       <div className="between">
@@ -18,8 +37,12 @@ const QuestionCard = ({ question, index }) => {
       </div>
       <div className="flex flex-col gap-3 pt-4 ps-4">
         {question?.options?.map((op) => (
-          <div className="flex gap-3" key={op.id ? op.id : op._id}>
-            {op?.isCorrect ? (
+          <div
+            className="flex gap-3"
+            key={op.id ? op.id : op._id}
+            onClick={() => handleOptionClick(op.id ? op.id : op._id)}
+          >
+            {selectedOption === (op.id ? op.id : op._id) ? (
               <RadioBtn />
             ) : (
               <svg
@@ -28,6 +51,7 @@ const QuestionCard = ({ question, index }) => {
                 viewBox="0 0 20 21"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                className="cursor-pointer mt-1"
               >
                 <circle
                   cx="10"
@@ -38,7 +62,7 @@ const QuestionCard = ({ question, index }) => {
                 />
               </svg>
             )}
-            <span>{op?.text}</span>
+            <span className="cursor-pointer">{op?.text}</span>
           </div>
         ))}
       </div>
@@ -46,4 +70,4 @@ const QuestionCard = ({ question, index }) => {
   );
 };
 
-export default QuestionCard;
+export default StudentQuestionCard;

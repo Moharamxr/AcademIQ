@@ -19,17 +19,15 @@ const ParentTimeTable = () => {
       let data;
       if (role === "teacher") {
         data = await getTeacherTimetable(userId);
-      } else if (role === "student") {
-        const gradeClassId = localStorage.getItem("gradeClassId");
-        data = await getClassTimetable(gradeClassId);
       } else {
-        return;
+        const gradeClassId = localStorage.getItem("gradeClassId");
+        if (!gradeClassId || gradeClassId === "undefined" || gradeClassId === "null") {
+          return;
+        }
+        data = await getClassTimetable(gradeClassId);
       }
-      console.log("data", data);
       const timeTableData = data?.timetable;
-      console.log("timeTableData", timeTableData);
       if (timeTableData) {
-        // Initialize activeTimeTable with break periods
         const activeTimeTables = Array(6).fill(null);
         const date = new Date();
         const dayOfWeek = date.getDay();
@@ -42,16 +40,15 @@ const ParentTimeTable = () => {
           "Friday",
           "Saturday",
         ];
-        // const dayName = days[dayOfWeek];
-        const dayName = "Sunday";
+        const dayName = days[dayOfWeek];
+        // const dayName = "Sunday";
 
         const filteredTimeTable = timeTableData.filter(
           (item) => item.day === dayName
         );
 
         filteredTimeTable.sort((a, b) => a.period - b.period);
-        console.log("sorted timeTableData", filteredTimeTable);
-
+        
         filteredTimeTable.forEach((item) => {
           const index = item.period - 1; 
           activeTimeTables[index] = item;

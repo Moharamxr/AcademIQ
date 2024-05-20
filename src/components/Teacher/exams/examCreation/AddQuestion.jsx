@@ -18,7 +18,7 @@ const AddQuestion = ({ isOpen, onClose, id }) => {
     paragraph: "",
     type: "Multiple-Choice",
     answer: "",
-    options: [{ text: "", reason: "", isCorrect: false }],
+    options: [{ text: "", reason: "no reason", isCorrect: false }],
     tags: [],
     difficulty: "hard",
     points : ''
@@ -103,7 +103,7 @@ const AddQuestion = ({ isOpen, onClose, id }) => {
       paragraph: "",
       type: "Multiple-Choice",
       answer: "",
-      options: [{ text: "", reason: "", isCorrect: true }],
+      options: [{ text: "", reason: "no reason", isCorrect: true }],
       tags: [],
       difficulty: "hard",
       points : 1
@@ -186,7 +186,7 @@ const AddQuestion = ({ isOpen, onClose, id }) => {
             {questionData.options.map((option, index) => (
               <div key={index} className="center gap-3 pt-3 ">
                 <span className="text-sm font-medium">{index + 1}.</span>
-                <label className="center ">
+                <label className="center">
                   <input
                     type="radio"
                     name="options"

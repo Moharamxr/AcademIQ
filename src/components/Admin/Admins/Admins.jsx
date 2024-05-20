@@ -23,7 +23,7 @@ const Admins = () => {
       setIsLoading(true);
       const data = await getUsers("admin");
       setIsLoading(false);
-      setAdmins(data.users);
+      setAdmins(data?.users);
     } catch (error) {
       console.error(error);
       setIsLoading(false);
@@ -35,7 +35,7 @@ const Admins = () => {
 
   return (
     <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 ">
-      {admins.map((admin, index) => {
+      {admins?.map((admin, index) => {
         return (
           <div
             key={index}
@@ -58,7 +58,7 @@ const Admins = () => {
           </div>
         );
       })}
-      {isLoading&&<Skeleton variant="rounded" height={210} />}
+      {isLoading && <Skeleton variant="rounded" height={210} />}
       <div className=" bg-white center flex-col p-4 gap-10 rounded-xl">
         <GrayAddImg />
         <button

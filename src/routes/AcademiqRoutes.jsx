@@ -2,7 +2,6 @@ import React from "react";
 import { Routes } from "react-router-dom";
 import Connect from "../components/connect/Connect";
 import Report from "../components/Report/Report";
-import Parent from "../components/Parent/home/Parent";
 import { Route } from "react-router-dom";
 import ToDoPage from "../components/Student/todo-list/ToDoPage";
 import StuAssignments from "../components/Student/assignments/StuAssignments";
@@ -29,8 +28,9 @@ import CourseDetailsPage from "../components/Teacher/classes/CourseDetailsPage";
 import ClassesForAttendance from "../components/Teacher/attendance/ClassesForAttendance";
 import Parents from "../components/Admin/Parents/Parents";
 import SelectQuestions from "../components/Teacher/exams/examCreation/SelectQuestions";
-import TeacherExamsPage from "../components/Teacher/exams/TeacherExamsPage";
 import ExamDetails from "../components/Teacher/exams/examDetailsPage/ExamDetails";
+import ExamsPage from "../components/Teacher/exams/ExamsPage";
+import StudentParentHome from "../components/Parent/home/StudentParentHome";
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
   const routes = {
@@ -56,6 +56,10 @@ const AcademiqRoutes = () => {
         component: <Dashboard />,
       },
       {
+        path: "/profile/:id",
+        component: <UserProfile />,
+      },
+      {
         path: "/admin/courses",
         component: <AdminCourses />,
       },
@@ -75,11 +79,19 @@ const AcademiqRoutes = () => {
         path: "/admin/user/:id",
         component: <UserProfile />,
       },
+      {
+        path: "/report",
+        component: <Report />,
+      }
     ],
     student: [
       {
         path: "/home",
-        component: <Parent />,
+        component: <StudentParentHome />,
+      },
+      {
+        path: "/profile/:id",
+        component: <UserProfile />,
       },
       {
         path: "/assignments",
@@ -95,7 +107,7 @@ const AcademiqRoutes = () => {
       },
       {
         path: "/exams",
-        component: <TeacherExamsPage />,
+        component: <ExamsPage />,
       },
       {
         path: "/exams/details/:id",
@@ -110,6 +122,10 @@ const AcademiqRoutes = () => {
       {
         path: "/home",
         component: <Teacher />,
+      },
+      {
+        path: "/profile/:id",
+        component: <UserProfile />,
       },
       {
         path: "/courses",
@@ -129,7 +145,7 @@ const AcademiqRoutes = () => {
       },
       {
         path: "/exams",
-        component: <TeacherExamsPage />,
+        component: <ExamsPage />,
       },
       {
         path: "/attendance",
@@ -159,11 +175,15 @@ const AcademiqRoutes = () => {
         path: "/exams/create/:id/select-questions",
         component: <SelectQuestions />,
       },
+      {
+        path: "/report",
+        component: <Report />,
+      },
     ],
     parent: [
       {
         path: "/home",
-        component: <Parent />,
+        component: <StudentParentHome />,
       },
       {
         path: "/connect",
@@ -174,8 +194,12 @@ const AcademiqRoutes = () => {
         component: <Report />,
       },
       {
-        path: "child",
+        path: "/child/:childID",
         component: <Child />,
+      },
+      {
+        path: "/profile/:id",
+        component: <UserProfile />,
       },
     ],
   };

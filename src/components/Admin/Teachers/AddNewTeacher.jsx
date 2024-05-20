@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createUser } from "../../../services/user.service";
 import { getGradeCourses } from "../../../services/courses.service";
+import { CircularProgress } from "@mui/material";
 
 const AddNewTeacher = ({ isOpen, onClose }) => {
   const [day, setDay] = useState("");
@@ -23,10 +24,12 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
 
   const [courses, setCourses] = useState([]);
   const [courseId, setCourseId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCourseIdChange = (e) => {
-    setCourseId(e.target.value);
+    setNewTeacherData({ ...newTeacherData, courses: [e.target.value] });
   };
+
   const getCourses = async () => {
     if (!isOpen) {
       return;
@@ -81,15 +84,13 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
     setNewTeacherData({ ...newTeacherData, gender: e.target.value });
   };
 
-  
-
   const reset = () => {
     setNewTeacherData({
       firstName: "",
       lastName: "",
       birthdate: "",
       ssn: "",
-      role: "teacher", 
+      role: "teacher",
       gender: "",
       phone: "",
       city: "",
@@ -177,9 +178,6 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
       }, 3000);
       return false;
     }
-
-    // If all validations pass, clear the error after 3 seconds
-
     return true;
   };
 
@@ -203,19 +201,14 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
       courses: newTeacherData.courses,
       role: newTeacherData.role,
     };
-
+    setIsLoading(true);
     try {
-      const data = await createUser(requestData);
-      console.log("New teacher added successfully!", data);
-      reset();
-      onClose();
+      await createUser(requestData);
+      setIsLoading(false);
+      closeModel();
     } catch (error) {
-      console.error(error);
-      if (error.response) {
-        setError(error.response.data.error);
-      } else {
-        setError("Something went wrong");
-      }
+      setIsLoading(false);
+      setError(error?.response?.data?.error || "Something went wrong");
     }
   };
 
@@ -231,7 +224,7 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
           )}
 
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="FirstName" className="text-active">
                 First Name
               </label>
@@ -241,8 +234,8 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleFirstNameChange}
               />
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="LastName" className="text-active">
                 Last Name
               </label>
@@ -252,10 +245,10 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleLastNameChange}
               />
-            </form>
+            </div>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Birthdate" className="text-active">
                 Birthdate
               </label>
@@ -332,26 +325,17 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                   }}
                 >
                   <option value="">Year</option>
-                  <option value="2019">2019</option>
-                  <option value="2018">2018</option>
-                  <option value="2017">2017</option>
-                  <option value="2016">2016</option>
-                  <option value="2015">2015</option>
-                  <option value="2014">2014</option>
-                  <option value="2013">2013</option>
-                  <option value="2012">2012</option>
-                  <option value="2011">2011</option>
-                  <option value="2010">2010</option>
-                  <option value="2009">2009</option>
-                  <option value="2008">2008</option>
-                  <option value="2007">2007</option>
-                  <option value="2006">2006</option>
-                  <option value="2005">2005</option>
-                  <option value="2004">2004</option>
+                  {Array.from({ length: 50 }, (_, i) => {
+                    return (
+                      <option key={i} value={2000 + i}>
+                        {1960 + i}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Gender" className="text-active">
                 Gender
               </label>
@@ -360,15 +344,16 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                 id="Gender"
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleGenderChange}
+                value={newTeacherData.gender}
               >
                 <option value="">Select </option>
                 <option value="male">male</option>
                 <option value="female">female</option>
               </select>
-            </form>
+            </div>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="SSN" className="text-active">
                 SSN
               </label>
@@ -379,8 +364,8 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleSSNChange}
               />
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Phone" className="text-active">
                 Phone
               </label>
@@ -391,10 +376,10 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handlePhoneChange}
               />
-            </form>
+            </div>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="City" className="text-active">
                 City
               </label>
@@ -404,8 +389,8 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleCityChange}
               />
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Street" className="text-active">
                 Street
               </label>
@@ -415,10 +400,10 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleStreetChange}
               />
-            </form>
+            </div>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="State" className="text-active">
                 State
               </label>
@@ -428,10 +413,10 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleStateChange}
               />
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="department" className="text-active">
-                department
+                Department
               </label>
               <input
                 name="department"
@@ -439,10 +424,10 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                 className="bg-gray-100 text-gray-500 text-sm p-2  rounded-lg outline-none"
                 onChange={handleDepartmentChange}
               />
-            </form>
+            </div>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10 ">
-          <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="courseId" className="text-active">
                 Course
               </label>
@@ -451,7 +436,7 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                 id="courseId"
                 className="bg-gray-100 text-gray-500 p-2 rounded-lg outline-none"
                 onChange={handleCourseIdChange}
-                value={courseId}
+                value={newTeacherData.courses[0]}
               >
                 <option value="">select</option>
                 {courses.map((course) => (
@@ -460,14 +445,19 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                   </option>
                 ))}
               </select>
-            </form>
+            </div>
           </div>
           <div className="between pt-8 pb-4">
             <button
               className="w-64 bg-active rounded-lg p-3  text-center text-white "
               onClick={handleAddNewTeacher}
+              disabled={isLoading}
             >
-              Done
+              {isLoading ? (
+                <CircularProgress size={16} color="inherit" />
+              ) : (
+                "Done"
+              )}
             </button>
             <button
               className="w-64 bg-white rounded-lg p-3 border-2 border-active-br text-center text-active "

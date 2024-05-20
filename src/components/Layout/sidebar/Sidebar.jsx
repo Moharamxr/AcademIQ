@@ -6,12 +6,10 @@ import ChildIcon from "../../../assets/icons/ChildIcon.jsx";
 import UpCursor from "../../../assets/icons/UpCursor.jsx";
 import ConnectIcon from "../../../assets/icons/ConnectIcon.jsx";
 import ReportIcon from "../../../assets/icons/ReportIcon.jsx";
-import FirstChildImage from "../../../assets/FirstChild.png";
-import SecondChildImage from "../../../assets/secondChild.png";
 import SettingIcon from "../../../assets/icons/SettingIcon.jsx";
 import SignOutIcon from "../../../assets/icons/SignoutIcon.jsx";
 import SupportIcon from "../../../assets/icons/SupportIcon.jsx";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import AssignmentsIcon from "../../../assets/icons/AssignmentsIcon.jsx";
 import TodoListIcon from "../../../assets/icons/TodoListIcon.jsx";
 import AttendanceIcon from "../../../assets/icons/AttendanceIcon.jsx";
@@ -24,9 +22,62 @@ import AdminsIcon from "../../../assets/icons/AdminsIcon.jsx";
 import StudentsIcon from "../../../assets/icons/StudentsIcon.jsx";
 import FamilyRestroomIcon from "@mui/icons-material/FamilyRestroom";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
+import { getChildrenByParent } from "../../../services/user.service.js";
+import { Skeleton } from "@mui/material";
+
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { childID } = useParams();
+  const firstChild = localStorage.getItem("firstChild");
   const role = localStorage.getItem("role");
+  const [children, setChildren] = useState([]);
+  const [selectedChild, setSelectedChild] = useState(firstChild || childID);
+  const [isChildrenLoading, setIsChildrenLoading] = useState(false);
+
+  const fetchChildren = async () => {
+    if (role !== "parent") return;
+    setIsChildrenLoading(true);
+    const data = await getChildrenByParent(localStorage.getItem("userId"));
+    setChildren(data?.children || []);
+    setIsChildrenLoading(false);
+
+    if (!selectedChild && data?.children?.length > 0) {
+      const initialChild = data.children[0]._id;
+      setSelectedChild(initialChild);
+      localStorage.setItem("firstChild", initialChild);
+      localStorage.setItem("gradeClassId", data.children[0]?.gradeClassId);
+      navigate(`/child/${initialChild}`);
+    }
+  };
+
+  useEffect(() => {
+    fetchChildren();
+  }, []);
+
+  useEffect(() => {
+    if (childID && selectedChild !== childID) {
+      setSelectedChild(childID);
+      localStorage.setItem("firstChild", childID);
+      navigate(`/child/${childID}`);
+    }
+  }, [childID]);
+
+  useEffect(() => {
+    if (selectedChild) {
+      const child = children.find((c) => c._id === selectedChild);
+      if (child) {
+        localStorage.setItem("gradeClassId", child.gradeClassId);
+        localStorage.setItem("firstChild", selectedChild);
+      }
+    }
+  }, [selectedChild]);
+
+  const handleSelectChild = (childId) => {
+    setSelectedChild(childId);
+    navigate(`/child/${childId}`);
+  };
+
   const [nav, setNav] = useState({
     admin: [
       {
@@ -78,6 +129,13 @@ const Sidebar = () => {
         path: "/admin/admins",
         active: false,
       },
+      {
+        name: "Report",
+        icon: <ReportIcon />,
+        activeIcon: <ReportIcon active={true} />,
+        path: "/report",
+        active: false,
+      },
     ],
 
     parent: [
@@ -92,33 +150,22 @@ const Sidebar = () => {
         name: "Child",
         icon: <ChildIcon />,
         activeIcon: <ChildIcon active={true} />,
-        path: "/child",
+        path: `/child`,
         active: false,
-        children: [
-          {
-            name: "Jane Cooper",
-            image: FirstChildImage,
-            id: 1355,
-          },
-          {
-            name: "Wade Cooper",
-            image: SecondChildImage,
-            id: 2555,
-          },
-        ],
-      },
-      {
-        name: "Connect",
-        icon: <ConnectIcon />,
-        activeIcon: <ConnectIcon active={true} />,
-        path: "/connect",
-        active: false,
+        children,
       },
       {
         name: "Report",
         icon: <ReportIcon />,
         activeIcon: <ReportIcon active={true} />,
         path: "/report",
+        active: false,
+      },
+      {
+        name: "Connect",
+        icon: <ConnectIcon />,
+        activeIcon: <ConnectIcon active={true} />,
+        path: "/connect",
         active: false,
       },
     ],
@@ -202,8 +249,16 @@ const Sidebar = () => {
         path: "/attendance",
         active: false,
       },
+      {
+        name: "Report",
+        icon: <ReportIcon />,
+        activeIcon: <ReportIcon active={true} />,
+        path: "/report",
+        active: false,
+      },
     ],
   });
+
   const staticNavBar = [
     {
       name: "Setting",
@@ -245,17 +300,12 @@ const Sidebar = () => {
   }, [location.pathname, role]);
 
   const handleLogout = () => {
-    localStorage.setItem("isLoggedIn", false);
-    localStorage.removeItem("token", "");
-    localStorage.removeItem("role", "");
-    localStorage.removeItem("userId", "");
-    localStorage.removeItem("fullName", "");
-    localStorage.removeItem("email", "");
+    localStorage.clear();
     window.location.href = "/";
   };
 
   return (
-    <nav className="w-full min-w-[fit-content] h-full  max-h-[45rem] min-h-min bg-white rounded-2xl">
+    <nav className="w-full min-w-[fit-content] h-full max-h-[50rem] min-h-min bg-white rounded-2xl">
       <div className="py-10 flex justify-center items-center">
         <Logo />
       </div>
@@ -285,14 +335,17 @@ const Sidebar = () => {
                 </NavLink>
               ) : (
                 <div
-                  className={`p-1 px-4 py-2  cursor-pointer  border-l-[3px] rounded-[3px] ${
+                  className={`p-1 px-4 py-2 cursor-pointer border-l-[3px] rounded-[3px] ${
                     item.active
-                      ? "bg-active-bg  border-active "
+                      ? "bg-active-bg border-active "
                       : "border-white "
                   } hover:bg-active-bg`}
                   key={item.path}
                 >
-                  <NavLink to={item.path} className="between space-x-4">
+                  <NavLink
+                    to={`/child/${selectedChild}`}
+                    className="between space-x-4"
+                  >
                     <div className="flex space-x-4">
                       <ChildIcon active={item.active} />
                       <p
@@ -310,20 +363,33 @@ const Sidebar = () => {
                       item.active ? "active" : ""
                     }`}
                   >
-                    {item.children.map((child) => (
-                      <li key={child.id}>
-                        <div className="flex space-x-4 hover:bg-white rounded-xl">
-                          <img
-                            src={child.image}
-                            alt={child.name}
-                            className="aspect-square"
-                          />
-                          <p className="font-poppins text-[10px] leading-6 tracking-normal text-left text-active flex-shrink-0">
-                            {child.name}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
+                    {isChildrenLoading && <Skeleton />}
+                    {!isChildrenLoading &&
+                      children?.map((child) => (
+                        <li
+                          key={child?._id}
+                          onClick={() => handleSelectChild(child?._id)}
+                        >
+                          <div
+                            className={`flex space-x-4 hover:bg-white rounded-xl ${
+                              selectedChild === child._id && "bg-white"
+                            }`}
+                          >
+                            <div
+                              className="w-6 h-6 text-white text-[10px] rounded-full center mr-2 select-none"
+                              style={{
+                                backgroundColor: child.profilePicture.color,
+                              }}
+                            >
+                              {child?.name?.first.charAt(0) +
+                                child?.name?.last.charAt(0)}
+                            </div>
+                            <p className="font-poppins text-[10px] leading-6 tracking-normal text-left text-active flex-shrink-0">
+                              {child?.name?.first} {child?.name?.last}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
                   </ul>
                 </div>
               )}

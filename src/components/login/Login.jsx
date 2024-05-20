@@ -7,7 +7,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../store/slices/userSlice";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, LinearProgress } from "@mui/material";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -62,7 +62,6 @@ const Login = () => {
         };
         dispatch(setUserData(newUserData));
         setIsLoading(false);
-        
 
         setErrorMessage("");
         navigate("/home");
@@ -130,7 +129,18 @@ const Login = () => {
               onClick={handleLogin}
               disabled={isLoading}
             >
-              {isLoading ? <CircularProgress size={16} color="inherit" /> : "Login"}
+              {isLoading ? (
+                <div className=" py-3 ">
+                  <LinearProgress
+                    variant="buffer"
+                    value={0}
+                    valueBuffer={0}
+                    className="w-2/3"
+                  />
+                </div>
+              ) : (
+                "Login"
+              )}
             </button>
           </div>
         </div>

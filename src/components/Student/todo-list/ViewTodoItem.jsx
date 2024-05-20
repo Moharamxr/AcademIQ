@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { createTodoItem } from "../../../services/todo.service";
-import { DateTimePicker, StaticDateTimePicker } from "@mui/x-date-pickers";
+import {  updateToDoItem } from "../../../services/todo.service";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import styled from "@emotion/styled";
 import { CircularProgress } from "@mui/material";
 const FixedBottomContent = styled.div`
@@ -12,12 +11,21 @@ const FixedBottomContent = styled.div`
   bottom: 0;
   z-index: 1;
 `;
-const AddTodo = ({ onClose, isOpen }) => {
+const ViewTodoItem = ({ onClose, isOpen, todoItem }) => {
   const [todo, setTodo] = useState({
-    title: "",
-    description: "",
-    schedule: dayjs(),
+    title: todoItem?.title,
+    description: todoItem?.description,
+    schedule: dayjs(todoItem?.schedule),
+    completed : todoItem?.completed,
   });
+  useEffect(() => {
+    setTodo({
+      title: todoItem?.title,
+      description: todoItem?.description,
+      schedule: dayjs(todoItem?.schedule),
+      completed : todoItem?.completed,
+    });
+  }, [todoItem]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -74,7 +82,7 @@ const AddTodo = ({ onClose, isOpen }) => {
     onClose();
   };
 
-  const handleAddTodo = async () => {
+  const handleEditTodo = async () => {
     const isValid = isValidate();
     if (!isValid) {
       return;
@@ -86,7 +94,7 @@ const AddTodo = ({ onClose, isOpen }) => {
         description: todo?.description,
         schedule: todo?.schedule?.toISOString(),
       };
-      await createTodoItem(newData);
+      await updateToDoItem(todoItem?._id, newData);
       setIsLoading(false);
       closeModal();
     } catch (error) {
@@ -102,7 +110,7 @@ const AddTodo = ({ onClose, isOpen }) => {
           <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-600 bg-opacity-50">
             <div className="bg-white z-50 w-[90%] md:w-[50%] xl:w-[35%]  max-h-[90%] rounded-xl px-6 py-4">
               <h3 className="font-inter font-normal text-lg leading-7 text-active text-center py-3">
-                Add to todo list
+                Edit todo item
               </h3>
               {error && (
                 <p className="bg-red-200 text-red-700 p-2 rounded-lg text-sm text-center ">
@@ -121,7 +129,7 @@ const AddTodo = ({ onClose, isOpen }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DateTimePicker
                         sx={{ width: "100%" }}
-                        value={todo.schedule}
+                        value={todo.schedule || dayjs()} // Use current date if todo.schedule is undefined
                         onChange={handleScheduleChange}
                       />
                     </LocalizationProvider>
@@ -137,8 +145,8 @@ const AddTodo = ({ onClose, isOpen }) => {
                   <input
                     type="text"
                     id="addTitleTodo"
-                    className="bg-white border-[0.5px] border-gray-400/70  text-gray-800 p-2 h-14 rounded-[4px] outline-none hover:border-black "
-                    value={todo.title}
+                    className="outline-none border border-active rounded-md  text-start px-2 h-14"
+                    value={todo?.title}
                     onChange={handleTitleChange}
                   />
                 </div>
@@ -152,7 +160,7 @@ const AddTodo = ({ onClose, isOpen }) => {
                   <textarea
                     type="text"
                     id="addDescTodo"
-                    className="bg-white border-[0.5px] border-gray-400/70  text-gray-800 p-2 h-14 rounded-[4px] outline-none hover:border-black resize-none"
+                    className="outline-none border border-active rounded-md h-32 text-start px-2 resize-none"
                     value={todo.description}
                     onChange={handleDescriptionChange}
                   />
@@ -161,7 +169,7 @@ const AddTodo = ({ onClose, isOpen }) => {
               <FixedBottomContent className=" between px-4 bg-white pt-10 pb-3 object-cover">
                 <button
                   className="h-12 bg-active text-white rounded-md font-medium py-0 sm:px-24 md:px-10 lg:px-16 px-11"
-                  onClick={handleAddTodo}
+                  onClick={handleEditTodo}
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -185,4 +193,4 @@ const AddTodo = ({ onClose, isOpen }) => {
   );
 };
 
-export default AddTodo;
+export default ViewTodoItem;
