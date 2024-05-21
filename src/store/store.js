@@ -1,14 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userSlice from './slices/userSlice';
 import calenderSlice from './slices/calenderSlice';
-import ExamSlice from './slices/ExamSlice';
+import examSlice from './slices/examSlice';
 import parentSlice from './slices/parentSlice';
 import reportsSlice from './slices/reportsSlice';
 
 export const store = configureStore({
     reducer: {
         userData: userSlice,
-        examData: ExamSlice, 
+        examData: examSlice, 
         calenderData : calenderSlice,
         parentData: parentSlice,
         reportsData: reportsSlice,

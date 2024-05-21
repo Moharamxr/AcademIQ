@@ -11,9 +11,8 @@ const TopBar = () => {
     ?.split(" ")
     .map((n) => n[0].toUpperCase())
     .join("");
-  const bgColor = localStorage.getItem("profilePicture");
   const profilePictureUrl = localStorage.getItem("profilePictureUrl");
-
+  
   const navigate = useNavigate();
 
   const handleGotoProfile = () => {
@@ -40,16 +39,16 @@ const TopBar = () => {
       </div>
       <div className=" col-span-4  h-14  flex  justify-between ps-4 gap-5 xl:gap-x-3 lg:gap-x-1">
         {/* <img src={AvatarPic} alt="AvatarPic  " className="aspect-square" /> */}
-        {/* {profilePictureUrl !== '' ? (
+        {profilePictureUrl !== "" ? (
           <img src={profilePictureUrl} className="w-14 h-14 rounded-full" />
-        ) : ( */}
+        ) : (
           <div
             className="w-14 h-14 bg-active  text-white text-2xl rounded-full center select-none cursor-pointer"
             onClick={handleGotoProfile}
           >
             {initials}
           </div>
-        {/* )} */}
+        )}
         <div
           className="bg-white xl:py-1 xl:px-2 w-7/12   lg:flex hidden  flex-col justify-center items-center rounded-xl cursor-pointer"
           onClick={handleGotoProfile}
