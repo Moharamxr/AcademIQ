@@ -11,7 +11,7 @@ import { CircularProgress, Skeleton, duration } from "@mui/material";
 import AddQuestion from "../examCreation/AddQuestion";
 import StudentQuestionCard from "./StudentQuestionCard";
 import { useDispatch, useSelector } from "react-redux";
-import { resetState } from "../../../../store/slices/ExamSlice";
+import { resetState } from "../../../../store/slices/examSlice";
 
 const TeacherExamsContainer = styled("div")({
   height: "100hv",
