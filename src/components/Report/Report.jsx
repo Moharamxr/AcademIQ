@@ -9,35 +9,35 @@ const Report = () => {
   const toggleNewMessage = useSelector(
     (state) => state.reportsData.toggleNewMessage
   );
-  const selectedContact = useSelector(
-    (state) => state.reportsData.selectedContact
-  );
-  const [reports, setReports] = useState([]);
-  const [selectedReport, setSelectedReport] = useState({});
-  const [loading, setLoading] = useState(false);
+  
+  const [sentReports, setSentReports] = useState([]);
+  const [receivedReports, setReceivedReports] = useState([]);
+
+  const [isReportLoading, setIsReportLoading] = useState(false);
 
   const fetchReports = async () => {
-    setLoading(true);
-    const reportsData = await getUserReport(true);
-    setReports(reportsData.reports);
-    setLoading(false);
+    setIsReportLoading(true);
+    try {
+      const receivedReports = await getUserReport(false);
+      const sentReports = await getUserReport(true);
+      setReceivedReports(receivedReports?.reports?.reverse());
+      setSentReports(sentReports?.reports?.reverse());
+    } finally {
+      setIsReportLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchReports();
   }, []);
 
-  useEffect(() => {
-    setSelectedReport(reports?.find((report) => report?.to === selectedContact?._id));
-  }, [selectedContact, reports]);
-
   return (
     <div className="w-full flex flex-col gap-4 md:flex-row">
-      <ReportList reports={reports} />
+      <ReportList sentReports={sentReports} receivedReports={receivedReports} loading={isReportLoading} />
       {toggleNewMessage ? (
         <ReportNewMessage />
       ) : (
-        <ReportMessages report={selectedReport} loading={loading} />
+        <ReportMessages />
       )}
     </div>
   );

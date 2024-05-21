@@ -8,6 +8,7 @@ import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeT
 import CheckedIcon from "../../../assets/icons/CheckedIcon";
 import { useParams } from "react-router-dom";
 import {
+  getAttendance,
   getGradeClassById,
   takeAttendance,
 } from "../../../services/gradClass.service";
@@ -145,7 +146,7 @@ const Attendance = () => {
     setAttendanceLoading(true);
     const newData = {
       students: attendedStudents,
-      period: 7,
+      period,
       courseId ,
     };
     console.log(newData);
@@ -174,6 +175,16 @@ const Attendance = () => {
   const attends = () => {
     return students.filter((student) => student.checked).length;
   };
+
+  const fetchAttendance = async () => {
+
+      await getAttendance(id , dayjs().format("YYYY-MM-DD"),6);
+    
+  };
+
+  useEffect(() => {
+    fetchAttendance();
+  }, [period]);
 
   return (
     <>

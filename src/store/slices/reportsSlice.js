@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  selectedContact: {},
+  selectedReport: {},
   toggleNewMessage: false,
+  isSent : false,
 
 };
 
@@ -10,16 +11,20 @@ const reportsSlice = createSlice({
   name: "reportsData",
   initialState,
   reducers: {
-    setSelectedContact: (state, action) => {
-      const { contact } = action.payload;
-      state.selectedContact = contact;
+    setSelectedReport: (state, action) => {
+      const { report } = action.payload;
+      state.selectedReport = report;
     },
     setToggleNewMessage: (state,action) => {
       const { toggleNewMessage } = action.payload;
       state.toggleNewMessage = toggleNewMessage;
     },
+    setIsSent : (state,action) => {
+      const { isSent } = action.payload;
+      state.isSent = isSent;
+    }
   },
 });
 
-export const { setSelectedContact ,setToggleNewMessage  } = reportsSlice.actions;
+export const { setSelectedReport ,setToggleNewMessage ,setIsSent  } = reportsSlice.actions;
 export default reportsSlice.reducer;

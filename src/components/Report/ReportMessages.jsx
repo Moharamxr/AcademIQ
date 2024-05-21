@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
-import Teacher1 from "../../assets/connect-teatcher (1).png";
-import ThreeDots from "../../assets/icons/ThreeDots";
-import ReportMessageCard from "./ReportMessageCard";
-import SendMessageIcon from "../../assets/icons/SendMessageIcon";
-import Trash from "../../assets/icons/Trash";
-import ShareIcon from "../../assets/icons/ShareIcon";
-import OpenFolder from "../../assets/icons/OpenFolder";
-import EditIcon from "../../assets/icons/EditIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { setToggleNewMessage } from "../../store/slices/reportsSlice";
+import EditIcon from "../../assets/icons/EditIcon";
+import ReportMessageCard from "./ReportMessageCard";
 
 const ConnectChatContainer = styled("div")({
   height: "36rem",
@@ -26,110 +20,80 @@ const FixedTopContent = styled.div`
   z-index: 1;
 `;
 
-const ReportMessages = ({ report, loading }) => {
+const ReportMessages = () => {
   const role = localStorage.getItem("role");
-  const selectedContact = useSelector(
-    (state) => state.reportsData.selectedContact
+  const selectedReport = useSelector(
+    (state) => state.reportsData.selectedReport
   );
-  const showMessage = useSelector(
-    (state) => state.reportsData.toggleNewMessage
-  );
-
-  const [initials, setInitials] = useState("");
-  useEffect(() => {
-    const firstName = selectedContact?.name?.first;
-    const lastName = selectedContact?.name?.last;
-    const initials =
-      (firstName?.charAt(0).toUpperCase() || "") +
-      (lastName?.charAt(0).toUpperCase() || "");
-    setInitials(initials);
-  }, [selectedContact]);
-
+  const isSent = useSelector((state) => state.reportsData.isSent);
   const dispatch = useDispatch();
+
+  const contact = isSent ? selectedReport?.to : selectedReport?.from;
+
   const handleOpenAddMessage = () => {
     dispatch(setToggleNewMessage({ toggleNewMessage: true }));
   };
 
-  const isRender = () => {
-    if (role == 'admin') {
-      return selectedContact?.name;
+  const initials =
+    contact?.name?.first && contact?.name?.last
+      ? `${contact.name.first[0]}${contact.name.last[0]}`
+      : "";
 
-    } else {
-      return selectedContact && report;
-    }
-  }
-  return (
+  return selectedReport ? (
     <ConnectChatContainer
       className={`bg-white ${
-        showMessage && "hidden"
+        !selectedReport ? "hidden" : ""
       } rounded-2xl w-full md:w-8/12 overflow-hidden`}
     >
-      <FixedTopContent className="w-full between bg-white px-4 pe-6 py-3 border-b-gray-300 border-b-2 border-opacity-40 ">
+      <FixedTopContent className="w-full between bg-white px-4 pe-6 py-3 border-b-gray-300 border-b-2 border-opacity-40">
         <div className="flex gap-2">
-          {selectedContact?.profilePicture?.url ? (
+          {contact?.profilePicture?.url ? (
             <img
-              src={selectedContact?.profilePicture?.url}
+              src={contact.profilePicture.url}
               alt="profile-pic"
               className="w-14 h-14 rounded-full"
             />
           ) : (
             <div
-              className={`w-14 h-14 bg-[${
-                selectedContact?.profilePicture?.color
-              }] ${
-                !selectedContact && "bg-white"
-              }  text-white text-2xl rounded-full center select-none cursor-pointer`}
-              style={{
-                backgroundColor: selectedContact?.profilePicture?.color,
-              }}
+              className={`w-14 h-14 bg-${
+                contact?.profilePicture?.color || "white"
+              } text-white text-2xl rounded-full center select-none cursor-pointer`}
+              style={{ backgroundColor: contact?.profilePicture?.color }}
             >
               {initials}
             </div>
           )}
-          <div className="flex flex-col gap-y-1 p-1">
+          <div className="flex flex-col gap-y- p-1">
             <p className="font-poppins font-normal text-xs sm:text-sm">
-              {selectedContact?.name?.first} {selectedContact?.name?.last} {selectedContact?.to}
+              {contact?.name?.first} {contact?.name?.last}
             </p>
             <p className="font-poppins font-light text-xs text-gray-400">
-              {selectedContact?.email}
+              {contact?.email}
             </p>
+         
+             
+         
           </div>
         </div>
-        {/* <p className="font-poppins font-light text-xs  text-gray-400">
-          31 / 07 / 2020
-        </p> */}
-        {isRender() && (
+        {selectedReport?.body && role !== "parent" && (
           <span onClick={handleOpenAddMessage}>
             <EditIcon />
           </span>
         )}
       </FixedTopContent>
-      <div className="w-full flex flex-col gap-1 pb-4 min-h-[28rem]">
-        {isRender() && (
+      {selectedReport && (
+        <div className="w-full flex flex-col gap-1 pb-4 min-h-[28rem]">
           <ReportMessageCard
-            key={report?._id}
-            img={Teacher1}
-            forward={false}
-            report={report}
+            key={selectedReport._id}
+            forward={
+              selectedReport?.from?._id === localStorage.getItem("userId")
+            }
+            report={selectedReport}
           />
-        )}
-
-        {/* <ReportMessageCard img={Teacher1} forward={true} /> */}
-      </div>
-      {/* {selectedContact && (
-        <FixedBottomContent className="w-full flex justify-around items-center border-t-[1px] border-t-gray-400 border-opacity-40 px-4 py-2 bg-white">
-          <Trash />
-          <ShareIcon />
-
-          <OpenFolder />
-
-          <span onClick={handleOpenAddMessage}>
-            <EditIcon />
-          </span>
-        </FixedBottomContent>
-      )} */}
+        </div>
+      )}
     </ConnectChatContainer>
-  );
+  ) : null;
 };
 
 export default ReportMessages;

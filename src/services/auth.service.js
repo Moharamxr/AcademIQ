@@ -25,6 +25,7 @@ export const login = async (email, password) => {
   if (response.data.user.role === "student") {
     localStorage.setItem("gradeClassId", response?.data?.user?.gradeClassId);
   }
+  localStorage.setItem('profilePictureUrl', response?.data?.user?.profilePicture?.url)
   localStorage.setItem('profilePicture', response?.data?.user?.profilePicture?.color)
   if (response.data.user.role === "parent") {
     localStorage.setItem("firstChild", response?.data?.user?.children[0]);

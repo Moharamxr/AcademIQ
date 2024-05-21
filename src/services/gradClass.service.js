@@ -124,6 +124,7 @@ export const reTakeAttendance = async (id, newData) => {
 };
 
 export const getAttendance = async (id, date, period) => {
+  console.log(date, period, id)
   try {
     const response = await axiosInstance.get(
       `${path}/gradeClasses/${id}/attendance?date=${date}&period=${period}`

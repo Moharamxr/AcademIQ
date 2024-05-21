@@ -89,7 +89,7 @@ const ReportNewMessage = () => {
       <div className="flex flex-col gap-y-1 pt-3 px-6">
         <div className="flex">
           <p className="font-poppins font-normal text-sm leading-6 text-gray-900 pb-2">
-            To: {selectedContact?.name?.first} {selectedContact?.name?.last}
+            To: {selectedContact?.name?.first} {selectedContact?.name?.last} {selectedContact?.to !== localStorage.getItem("userId") ? selectedContact?.to : selectedContact?.from}
           </p>
         </div>
         <hr />
