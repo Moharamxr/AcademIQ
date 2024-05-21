@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import RadioBtn from "../../../../assets/icons/RadioBtn";
 import { useDispatch, useSelector } from "react-redux";
-import { setStudentAnswers } from "../../../../store/slices/ExamSlice";
+import { setStudentAnswers } from "../../../../store/slices/examSlice";
 
 const StudentQuestionCard = ({ question, index, examId }) => {
   const dispatch = useDispatch();
