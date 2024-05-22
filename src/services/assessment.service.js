@@ -78,11 +78,13 @@ export const getAssessmentByCourse = async (id) => {
     handleError(error);
   }
 };
-export const getAssessmentByStatus = async (status) => {
+export const getAssessmentByStatus = async (status , studentId) => {
   const statusQueryParam = status ? `?status=${status}` : "";
+  const studentIdParam = studentId ? `studentId=${studentId}` : "";
+  const params = statusQueryParam && studentIdParam ? `${statusQueryParam}&${studentIdParam}` : statusQueryParam || `?${studentIdParam}`; 
   try {
     const response = await axiosInstance.get(
-      `${path}/assessments${statusQueryParam}`
+      `${path}/assessments${params}`
     );
     return handleResponse(response);
   } catch (error) {

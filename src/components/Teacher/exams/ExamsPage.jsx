@@ -1,14 +1,13 @@
-import React, { useEffect } from "react";
-import Exams from "./Exams";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
+import Exams from "./Exams";
 import {
   createAssessment,
   getAssessmentByCourse,
   getAssessmentByStatus,
 } from "../../../services/assessment.service";
-import { CircularProgress } from "@mui/material";
 import { getGradeCourses } from "../../../services/courses.service";
 
 const FixedTopContent = styled.div`
@@ -17,6 +16,7 @@ const FixedTopContent = styled.div`
   background-color: white;
   z-index: 10;
 `;
+
 const FixedBottomContent = styled.div`
   position: sticky;
   bottom: 0;
@@ -24,159 +24,167 @@ const FixedBottomContent = styled.div`
   z-index: 10;
 `;
 
-const TeacherExamsContainer = styled("div")({
-  maxHeight: "38rem",
-  overflowY: "auto",
-  "&::-webkit-scrollbar": {
-    width: "0",
-    background: "transparent",
-  },
-});
+const TeacherExamsContainer = styled.div`
+  max-height: 38rem;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+`;
+
 const ExamsPage = () => {
   const role = localStorage.getItem("role");
+  const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
-  const [loadingCourses, setLoadingCourses] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(courses[0]?._id || "");
+  const [exams, setExams] = useState({
+    lastExams: [],
+    activeExams: [],
+    upcomingExams: [],
+    teacherActiveExams: [],
+  });
+  const [loading, setLoading] = useState({
+    courses: false,
+    exams: false,
+    creatingExam: false,
+  });
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [activeTab, setActiveTab] = useState(0);
 
-  const fetchCourses = async () => {
-    setLoadingCourses(true);
-    try {
-      const data = await getGradeCourses();
-      setCourses(data.courses);
-      setLoadingCourses(false);
-    } catch (error) {
-      console.error("Error fetching courses: ", error);
-      setLoadingCourses(false);
-    }
-  };
   useEffect(() => {
+    const fetchCourses = async () => {
+      setLoading((prev) => ({ ...prev, courses: true }));
+      try {
+        const data = await getGradeCourses();
+        setCourses(data.courses);
+      } catch (error) {
+        console.error("Error fetching courses: ", error);
+      } finally {
+        setLoading((prev) => ({ ...prev, courses: false }));
+      }
+    };
+
     fetchCourses();
   }, []);
 
-  const [lastExams, setLastExams] = useState([]);
-  const [pendingExams, setPendingExams] = useState([]);
-  const [upcomingExams, setUpcomingExams] = useState([]);
-  const [activeExams, setActiveExams] = useState([]);
-  const [loadingExams, setLoadingExams] = useState(false);
-
-  const fetchExamsByStatus = async () => {
-    setLoadingExams(true);
-    try {
-      if (role === "teacher") {
-        const data = await getAssessmentByStatus("draft");
-        setPendingExams(data?.assessments);
-      } else {
+  useEffect(() => {
+    const fetchExamsByStatus = async () => {
+      setLoading((prev) => ({ ...prev, exams: true }));
+      try {
         const data = await getAssessmentByStatus();
-        const examsData = data?.assessments;
+        const examsData = data?.assessments || [];
         const activeExamsData = examsData.filter(
           (exam) => exam.status === "published"
         );
         const upcomingExamsData = examsData.filter(
           (exam) => exam.status === "pending"
         );
-        setUpcomingExams(upcomingExamsData);
-        setActiveExams(activeExamsData);
+        setExams((prev) => ({
+          ...prev,
+          activeExams: activeExamsData,
+          upcomingExams: upcomingExamsData,
+        }));
+        if (role === "teacher") {
+          const pendingExamsData = examsData.filter(
+            (exam) => exam.status === "draft"
+          );
+          setExams((prev) => ({
+            ...prev,
+            teacherActiveExams: activeExamsData,
+            pendingExams: pendingExamsData,
+          }));
+        }
+      } catch (error) {
+        // console.error("Error fetching exams: ", error);
+      } finally {
+        setLoading((prev) => ({ ...prev, exams: false }));
       }
+    };
 
-      setLoadingExams(false);
-    } catch (error) {
-      console.error("Error fetching drafts: ", error);
-      setLoadingExams(false);
-    }
-  };
-
-  useEffect(() => {
     fetchExamsByStatus();
-  }, []);
+  }, [role]);
 
-  const fetchExamsByCourse = async () => {
-    if (!selectedCourse) return;
-    setLoadingExams(true);
-    try {
-      const data = await getAssessmentByCourse(selectedCourse);
-      const examsData = data?.assessments;
-      const lastExamsData = examsData.filter(
-        (exam) => exam.status === "completed"
-      );
-      const upcomingExamsData = examsData.filter(
-        (exam) => exam.status === "pending"
-      );
-      setLastExams(lastExamsData);
-      setUpcomingExams(upcomingExamsData);
-      setLoadingExams(false);
-    } catch (error) {
-      console.error("Error fetching exams: ", error);
-      setLoadingExams(false);
-    }
-  };
   useEffect(() => {
-      fetchExamsByCourse();
+    if (!selectedCourse) return;
+
+    const fetchExamsByCourse = async () => {
+      setLoading((prev) => ({ ...prev, exams: true }));
+      try {
+        const data = await getAssessmentByCourse(selectedCourse);
+        const examsData = data?.assessments || [];
+        const lastExamsData = examsData.filter(
+          (exam) => exam.status === "completed"
+        );
+        const upcomingExamsData = examsData.filter(
+          (exam) => exam.status === "pending"
+        );
+        setExams((prev) => ({
+          ...prev,
+          lastExams: lastExamsData,
+          upcomingExams: upcomingExamsData,
+        }));
+      } catch (error) {
+        console.error("Error fetching exams by course: ", error);
+      } finally {
+        setLoading((prev) => ({ ...prev, exams: false }));
+      }
+    };
+
+    fetchExamsByCourse();
   }, [selectedCourse]);
-  const [activeTab, setActiveTab] = useState(0);
-  const teacherTabs = [
-    {
-      label: "Last Exams",
-      content: <Exams exams={lastExams} isLoading={loadingExams} />,
-    },
-    {
-      label: "Pending Exams",
-      content: <Exams exams={pendingExams} isLoading={loadingExams} />,
-    },
-    {
-      label: "Upcoming Exams",
-      content: <Exams exams={upcomingExams} isLoading={loadingExams} />,
-    },
-  ];
-  const studentTabs = [
-    // {
-    //   label: "Last Exams",
-    //   content: <Exams exams={lastExams} isLoading={loadingExams} />,
-    // },
-    {
-      label: "Active Exams",
-      content: <Exams exams={activeExams} isLoading={loadingExams} />,
-    },
-    {
-      label: "Upcoming Exams",
-      content: <Exams exams={upcomingExams} isLoading={loadingExams} />,
-    },
-  ];
-  const tabs = role === "teacher" ? teacherTabs : studentTabs;
-  const navigate = useNavigate();
-  const [isCreatingExam, setIsCreatingExam] = useState(false);
 
   const handleCreateExam = async () => {
-    const requestBody = {
-      type: "exam",
-    };
-    setIsCreatingExam(true);
+    setLoading((prev) => ({ ...prev, creatingExam: true }));
     try {
-      const data = await createAssessment(requestBody);
-      setIsCreatingExam(false);
+      const data = await createAssessment({ type: "exam" });
       const assessmentData = data?.assessment;
       navigate(`/exams/create/${assessmentData._id}`);
     } catch (error) {
       console.error("Error creating exam: ", error);
-      setIsCreatingExam(false);
+    } finally {
+      setLoading((prev) => ({ ...prev, creatingExam: false }));
     }
   };
+
+  const tabs = [
+    {
+      label: "Last Exams",
+      content: <Exams exams={exams.lastExams} isLoading={loading.exams} />,
+    },
+    {
+      label: "Active Exams",
+      content: (
+        <Exams
+          exams={
+            role === "student" ? exams.activeExams : exams.teacherActiveExams
+          }
+          isLoading={loading.exams}
+        />
+      ),
+    },
+    {
+      label: "Upcoming Exams",
+      content: <Exams exams={exams.upcomingExams} isLoading={loading.exams} />,
+    },
+  ];
+
   return (
     <div className="w-full bg-white rounded-xl">
-      <TeacherExamsContainer className=" bg-white rounded-xl ">
+      <TeacherExamsContainer className="bg-white rounded-xl">
         <FixedTopContent>
           <div className="between p-5 pb-0">
             <h3 className="font-poppins text-2xl font-medium">Exams</h3>
             <select
               name="courses"
               id="courses"
-              className="p-3 bg-gray-100 rounded-xl outline-none "
+              className="p-3 bg-gray-100 rounded-xl outline-none"
               value={selectedCourse}
               onChange={(e) => setSelectedCourse(e.target.value)}
             >
               <option value="" disabled>
                 Select Course
               </option>
-              {loadingCourses ? (
+              {loading.courses ? (
                 <option value="" disabled>
                   Loading...
                 </option>
@@ -195,9 +203,9 @@ const ExamsPage = () => {
                 key={index}
                 className={`${
                   activeTab === index
-                    ? "border-b-2 border-active  text-active"
+                    ? "border-b-2 border-active text-active"
                     : "text-gray-400"
-                } px-3 font-poppins font-normal text-base leading-7 pb-2  cursor-pointer`}
+                } px-3 font-poppins font-normal text-base leading-7 pb-2 cursor-pointer`}
                 onClick={() => setActiveTab(index)}
               >
                 {tab.label}
@@ -206,19 +214,19 @@ const ExamsPage = () => {
           </div>
         </FixedTopContent>
 
-        <div className="py-7 center flex-col gap-5 ">
+        <div className="py-7 center flex-col gap-5">
           {tabs[activeTab].content}
         </div>
 
         {role === "teacher" && (
-          <FixedBottomContent className=" flex flex-row-reverse pt-12 pe-5 pb-5">
+          <FixedBottomContent className="flex flex-row-reverse pt-12 pe-5 pb-5">
             <button
-              className={`float-right bg-active text-white p-2 rounded-md  font-poppins ${
-                isCreatingExam ? "px-12" : "px-4"
+              className={`float-right bg-active text-white p-2 rounded-md font-poppins ${
+                loading.creatingExam ? "px-12" : "px-4"
               }`}
               onClick={handleCreateExam}
             >
-              {isCreatingExam ? (
+              {loading.creatingExam ? (
                 <CircularProgress size={16} color="inherit" />
               ) : (
                 "Create Exam"

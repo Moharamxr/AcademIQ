@@ -1,40 +1,60 @@
-import React from 'react'
-import ChildExaminationsCard from './ChildExaminationsCard'
+import React, { useEffect, useState } from "react";
+import ChildExaminationsCard from "./ChildExaminationsCard";
+import { BiLoader } from "react-icons/bi";
+import { getAssessmentByStatus } from "../../../../services/assessment.service";
+import { useParams } from "react-router-dom";
+import { Skeleton } from "@mui/material";
 
 const ChildExaminations = () => {
+  const { childID } = useParams();
+  const [assessments, setAssessments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const getAssessments = async () => {
+    setLoading(true);
+    try {
+      const data = await getAssessmentByStatus(false,childID);
+      setAssessments(data?.assessments);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAssessments();
+  }, [childID]);
+
+  if (loading) {
+    return (
+      <div className="center">
+        <BiLoader />
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="text-red-500 text-center font-medium">
+        Error: {error?.message}
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col pb-2 gap-y-3  w-full">
-    <div className="flex flex-row-reverse gap-x-1">
-      <select
-        name="days"
-        id="childAssYear"
-        className="border border-active-br outline-none rounded-md text-active px-px text-sm font-poppins font-normal"
-      >
-        <option value="1">Year</option>
-        <option value="2024">2024</option>
-      </select>
-      <select
-        name="days"
-        id="childAssMonth"
-        className="border border-active-br outline-none rounded-md text-active px-px text-sm font-poppins font-normal"
-      >
-        <option value="1">Month</option>
-        <option value="1">Jan</option>
-      </select>
-      <select
-        name="days"
-        id="childAssDays"
-        className="border border-active-br outline-none rounded-md text-active px-px text-sm font-poppins font-normal"
-      >
-        <option value="1">Day</option>
-        <option value="1">1</option>
-      </select>
+      {!loading ? 
+      assessments?.length > 0 ?
+      assessments?.map((ass) => (
+        <ChildExaminationsCard key={ass?.key} assessment={ass} />
+      )) : <p className="text-gray-400 text-center pt-3">No Exams yet !</p> : 
+      (
+        <Skeleton variant="rounded" height={50} />
+      )
+      
+      }
     </div>
-    <ChildExaminationsCard />
-    <ChildExaminationsCard />
-    <ChildExaminationsCard />
-  </div>
-  )
-}
+  );
+};
 
-export default ChildExaminations
+export default ChildExaminations;

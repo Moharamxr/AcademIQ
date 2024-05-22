@@ -39,7 +39,6 @@ const AdminClasses = () => {
     try {
       setIsLoading(true);
       const data = await getGradeClasses();
-      console.log("Selected Grade:", selectedGrade);
       if (parseInt(selectedGrade) === 0) {
         setGradeClasses(data.gradeClasses);
       } else {
@@ -59,7 +58,6 @@ const AdminClasses = () => {
   };
 
   useEffect(() => {
-    console.log("selectedGrade: ", selectedGrade);
     getData();
   }, [selectedGrade]);
 

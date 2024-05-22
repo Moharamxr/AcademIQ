@@ -15,7 +15,7 @@ const FixedTopContent = styled.div`
   z-index: 1;
 `;
 const TeacherClassesContainer = styled("div")({
-  height: "35.8rem",
+  height: "95vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",

@@ -64,7 +64,6 @@ const UnitBank = () => {
   };
 
   const onOpenEdit = (i) => {
-    console.log(i);
     setIsOpenEdit(true);
     setOpenedQuestion(questions[i]);
   };

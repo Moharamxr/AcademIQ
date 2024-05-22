@@ -23,7 +23,6 @@ const PostCard = ({ post, courseId }) => {
   const [comments, setComments] = useState([]);
   const [addCommentToggle, setAddCommentToggle] = useState(false);
   const [initials, setInitials] = useState("");
-  const [bgColor, setBgColor] = useState("");
   const [isCommentsLoading, setIsCommentsLoading] = useState(false);
   const [addingComment, setAddingComment] = useState(false);
   useEffect(() => {
@@ -31,13 +30,6 @@ const PostCard = ({ post, courseId }) => {
     const lastName = post?.creator?.name?.last;
     const initials = firstName.charAt(0) + lastName.charAt(0);
     setInitials(initials);
-    const randomColor = () => {
-      const hex = Math.floor(Math.random() * 0xffffff);
-      return "#" + ("000000" + hex.toString(16)).substr(-6);
-    };
-    const generatedColor = randomColor();
-    setBgColor(generatedColor);
-    
   }, []);
 
   useEffect(() => {
@@ -103,16 +95,25 @@ const PostCard = ({ post, courseId }) => {
       setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
     }
   };
+
   return (
-    <div className="flex flex-col border-2 divide-y-2 border-gray-200/70 rounded-xl lg:w-5/6 w-full">
+    <div className="flex flex-col border-2 divide-y-2 border-gray-200/70 rounded-xl lg:w-5/6 w-full overflow-hidden">
       <div className="between p-4">
         <div className="flex gap-2">
-          <div
-            className="w-10 h-10 text-white text-xl rounded-full center mr-2 select-none"
-            style={{ backgroundColor: bgColor }}
-          >
-            {initials}
-          </div>
+          {post?.creator?.profilePicture?.url ? (
+            <img
+              src={post?.creator?.profilePicture?.url}
+              className="w-10 h-10 rounded-full"
+              
+            />
+          ) : (
+            <div
+              className="w-10 h-10 text-white text-xl rounded-full center mr-2 select-none"
+              style={{ backgroundColor: post?.creator?.profilePicture?.color }}
+            >
+              {initials}
+            </div>
+          )}
 
           <p className="font-poppins">
             {post?.creator?.name?.first} {post?.creator?.name?.last}
@@ -126,6 +127,20 @@ const PostCard = ({ post, courseId }) => {
           <ThreeDots />
         </span> */}
       </div>
+      {post?.attachments?.length > 0 && (
+        <div className="inline-flex overflow-auto gap-2 hide-scrollbar">
+          {post?.attachments.map((attachment, i) => (
+            <img
+              src={attachment}
+              key={i}
+              className="aspect-square"
+              alt="attachment"
+              loading="lazy"
+            />
+          ))}
+        </div>
+      )}
+
       <article className="font-poppins p-4 text-gray-700 ">
         {post?.content}
       </article>

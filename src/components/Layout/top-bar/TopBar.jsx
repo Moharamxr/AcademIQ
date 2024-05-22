@@ -12,7 +12,8 @@ const TopBar = () => {
     .map((n) => n[0].toUpperCase())
     .join("");
   const profilePictureUrl = localStorage.getItem("profilePictureUrl");
-  
+  const isProfilePicture = profilePictureUrl !== "undefined";
+
   const navigate = useNavigate();
 
   const handleGotoProfile = () => {
@@ -39,7 +40,7 @@ const TopBar = () => {
       </div>
       <div className=" col-span-4  h-14  flex  justify-between ps-4 gap-5 xl:gap-x-3 lg:gap-x-1">
         {/* <img src={AvatarPic} alt="AvatarPic  " className="aspect-square" /> */}
-        {profilePictureUrl !== "" ? (
+        {isProfilePicture? (
           <img src={profilePictureUrl} className="w-14 h-14 rounded-full" />
         ) : (
           <div

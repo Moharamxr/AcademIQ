@@ -41,7 +41,6 @@ const AdminCourses = () => {
     try {
       setIsLoading(true);
       const data = await getGradeCourses();
-      console.log("Selected Grade:", selectedGrade);
       if (parseInt(selectedGrade) === 0) {
         setGradeCourses(data.courses);
       } else {

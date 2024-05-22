@@ -44,14 +44,28 @@ const ReportList = ({ sentReports, receivedReports, loading }) => {
   const handleSearch = (e) => {
     setShowSearch(true);
     setSearchTerm(e.target.value);
-    const filtered = tabs[activeTab].filter((report) =>
-      activeTab === "sent"
-        ? report?.to?.name?.first
+    const filtered = tabs[activeTab].filter(
+      (report) =>
+        // search in the name of the contact and the body of the report and subject of the report
+
+        (!isSent &&
+          report?.from?.name?.first
             .toLowerCase()
-            .includes(e.target.value.toLowerCase())
-        : report?.from?.name?.first
+            .includes(e.target.value.toLowerCase())) ||
+        (!isSent &&
+          report?.from?.name?.last
             .toLowerCase()
-            .includes(e.target.value.toLowerCase())
+            .includes(e.target.value.toLowerCase())) ||
+        (isSent &&
+          report?.to?.name?.first
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase())) ||
+        (isSent &&
+          report?.to?.name?.last
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase())) ||
+        report?.body.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        report?.subject.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setFilteredReports(filtered);
   };
@@ -84,27 +98,29 @@ const ReportList = ({ sentReports, receivedReports, loading }) => {
           <input
             type="text"
             className="bg-transparent w-full outline-none text-center text-sm font-normal"
-            placeholder="Search for users"
+            placeholder="Search for reports"
             value={searchTerm}
             onChange={handleSearch}
           />
         </div>
 
-        {!showSearch&&<div className="flex justify-around gap-2 mt-2">
-          {Object.keys(tabs).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => handleTabChange(tab)}
-              className={`${
-                activeTab === tab
-                  ? "bg-blue-100/55 text-active"
-                  : "bg-white text-slate-400"
-              } font-poppins font-normal text-xs sm:text-sm px-4 py-1 rounded-lg`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
-        </div>}
+        {!showSearch && (
+          <div className="flex justify-around gap-2 p-2">
+            {Object.keys(tabs).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => handleTabChange(tab)}
+                className={`${
+                  activeTab === tab
+                    ? "bg-blue-100/55 text-active"
+                    : "bg-white text-slate-400"
+                } font-poppins font-normal text-xs sm:text-sm px-4 py-1 rounded-lg`}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </div>
+        )}
       </FixedTopContent>
 
       <div className="w-full mx-auto flex flex-col gap-y-2 py-2">

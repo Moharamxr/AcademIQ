@@ -35,7 +35,7 @@ const Report = () => {
     <div className="w-full flex flex-col gap-4 md:flex-row">
       <ReportList sentReports={sentReports} receivedReports={receivedReports} loading={isReportLoading} />
       {toggleNewMessage ? (
-        <ReportNewMessage />
+        <ReportNewMessage fetchReports={fetchReports} />
       ) : (
         <ReportMessages />
       )}

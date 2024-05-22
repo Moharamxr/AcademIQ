@@ -7,16 +7,15 @@ import { CircularProgress } from "@mui/material";
 import { setToggleNewMessage } from "../../store/slices/reportsSlice";
 import { BiAddToQueue, BiLoader } from "react-icons/bi";
 
-const ReportNewMessage = () => {
-  const selectedContact = useSelector(
-    (state) => state.reportsData.selectedContact
-  );
+const ReportNewMessage = ({fetchReports}) => {
+  
   const fullName = localStorage.getItem("fullName");
 
   const [priority, setPriority] = useState("high");
   const [attachment, setAttachment] = useState(null);
   const [body, setBody] = useState("");
   const [subject, setSubject] = useState("");
+  const [to, setTo] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -24,20 +23,27 @@ const ReportNewMessage = () => {
     setAttachment(e.target.files[0]);
   };
   const validateData = () => {
-    if (!subject || !body) {
-      setError("Subject and body are required");
+    if (!to) {
+      setError("To is required");
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+      return false;
+    } else if (!subject) {
+      setError("Subject is required");
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+      return false;
+    } else if (!body) {
+      setError("Body is required");
       setTimeout(() => {
         setError(null);
       }, 3000);
       return false;
     }
-    // else if (!attachment) {
-    //   setError("Attachment is required");
-    //   return false;
-    // }
-    else {
-      return true;
-    }
+
+    return true;
   };
 
   const reset = () => {
@@ -57,11 +63,12 @@ const ReportNewMessage = () => {
     formData.append("body", body);
     formData.append("subject", subject);
     formData.append("priority", priority);
-    formData.append("to", selectedContact?._id);
+    formData.append("to", to);
 
     try {
       await sendReport(formData);
       reset();
+      fetchReports();
       dispatch(setToggleNewMessage({ toggleNewMessage: false }));
     } catch (error) {
       setError(
@@ -82,25 +89,33 @@ const ReportNewMessage = () => {
         </h5>
         {error && <p className="text-red-500">{error}</p>}
         <span className="pe-4 rounded-md" onClick={handleSend}>
-          {loading ? <BiLoader  /> : <SendMessageIcon />}
+          {loading ? <BiLoader /> : <SendMessageIcon />}
         </span>
       </div>
       <hr />
       <div className="flex flex-col gap-y-1 pt-3 px-6">
-        <div className="flex">
-          <p className="font-poppins font-normal text-sm leading-6 text-gray-900 pb-2">
-            To: {selectedContact?.name?.first} {selectedContact?.name?.last} {selectedContact?.to !== localStorage.getItem("userId") ? selectedContact?.to : selectedContact?.from}
-          </p>
+        <div className="flex w-full items-center gap-1">
+          <label className="font-poppins font-normal text-sm leading-6 text-gray-900 ">
+            To :
+          </label>
+          <input
+            type="To"
+            name="To"
+            id="To"
+            className="outline-none bg-gray-100/50 h-11 px-2 w-11/12 rounded-md"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+          />
         </div>
         <hr />
-        <p className="font-poppins font-normal text-sm leading-6 text-gray-900 pb-2">
+        <p className="font-poppins font-normal text-sm leading-6 text-gray-900 ">
           Cc / Bcc. From: {fullName}
         </p>
         <hr />
         <div className="flex w-full items-center gap-1">
-          <p className="font-poppins font-normal text-sm leading-6 text-gray-900 pb-2">
+          <label className="font-poppins font-normal text-sm leading-6 text-gray-900 ">
             Subject:
-          </p>
+          </label>
           <input
             type="text"
             name="Subject"
@@ -112,9 +127,9 @@ const ReportNewMessage = () => {
         </div>
         <hr />
         <div className="flex items-center">
-          <p className="font-poppins font-normal text-sm leading-6 text-gray-900 pb-2">
+          <label className="font-poppins font-normal text-sm leading-6 text-gray-900 ">
             Priority:
-          </p>
+          </label>
           <select
             name="Priority"
             id="Priority"
@@ -127,6 +142,7 @@ const ReportNewMessage = () => {
             <option value="low">Low</option>
           </select>
         </div>
+        <hr />
         <div className="flex items-center">
           <label
             htmlFor="repAttachment"

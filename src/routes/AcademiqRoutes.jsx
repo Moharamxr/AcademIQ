@@ -31,6 +31,8 @@ import SelectQuestions from "../components/Teacher/exams/examCreation/SelectQues
 import ExamDetails from "../components/Teacher/exams/examDetailsPage/ExamDetails";
 import ExamsPage from "../components/Teacher/exams/ExamsPage";
 import StudentParentHome from "../components/Parent/home/StudentParentHome";
+import SupportAndHelp from "../components/Layout/Support&Help/SupportAndHelp";
+import Settings from "../components/Layout/Setting/Settings";
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
   const routes = {
@@ -82,7 +84,7 @@ const AcademiqRoutes = () => {
       {
         path: "/report",
         component: <Report />,
-      }
+      },
     ],
     student: [
       {
@@ -203,14 +205,37 @@ const AcademiqRoutes = () => {
       },
     ],
   };
+  const staticRoutes = [
+    {
+      path: "/login",
+      component: <Login />,
+    },
+    {
+      path: "/support",
+      component: <SupportAndHelp />,
+    },
+    {
+      path: "/",
+      component: <Login />,
+    },
+    {
+      path: "/settings",
+      component: <Settings />,
+    },
+    {
+      path: "*",
+      component: <Login />,
+    },
+  ];
   return (
     <>
       <Routes>
-        <Route path="/" element={<Login />} />
+        {staticRoutes.map((route, index) => (
+          <Route key={index+99} path={route.path} element={route.component} />
+        ))}
         {routes[role]?.map((route, index) => (
           <Route key={index} path={route.path} element={route.component} />
         ))}
-        {/* <Route path="*" element={<Login />} /> */}
       </Routes>
     </>
   );

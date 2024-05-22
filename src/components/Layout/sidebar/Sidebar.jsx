@@ -264,7 +264,7 @@ const Sidebar = () => {
       name: "Setting",
       icon: <SettingIcon />,
       activeIcon: <SettingIcon active={true} />,
-      path: "/setting",
+      path: "/settings",
       active: false,
     },
     {

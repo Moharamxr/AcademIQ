@@ -177,9 +177,9 @@ const Dashboard = () => {
               <div
                 className={`${
                   !deleteToggle ? "bg-white" : "bg-red-400"
-                }  shadow-lg rounded-lg p-2 z-10`}
+                }  shadow-lg rounded-lg z-10`}
               >
-                <p onClick={toggleDelete} className="hover:cursor-pointer">
+                <p onClick={toggleDelete} className="hover:bg-red-300 p-2 rounded-lg cursor-pointer">
                   {deleteToggle ? "Disable" : "Enable"} Delete Period
                 </p>
               </div>

@@ -86,10 +86,7 @@ const UserProfile = () => {
         ].map((item, index) => (
           <div className="flex gap-5 py-2 px-1" key={index}>
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-              {item.label}:
-              <span className="text-gray-600 text-base font-medium">
-                {loading ? <Skeleton width={100} /> : item.value}
-              </span>
+              {item.label} : {loading ? <Skeleton width={100} /> :<span className="text-gray-600 text-base font-medium">{item.value}</span> }
             </p>
           </div>
         ))}
@@ -145,6 +142,26 @@ const UserProfile = () => {
               </div>
             </div>
           )}
+          {userData?.children?.length > 0 && (
+              <div className="flex gap-2 py-2 px-1 w-full">
+                <p className=" min-w-fit font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
+                Children  :
+                </p>
+
+                <div className=" flex flex-wrap gap-4 w-full">
+                  {userData?.children?.map((s, index) => (
+                    <div className=" gap-1 col-span-1" key={index}>
+                      <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
+                        <span className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2">
+                          {/* {s?.name?.first} {s?.name?.last} */}
+                          {s?.email}
+                        </span>
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
       </div>
     </div>
   );
