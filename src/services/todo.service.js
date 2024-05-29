@@ -1,5 +1,5 @@
 import axios from "axios";
-const path = "https://academiq.onrender.com";
+const path = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
 
 const axiosInstance = axios.create();
 

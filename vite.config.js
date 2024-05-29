@@ -4,11 +4,13 @@ import reactRefresh from "@vitejs/plugin-react-refresh";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    watch: {
+      usePolling: true,
+    },
+  },
   plugins: [
     react(),
-    reactRefresh({
-      // Allow reading environment variables starting with REACT_APP_
-      include: "**/*.jsx",
-    }),
+    reactRefresh(),
   ],
 });
