@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@mui/material";
 import { getUserById } from "../../../services/user.service";
+import AddNewChild from "../Parents/AddNewChild";
+import { AddCircle } from "@mui/icons-material";
 
 const UserProfile = () => {
   const { id } = useParams();
@@ -9,6 +11,7 @@ const UserProfile = () => {
   const [initials, setInitials] = useState("");
   const [bgColor, setBgColor] = useState("");
   const [loading, setLoading] = useState(true);
+  const role = localStorage.getItem("role");
 
   const getData = async () => {
     try {
@@ -31,6 +34,15 @@ const UserProfile = () => {
   useEffect(() => {
     getData();
   }, []);
+
+  const [assignChildModal, setAssignChildModal] = useState(false);
+  const handleOpenChildModal = () => {
+    setAssignChildModal(true);
+  };
+
+  const handleCloseChildModal = () => {
+    setAssignChildModal(false);
+  };
 
   return (
     <div className="bg-white p-2 rounded-xl w-full ">
@@ -86,13 +98,20 @@ const UserProfile = () => {
         ].map((item, index) => (
           <div className="flex gap-5 py-2 px-1" key={index}>
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-              {item.label} : {loading ? <Skeleton width={100} /> :<span className="text-gray-600 text-base font-medium">{item.value}</span> }
+              {item.label} :{" "}
+              {loading ? (
+                <Skeleton width={100} />
+              ) : (
+                <span className="text-gray-600 text-base font-medium">
+                  {item.value}
+                </span>
+              )}
             </p>
           </div>
         ))}
         {userData?.role === "student" && userData?.parents?.father && (
           <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-            Father:
+            Father :{" "}
             <span className="text-gray-600 text-base font-medium">
               {loading ? (
                 <Skeleton width={100} />
@@ -104,7 +123,7 @@ const UserProfile = () => {
         )}
         {userData?.role === "student" && userData?.parents?.mother && (
           <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-            Mother:
+            Mother :{" "}
             <span className="text-gray-600 text-base font-medium">
               {loading ? (
                 <Skeleton width={100} />
@@ -117,7 +136,7 @@ const UserProfile = () => {
         {(userData?.role === "teacher" || userData?.role === "student") &&
           userData?.courses?.length > 0 && (
             <div className="flex gap-5 py-2 px-1">
-              <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
+              <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400 pt-1">
                 Courses Ids:
               </p>
               <div className="flex gap-3">
@@ -142,26 +161,49 @@ const UserProfile = () => {
               </div>
             </div>
           )}
-          {userData?.children?.length > 0 && (
-              <div className="flex gap-2 py-2 px-1 w-full">
-                <p className=" min-w-fit font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-                Children  :
-                </p>
 
-                <div className=" flex flex-wrap gap-4 w-full">
-                  {userData?.children?.map((s, index) => (
-                    <div className=" gap-1 col-span-1" key={index}>
-                      <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-                        <span className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2">
-                          {/* {s?.name?.first} {s?.name?.last} */}
-                          {s?.email}
-                        </span>
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+        {userData?.role === 'parent' && <div className="flex  gap-2 py-4 px-1 w-full">
+          <p className=" min-w-fit font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400 pt-2">
+            Children :
+          </p>
+
+          <div className=" flex flex-wrap gap-4 w-full">
+            {userData?.children?.length > 0 ? (
+              userData?.children?.map((s, index) => (
+                <p
+                  key={index}
+                  className="font-poppins font-normal sm:text-sm text-xs p-1 leading-6 text-gray-400"
+                >
+                  <span className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2">
+                    {/* {s?.name?.first} {s?.name?.last} */}
+                    {s?.email}
+                  </span>
+                </p>
+              ))
+            ) : (
+              <p className="font-poppins font-normal sm:text-sm text-xs p-1 leading-6 text-gray-400">
+                <span className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2">
+                  No Children
+                </span>
+              </p>
             )}
+            {role === "admin" && userData?.role === "parent" && (
+              <>
+                <span onClick={handleOpenChildModal}>
+                  <AddCircle color="action" className="cursor-pointer mt-1" />
+                </span>
+                <AddNewChild
+                  currentChildren={userData?.children}
+                  parentId={id}
+                  parentGender={userData?.gender}
+                  isOpen={assignChildModal}
+                  onClose={handleCloseChildModal}
+                  getData={getData}
+                />
+              </>
+            )}
+          </div>
+        </div>}
       </div>
     </div>
   );

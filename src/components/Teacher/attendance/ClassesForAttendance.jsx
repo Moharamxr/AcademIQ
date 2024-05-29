@@ -53,20 +53,21 @@ const ClassesForAttendance = () => {
         <FixedTopContent className="between bg-white  py-5">
           <h2 className="text-2xl font-poppins">Classes</h2>
         </FixedTopContent>
+        <div className="grid sm:grid-cols-3 grid-cols-2  gap-5 ">
+
         {!isLoading ? (
           Array.isArray(gradeClasses) &&
           gradeClasses.map((classData, index) => (
             <div
               key={index}
-              className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
+              className="col-span-1 bg-green-100 p-5  py-10 center border-2 border-green-600 rounded-lg  hover:bg-green-200  cursor-pointer text-center text-green-700 "
               onClick={() => navigateAttendance(classData._id)}
             >
-              <div className="flex items-center gap-5">
-                {index + 1}.
-                <span>
+           
+                <span className="font-poppins font-medium">
                   Class {classData.letter} {classData.level}
                 </span>
-              </div>
+           
             </div>
           ))
         ) : (
@@ -80,6 +81,7 @@ const ClassesForAttendance = () => {
             <Skeleton variant="rounded" height={50} />
           </>
         )}
+        </div>
       </ListContainer>
       <aside className="w-full xl:w-4/12 hidden md:block">
         <ParentTimeTable />

@@ -28,7 +28,7 @@ const FixedBottomContent = styled.div`
   z-index: 1;
 `;
 
-const ReportMessages = () => {
+const ReportMessages = ({ fetchReports }) => {
   const role = localStorage.getItem("role");
   const selectedReport = useSelector(
     (state) => state.reportsData.selectedReport
@@ -55,7 +55,7 @@ const ReportMessages = () => {
     setReplayLoading(true);
 
     await replayReport(selectedReport._id, { body: replay });
-
+    fetchReports();
     setReplay("");
     setReplaySuccess(true);
     setTimeout(() => {
@@ -65,7 +65,7 @@ const ReportMessages = () => {
   };
 
   return (
-    selectedReport && (
+    selectedReport?.from && (
       <ConnectChatContainer
         className={`bg-white ${
           !selectedReport ? "hidden" : ""
@@ -89,12 +89,17 @@ const ReportMessages = () => {
                 {initials}
               </div>
             )}
-            <div className="flex flex-col gap-y- p-1">
+            <div className="flex flex-col  p-1 pb-0">
               <p className="font-poppins font-normal text-xs sm:text-sm">
                 {contact?.name?.first} {contact?.name?.last}
               </p>
               <p className="font-poppins font-light text-xs text-gray-400">
                 {contact?.email}
+              </p>
+              <p className="font-poppins font-light text-sm pt-1 text-active">
+                {!isSent
+                  ? "To : You"
+                  : `From : You`}
               </p>
             </div>
           </div>

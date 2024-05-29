@@ -39,22 +39,25 @@ const handleError = (error) => {
 
 export const sendReport = async (newData) => {
   const token = localStorage.getItem("token");
-
-  const response = await axios.post(`${path}/reports`, newData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  console.log(response?.data?.message);
-  console.log(response?.data);
-  return response.data;
+  try {
+    const response = await axios.post(`${path}/reports`, newData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const getReport = async (id, markAsSeen) => {
   const seenParams = markAsSeen ? `?markAsSeen=${markAsSeen}` : "";
   try {
-    const response = await axiosInstance.get(`${path}/reports/${id}${seenParams``}`);
+    const response = await axiosInstance.get(
+      `${path}/reports/${id}${seenParams``}`
+    );
     return handleResponse(response);
   } catch (error) {
     handleError(error);

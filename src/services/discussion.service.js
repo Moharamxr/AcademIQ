@@ -49,15 +49,17 @@ export const getDiscussion = async (courseId) => {
 
 export const createPost = async (post) => {
   const token = localStorage.getItem("token");
+  try {
   const response = await axios.post(`${path}/discussions/posts`, post, {
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log(response?.data?.message);
-  console.log(response?.data);
-  return response.data;
+  return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
 };
 
 export const likePost = async (postId) => {
@@ -89,6 +91,36 @@ export const getPostComments = async (postId) => {
     const response = await axiosInstance.get(
       `${path}/discussions/posts/comments/${postId}`
     );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getAnnouncements = async () => {
+  try {
+    const response = await axiosInstance.get(`${path}/discussions/global`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const createAnnouncement = async (announcement) => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await axios.post(
+      `${path}/discussions/global/announcements`,
+      announcement,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
     return handleResponse(response);
   } catch (error) {
     handleError(error);

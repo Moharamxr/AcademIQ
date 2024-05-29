@@ -14,28 +14,32 @@ const ReplyCard = ({ report }) => {
     return new Intl.DateTimeFormat("en-US", options).format(date);
   }
 
-  const createdAt = report?.createdAt
-    ? formatISODateToTime(report.createdAt)
-    : "No date available";
-  return (
-     
-      <div className="flex flex-row-reverse gap-x-4 px-5 py-2">
-        <div className="flex flex-col items-end">
-          <div className="py-1 flex flex-row-reverse">
-            <div
-              className="font-poppins font-extralight leading-4 text-slate-800 text-sm bg-blue-100/55 rounded-2xl flex flex-col gap-3 rounded-bl-none
-              w-full max-w-[0%] min-w-fit py-3 px-4 break-inside-auto"
-            >
-              <p className="custom-paragraph">{report?.reply}</p>
+  const createdAt = report?.createdAt ? formatISODateToTime(report.createdAt) : "No date available";
+
+  return report?.body ? (
+    <div className={`flex flex-row-reverse gap-x-4 p-5   bg-white shadow-sm`}>
+      <div className={`flex flex-col items-end w-full`}>
+        <div className={`py-1 flex flex-col w-full`}>
+          <div className={`font-poppins font-light leading-4 text-slate-800 text-sm bg-blue-100/55 rounded-lg p-4 px-0 break-inside-auto w-full`}>
+            <div className={`flex flex-col justify-start border-b-2 border-gray-300  pb-5 px-4 `}>
+              <p className="font-semibold text-xl pb-1">You</p>
+              <p className="text-gray-400">to : {report?.from?.name?.first} {report?.from?.name?.last}</p>
+
+            
             </div>
+            <div className={`flex justify-start py-3 px-4`}>
+              <p className="mb-2 ">{report?.reply}</p>
+            </div>
+            
+              
           </div>
-          <time className="font-poppins text-[9.5px] text-end text-slate-500 ps-1">
+          <time className={`font-poppins text-xs text-slate-500 mt-2 self-end`}>
             {createdAt}
           </time>
         </div>
       </div>
-    
-  );
+    </div>
+  ) : null;
 };
 
 export default ReplyCard;

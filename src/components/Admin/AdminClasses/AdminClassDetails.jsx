@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import { getGradeClassById } from "../../../services/gradClass.service";
 import UpdateClass from "./UpdateClass";
+import { AddAlarm, AddCircle } from "@mui/icons-material";
+import AssignNewStudent from "./AssignNewStudent";
 
 const FixedBottomContent = styled.div`
   position: sticky;
@@ -34,6 +36,17 @@ const AdminClassDetails = () => {
   useEffect(() => {
     getData();
   }, []);
+
+  const [assignStudentModal, setAssignStudentModal] = useState(false);
+
+  const handleOpenAssignStudentModal = () => {
+    setAssignStudentModal(true);
+  };
+
+  const handleCloseAssignStudentModal = () => {
+    setAssignStudentModal(false);
+    getData();
+  };
 
   return (
     <div className="bg-white p-2 rounded-xl w-full">
@@ -102,25 +115,34 @@ const AdminClassDetails = () => {
                 ))}
               </div>
             </div>
-            {classData?.students?.length > 0 && (
-              <div className="flex gap-5 py-2 px-1">
-                <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
-                  students of this Class :
-                </p>
 
-                <div className="grid grid-cols-4 gap-5">
+            <div className="flex gap-5 py-2 px-1">
+              <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400 pt-1">
+                students of this Class :
+              </p>
+              {classData?.students?.length > 0 && (
+                <div className="flex flex-wrap gap-5">
                   {classData?.students?.map((s, index) => (
-                    <div className="center gap-1 col-span-1" key={index}>
-                      <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
+                    <div className="center gap-1 " key={index}>
                         <span className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2">
-                          {s?.name?.first} {s?.name?.last}
+                          {s?.email}
                         </span>
-                      </p>
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
+
+              <span onClick={handleOpenAssignStudentModal}>
+                <AddCircle color="action" className="cursor-pointer pt-1" />
+              </span>
+              <AssignNewStudent
+                isOpen={assignStudentModal}
+                getData={getData}
+                onClose={handleCloseAssignStudentModal}
+                gradeClassId={id}
+                currentStudents={classData?.students}
+              />
+            </div>
           </div>
           <FixedBottomContent className="bg-white py-5 px-4 flex flex-row-reverse">
             <button

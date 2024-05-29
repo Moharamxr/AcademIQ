@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { getCourseById } from "../../../services/courses.service";
 import styled from "@emotion/styled";
 import UpdateCourse from "./UpdateCourse";
+import { AddCircle } from "@mui/icons-material";
+import AssignNewTeacher from "./AssignNewTeacher";
 const FixedBottomContent = styled.div`
   position: sticky;
   bottom: 0;
@@ -29,6 +31,17 @@ const AdminCourseDetails = () => {
   useEffect(() => {
     getData();
   }, []);
+
+  const [assignTeacherModal, setAssignTeacherModal] = useState(false);
+
+  const handleOpenAssignTeacherModal = () => {
+    setAssignTeacherModal(true);
+  };
+
+  const handleCloseAssignTeacherModal = () => {
+    setAssignTeacherModal(false);
+    getData();
+  };
 
   return (
     courseData && (
@@ -72,24 +85,34 @@ const AdminCourseDetails = () => {
             </p>
           </div>
 
-          {courseData?.teachers?.length > 0 && (
-            <div className="flex gap-5 py-2 px-1">
-              <p className="font-poppins font-normal text-sm leading-6 text-gray-400">
-                Teachers of this course :
-              </p>
-              <div className="grid grid-cols-4 gap-5">
+          <div className="flex gap-5 py-2 px-1">
+            <p className="font-poppins font-normal text-sm leading-6 text-gray-400 pt-1">
+              Teachers of this course :
+            </p>
+            {courseData?.teachers?.length > 0 && (
+              <div className="flex flex-wrap gap-5">
                 {courseData?.teachers?.map((t, index) => (
-                  <div className="center  col-span-1" key={index}>
-                    <p className="font-poppins font-normal text-sm leading-6 text-gray-400">
-                      <span className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2">
-                        {t?.name?.first.slice(0, 8)} {t?.name?.last.slice(0, 8)}
-                      </span>
-                    </p>
-                  </div>
+                  <span
+                    key={index}
+                    className="text-gray-600 text-base font-medium bg-active-bg rounded-lg p-2"
+                  >
+                    {t?.email}
+                  </span>
                 ))}
               </div>
-            </div>
-          )}
+            )}
+            <span onClick={handleOpenAssignTeacherModal} className="pt-1">
+                <AddCircle color="action" className="cursor-pointer" />
+              </span>
+              <AssignNewTeacher
+                isOpen={assignTeacherModal}
+                getData={getData}
+                onClose={handleCloseAssignTeacherModal}
+                gradeClassId={id}
+                department={courseData?.department}
+                currentTeachers={courseData?.teachers}
+              />
+          </div>
         </div>
         <FixedBottomContent className="bg-white py-5 pe-4 flex flex-row-reverse">
           <button

@@ -97,3 +97,26 @@ export const getChildrenByParent = async (id) => {
     handleError(error);
   }
 };
+
+
+export const assignChildToParent = async (childId, parentId) => {
+  try {
+    const response = await axiosInstance.patch(
+      `${path}/users/students/${childId}/parents/${parentId}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const removeChildFromParent = async (childId, parentId) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${path}/users/students/${childId}/parents/${parentId}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};

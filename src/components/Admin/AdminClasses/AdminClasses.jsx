@@ -69,7 +69,6 @@ const AdminClasses = () => {
     setSelectedGrade(e.target.value);
   };
 
-  // make a filtered array of classes based on selected grade
 
   return (
     <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
@@ -92,25 +91,19 @@ const AdminClasses = () => {
             ))}
         </select>
       </FixedTopContent>
+      <div className="grid sm:grid-cols-3 md:grid-cols-4 grid-cols-2  gap-5 ">
+
       {!isLoading ? (
         Array.isArray(gradeClasses) && gradeClasses.length > 0 ? (
-        gradeClasses.map((classData, index) => (
+        gradeClasses.map((classData) => (
           <div
             key={classData._id}
-            className="class-card mb-4 hover:bg-slate-100 hover:cursor-pointer"
+            className="col-span-1 bg-green-100 p-5  py-14 center border-2 border-green-600 rounded-lg  hover:bg-green-200 cursor-pointer text-center text-green-700 text-lg"
             onClick={() => navigateToClassDetails(classData._id)}
           >
-            <div className="class-info flex items-center justify-between py-3 border border-gray-200 rounded-md px-6">
-              <div className="class-details flex items-center space-x-5">
-                <span className="text-lg font-medium">{index + 1}</span>
-                <p className="font-poppins font-medium">
+                <span className="font-poppins font-medium">
                   Class {classData.level} {classData.letter}
-                </p>
-              </div>
-              <span className="more-options cursor-pointer">
-                <ThreeDots />
-              </span>
-            </div>
+                </span>
           </div>
         )) 
       ) : (
@@ -120,15 +113,16 @@ const AdminClasses = () => {
       )
       ) : (
         <>
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
+          <Skeleton variant="rounded" height={110} />
+          <Skeleton variant="rounded" height={110} />
+          <Skeleton variant="rounded" height={110} />
+          <Skeleton variant="rounded" height={110} />
+          <Skeleton variant="rounded" height={110} />
+          <Skeleton variant="rounded" height={110} />
+          <Skeleton variant="rounded" height={110} />
         </>
       )}
+      </div>
 
       <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
         <button

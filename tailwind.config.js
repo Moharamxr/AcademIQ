@@ -9,6 +9,7 @@ export default {
       colors: {
         background: "#C1E5FF",
         "active-bg": "rgba(0, 118, 158, 0.08)",
+        "active-bg-2": "rgba(0, 118, 158, 0.25)",
         "active-br": "rgba(0, 118, 158, 1)",
         active: "rgba(0, 118, 158, 1)",
         default: "rgba(148, 163, 184, 1)",

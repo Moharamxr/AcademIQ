@@ -116,6 +116,14 @@ const AcademiqRoutes = () => {
         component: <ExamDetails />,
       },
       {
+        path: "/assignments",
+        component: <StuAssignments />,
+      }, 
+      {
+        path: "/assignments/:id",
+        component: <StuAssignments />,
+      },
+      {
         path: "todolist",
         component: <ToDoPage />,
       },

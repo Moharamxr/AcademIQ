@@ -9,7 +9,7 @@ const Report = () => {
   const toggleNewMessage = useSelector(
     (state) => state.reportsData.toggleNewMessage
   );
-  
+
   const [sentReports, setSentReports] = useState([]);
   const [receivedReports, setReceivedReports] = useState([]);
 
@@ -33,11 +33,15 @@ const Report = () => {
 
   return (
     <div className="w-full flex flex-col gap-4 md:flex-row">
-      <ReportList sentReports={sentReports} receivedReports={receivedReports} loading={isReportLoading} />
+      <ReportList
+        sentReports={sentReports}
+        receivedReports={receivedReports}
+        loading={isReportLoading}
+      />
       {toggleNewMessage ? (
         <ReportNewMessage fetchReports={fetchReports} />
       ) : (
-        <ReportMessages />
+        <ReportMessages fetchReports={fetchReports} />
       )}
     </div>
   );

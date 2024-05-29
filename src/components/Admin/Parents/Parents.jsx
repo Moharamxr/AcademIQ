@@ -43,7 +43,6 @@ const Parents = () => {
       setIsLoading(false);
       setParents(data?.users);
     } catch (error) {
-      console.error(error);
       setIsLoading(false);
     }
   };
@@ -62,34 +61,54 @@ const Parents = () => {
           <option value="">Class 1</option>
         </select> */}
       </FixedTopContent>
-      {!isLoading ? (
-        parents?.map((parent, index) => (
-          <div
-            key={parent._id}
-            className="between py-3  border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
-            onClick={() => navigate(`/admin/user/${parent._id}`)}
-          >
-            <div className="flex items-center gap-5">
-              <span className="">{index + 1}</span>
-              <img src={Stu1} alt="" className="w-9 h-9" />
-              <p className="font-poppins font-medium">{parent.username}</p>
+      <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 ">
+        {!isLoading ? (
+          parents?.map((parent, index) => (
+            <div
+              key={index}
+              className=" bg-active-bg border-2 border-blue-200 center flex-col p-4 gap-1 rounded-xl hover:bg-slate-50 hover:cursor-pointer overflow-hidden"
+              onClick={() => navigate(`/admin/user/${parent._id}`)}
+            >
+              {isLoading ? (
+                <Skeleton variant="circular" width={160} height={160} />
+              ) : parent?.profilePicture?.url ? (
+                <img
+                  src={parent?.profilePicture?.url}
+                  alt="profile-Pic"
+                  className="w-16 h-16 rounded-full"
+                />
+              ) : (
+                <div
+                  className="w-16 h-16 text-white text-2xl rounded-full center mr-2 select-none bg-active"
+                  // style={{ backgroundColor: parent?.profilePicture?.color }}
+                >
+                  {parent?.name?.first.charAt(0).toUpperCase() + parent?.name?.last.charAt(0).toUpperCase()} 
+                </div>
+              )}{" "}
+              <span className="text-center text-gray-900 font-poppins font-medium">
+              {parent?.name?.first +' '+ parent?.name?.last} 
+              </span>
+              
+              <span className="text-center text-gray-500 font-poppins text-sm">
+                {parent?.email}
+              </span>
+              {/* <button className="bg-active text-white rounded-lg py-2 px-4">
+                View Profile
+              </button> */}
             </div>
-            {/* <span className="cursor-pointer   ">
-              <ThreeDots />
-            </span> */}
-          </div>
-        ))
-      ) : (
-        <>
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-        </>
-      )}
+          ))
+        ) : (
+          <>
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+          </>
+        )}
+      </div>
       <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
         <button
           className="bg-active text-white rounded-lg py-3 px-6"

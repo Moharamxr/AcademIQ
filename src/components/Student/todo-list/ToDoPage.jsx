@@ -31,7 +31,16 @@ const ToDoPage = () => {
       console.log("assigned", assigned);
       console.log("done", done);
       console.log("missing", missing);
-      setTodos(data?.todos);
+  
+      const combinedTodos = [
+        ...(data?.todos?.todo || []),
+        ...(data?.todos?.assessmentTodos || [])
+      ];
+  
+      setTodos(data?.todos?.todo);
+      console.log(todos)
+      console.log("combinedTodos", combinedTodos)
+      
       setDoneTodos(done);
       setMissingTodos(missing);
     } catch (error) {
@@ -40,6 +49,8 @@ const ToDoPage = () => {
       setIsLoading(false);
     }
   };
+  
+  console.log(todos)
 
   useEffect(() => {
     fetchTodos();

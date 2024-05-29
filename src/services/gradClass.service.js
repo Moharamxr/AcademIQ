@@ -124,10 +124,32 @@ export const reTakeAttendance = async (id, newData) => {
 };
 
 export const getAttendance = async (id, date, period) => {
-  console.log(date, period, id)
+  console.log(date, period, id);
   try {
     const response = await axiosInstance.get(
       `${path}/gradeClasses/${id}/attendance?date=${date}&period=${period}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const assignStudentToGradClass = async (gradClassId, studentId) => {
+  try {
+    const response = await axiosInstance.patch(
+      `${path}/gradeClasses/${gradClassId}/students/${studentId}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const removeStudentFromGradClass = async (gradClassId, studentId) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${path}/gradeClasses/${gradClassId}/students/${studentId}`
     );
     return handleResponse(response);
   } catch (error) {

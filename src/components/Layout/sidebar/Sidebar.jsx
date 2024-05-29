@@ -45,7 +45,6 @@ const Sidebar = () => {
     if (!selectedChild && data?.children?.length > 0) {
       const initialChild = data.children[0]._id;
       setSelectedChild(initialChild);
-      localStorage.setItem("firstChild", initialChild);
       localStorage.setItem("gradeClassId", data.children[0]?.gradeClassId);
       navigate(`/child/${initialChild}`);
     }

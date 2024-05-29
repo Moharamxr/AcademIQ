@@ -77,7 +77,7 @@ const AdminCourses = () => {
         <select
           name="grades"
           id="grades"
-          className="bg-gray-100 rounded-lg p-3 outline-none"
+          className="bg-gray-100 rounded-lg border-2 p-3 outline-none"
           onChange={handleGradeChange}
           value={selectedGrade}
         >
@@ -91,39 +91,35 @@ const AdminCourses = () => {
             ))}
         </select>
       </FixedTopContent>
-      {!isLoading ? (
-        Array.isArray(gradeCourses) && gradeCourses.length > 0 ? (
-          gradeCourses.map((courseData, index) => (
-            <div
-              key={courseData._id}
-              className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
-              onClick={() => navigateToCourseDetails(courseData._id)}
-            >
-              <div className="flex items-center gap-5">
-                {index + 1}
-                <span className="text-lg font-medium">{courseData.title}</span>
+      <div className="grid sm:grid-cols-3 md:grid-cols-4   grid-cols-2  gap-5 ">
+        {!isLoading ? (
+          Array.isArray(gradeCourses) && gradeCourses.length > 0 ? (
+            gradeCourses?.map((courseData) => (
+              <div
+                key={courseData?._id}
+                className="col-span-1 bg-active-bg p-5  py-14 center border-2 border-active-br rounded-lg  hover:bg-active-bg-2  cursor-pointer text-center text-active "
+                onClick={() => navigateToCourseDetails(courseData?._id)}
+              >
+                <span className="text-lg font-medium">{courseData?.title}</span>
               </div>
-              <span className="cursor-pointer">
-                <ThreeDots />
-              </span>
+            ))
+          ) : (
+            <div className="text-center text-lg text-gray-400">
+              No courses available for this grade
             </div>
-          ))
+          )
         ) : (
-          <div className="text-center text-lg text-gray-400">
-            No courses available for this grade
-          </div>
-        )
-      ) : (
-        <>
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-        </>
-      )}
+          <>
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
+          </>
+        )}
+      </div>
 
       <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
         <button

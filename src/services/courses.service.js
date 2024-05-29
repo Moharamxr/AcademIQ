@@ -1,5 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
+
 const path = "https://academiq.onrender.com";
+ 
+
 
 const axiosInstance = axios.create();
 
@@ -66,7 +69,9 @@ export const getCourseById = async (id) => {
 };
 export const getCourseByGradeClass = async (id) => {
   try {
-    const response = await axiosInstance.get(`${path}/courses/gradeClasses/${id}`);
+    const response = await axiosInstance.get(
+      `${path}/courses/gradeClasses/${id}`
+    );
     return handleResponse(response);
   } catch (error) {
     handleError(error);
@@ -76,6 +81,47 @@ export const getCourseByGradeClass = async (id) => {
 export const updateCourse = async (id, newData) => {
   try {
     const response = await axiosInstance.put(`${path}/courses/${id}`, newData);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const uploadCourseMaterial = async (id, formData) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axiosInstance.patch(
+      `${path}/courses/${id}/materials`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const assignTeacherToCourse = async (courseId, teacherId) => {
+  try {
+    const response = await axiosInstance.patch(
+      `${path}/courses/${courseId}/teachers/${teacherId}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const removeTeacherFromCourse = async (courseId, teacherId) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${path}/courses/${courseId}/teachers/${teacherId}`
+    );
     return handleResponse(response);
   } catch (error) {
     handleError(error);

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../../services/user.service";
 import { Skeleton } from "@mui/material";
 const ListContainer = styled("div")({
-  maxHeight: "38rem",
+  maxHeight: "45rem",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -62,34 +62,54 @@ const Teachers = () => {
           <option value="">Class 1</option>
         </select> */}
       </FixedTopContent>
-      {!isLoading ? (
-        teachers?.map((teacher, index) => (
-          <div
-            key={teacher._id}
-            className="between py-3  border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
-            onClick={() => navigate(`/admin/user/${teacher._id}`)}
-          >
-            <div className="flex items-center gap-5">
-              <span className="text-lg font-medium">{index + 1}</span>
-              <img src={Stu1} alt="" className="w-9 h-9" />
-              <p className="font-poppins font-medium">{teacher.username}</p>
+      <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 ">
+        {!isLoading ? (
+          teachers?.map((teacher, index) => (
+            <div
+              key={index}
+              className=" bg-active-bg border-2 border-blue-200 center flex-col p-4 gap-1 rounded-xl hover:bg-slate-50 hover:cursor-pointer overflow-hidden"
+              onClick={() => navigate(`/admin/user/${teacher._id}`)}
+            >
+              {isLoading ? (
+                <Skeleton variant="circular" width={160} height={160} />
+              ) : teacher?.profilePicture?.url ? (
+                <img
+                  src={teacher?.profilePicture?.url}
+                  alt="profile-Pic"
+                  className="w-16 h-16 rounded-full"
+                />
+              ) : (
+                <div
+                  className="w-16 h-16 text-white text-2xl rounded-full center mr-2 select-none"
+                  style={{ backgroundColor: teacher?.profilePicture?.color }}
+                >
+                  {teacher?.name?.first.charAt(0).toUpperCase() + teacher?.name?.last.charAt(0).toUpperCase()} 
+                </div>
+              )}{" "}
+              <span className="text-center text-gray-900 font-poppins font-medium">
+              {teacher?.name?.first +' '+ teacher?.name?.last} 
+              </span>
+              
+              <span className="text-center text-gray-500 font-poppins text-sm">
+                {teacher?.email}
+              </span>
+              {/* <button className="bg-active text-white rounded-lg py-2 px-4">
+                View Profile
+              </button> */}
             </div>
-            <span className="cursor-pointer">
-              <ThreeDots />
-            </span>
-          </div>
-        ))
-      ) : (
-        <>
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-        </>
-      )}
+          ))
+        ) : (
+          <>
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+            <Skeleton variant="rounded" height={180} />
+          </>
+        )}
+      </div>
       <FixedBottomContent className="bg-white py-5 flex flex-row-reverse">
         <button
           className="bg-active text-white rounded-lg py-3 px-6"

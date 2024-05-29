@@ -32,6 +32,7 @@ const UserCourses = () => {
     try {
       setIsLoading(true);
       if (role === "student") {
+        if (!gradeClassId) return;
         const data = await getCourseByGradeClass(gradeClassId);
         setGradeCourses(data?.courses);
       } else {
@@ -59,17 +60,18 @@ const UserCourses = () => {
         <FixedTopContent className="between bg-white  py-5">
           <h2 className="text-2xl ">Courses</h2>
         </FixedTopContent>
-        {!isLoading ? (
+        <div className="grid sm:grid-cols-3 grid-cols-2  gap-5 ">
+          {!isLoading ? (
           Array.isArray(gradeCourses) &&
           gradeCourses.map((courseData, index) => (
             <div
               key={index}
-              className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:bg-slate-100 hover:cursor-pointer"
+              className="col-span-1 bg-active-bg p-5  py-10 center border-2 border-active-br rounded-lg  hover:bg-active  cursor-pointer text-center text-active hover:text-white"
               onClick={() => navigateToCourseDetails(courseData._id)}
             >
-              <div className="flex items-center gap-5">
-                {index + 1}.<span className="">{courseData.title}</span>
-              </div>
+             
+                <span className="font-poppins font-semibold ">{courseData.title}</span>
+              
             </div>
           ))
         ) : (
@@ -83,6 +85,8 @@ const UserCourses = () => {
             <Skeleton variant="rounded" height={50} />
           </>
         )}
+        </div>
+        
       </ListContainer>
       <aside className="w-full lg:w-4/12 hidden md:block">
         <ParentTimeTable />

@@ -46,7 +46,6 @@ const ReportList = ({ sentReports, receivedReports, loading }) => {
     setSearchTerm(e.target.value);
     const filtered = tabs[activeTab].filter(
       (report) =>
-        // search in the name of the contact and the body of the report and subject of the report
 
         (!isSent &&
           report?.from?.name?.first
