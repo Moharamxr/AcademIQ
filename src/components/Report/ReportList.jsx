@@ -81,7 +81,7 @@ const ReportList = ({ sentReports, receivedReports, loading }) => {
 
   const displayContacts = showSearch ? filteredReports : tabs[activeTab];
   return (
-    <ConnectListContainer className="bg-white w-full md:w-4/12 rounded-xl min-h-80 p-4 pt-0 overflow-hidden">
+    <ConnectListContainer className="bg-white w-full md:w-6/12 lg:w-4/12  rounded-xl min-h-80 p-4 pt-0 overflow-hidden">
       <FixedTopContent className="bg-white pt-4">
         <h3 className="font-poppins font-normal text-base md:text-lg lg:text-xl xl:text-2xl leading-normal md:leading-relaxed text-center py-1 pb-2">
           Inbox

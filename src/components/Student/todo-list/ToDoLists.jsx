@@ -40,9 +40,9 @@ const ToDoLists = ({ status, todos, isLoading, fetchTodos }) => {
     fetchTodos();
   };
   const calculateProgress = () => {
-    if (todos.length === 0) return 0;
+    if (todos?.length === 0) return 0;
     const total = todos?.length;
-    const done = todos?.filter((todo) => todo.completed).length;
+    const done = todos?.filter((todo) => todo?.completed).length;
     const progress = (done / total) * 100;
     return progress.toFixed(0);
   };
@@ -60,7 +60,7 @@ const ToDoLists = ({ status, todos, isLoading, fetchTodos }) => {
   return (
     <TodoListContainer
       className={`flex flex-col w-full p-4 pt-0 bg-white rounded-xl ${
-        status === "Assigned" ? "lg:max-h-[30rem]" : "lg:max-h-[18.4rem]"
+        status === "Assigned" ? "lg:max-h-[30rem]" : "lg:h-[19rem]"
       }`}
     >
       <FixedTopContent className=" bg-white py-4">
@@ -96,10 +96,10 @@ const ToDoLists = ({ status, todos, isLoading, fetchTodos }) => {
         {isLoading && <Skeleton variant="rounded" height={70} />}
         {todos?.length > 0
           ? !isLoading &&
-            todos?.map((todo) => (
+            todos?.map((todo,i) => (
               <div
                 className="bg-gray-100 rounded-2xl p-3 cursor-pointer hover:bg-gray-200"
-                key={todo._id}
+                key={i}
                 onClick={() => openView(todo)}
               >
                 <div className="flex gap-x-3 items-center">

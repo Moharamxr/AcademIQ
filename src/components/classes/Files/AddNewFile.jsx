@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CircularProgress } from "@mui/material";
-import { uploadCourseMaterial } from "../../../../services/courses.service";
+import { uploadCourseMaterial } from "../../../services/courses.service";
 import { useParams } from "react-router-dom";
 
 const AddNewFile = ({ isOpen, onClose, getCourseData }) => {

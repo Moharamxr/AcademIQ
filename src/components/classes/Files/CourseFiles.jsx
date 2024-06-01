@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import Word from "../../../../assets/vscode-icons_file-type-word.png";
-import Pdf from "../../../../assets/vscode-icons_file-type-pdf2.png";
-import ImageIcon from "@mui/icons-material/Image";
+import Word from "../../../assets/vscode-icons_file-type-word.png";
+import Pdf from "../../../assets/vscode-icons_file-type-pdf2.png";
 import { Skeleton } from "@mui/material";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
-import AddPostIcon from "../../../../assets/icons/AddPostIcon";
+import AddPostIcon from "../../../assets/icons/AddPostIcon";
 import AddNewFile from "./AddNewFile";
 
 const CourseFiles = ({ materials, isLoading, getCourseData }) => {
@@ -14,20 +13,21 @@ const CourseFiles = ({ materials, isLoading, getCourseData }) => {
     getCourseData();
   };
   const onOpen = () => setIsOpen(true);
-
+  const role = localStorage.getItem("role");
   return (
     <div className="flex flex-col px-4">
-      <div
-        className="border-2 border-gray-200/70 hover:bg-gray-100 cursor-pointer select-none rounded-xl p-4 flex gap-4  px-6 w-full mb-3 "
-        onClick={onOpen}
-      >
-        <AddPostIcon />
-        
+      {role === "teacher" && (
+        <div
+          className="border-2 border-gray-200/70 hover:bg-gray-100 cursor-pointer select-none rounded-xl p-4 flex gap-4  px-6 w-full mb-3 "
+          onClick={onOpen}
+        >
+          <AddPostIcon />
 
-        <p className="font-poppins  text-gray-700 pt-1 text-lg leading-7">
-          Add new file
-        </p>
-      </div>
+          <p className="font-poppins  text-gray-700 pt-1 text-lg leading-7">
+            Add new file
+          </p>
+        </div>
+      )}
       <div className="w-full divide-y-2 ">
         {materials?.length > 0
           ? !isLoading &&
@@ -76,10 +76,10 @@ const CourseFiles = ({ materials, isLoading, getCourseData }) => {
         )}
       </div>
       <AddNewFile
-          isOpen={isOpen}
-          onClose={onClose}
-          getCourseData={getCourseData}
-        />
+        isOpen={isOpen}
+        onClose={onClose}
+        getCourseData={getCourseData}
+      />
     </div>
   );
 };

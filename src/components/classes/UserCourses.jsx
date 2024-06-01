@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Skeleton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { getUserById } from "../../../services/user.service";
-import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
-import { getCourseByGradeClass } from "../../../services/courses.service";
+import ParentTimeTable from "../Layout/timeTables/parentTimeTable/ParentTimeTable";
+import { getCourseByGradeClass } from "../../services/courses.service";
+import { getUserById } from "../../services/user.service";
 const ListContainer = styled("div")({
   height: "34.5rem",
   overflowY: "auto",
@@ -62,31 +62,30 @@ const UserCourses = () => {
         </FixedTopContent>
         <div className="grid sm:grid-cols-3 grid-cols-2  gap-5 ">
           {!isLoading ? (
-          Array.isArray(gradeCourses) &&
-          gradeCourses.map((courseData, index) => (
-            <div
-              key={index}
-              className="col-span-1 bg-active-bg p-5  py-10 center border-2 border-active-br rounded-lg  hover:bg-active  cursor-pointer text-center text-active hover:text-white"
-              onClick={() => navigateToCourseDetails(courseData._id)}
-            >
-             
-                <span className="font-poppins font-semibold ">{courseData.title}</span>
-              
-            </div>
-          ))
-        ) : (
-          <>
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
-          </>
-        )}
+            Array.isArray(gradeCourses) &&
+            gradeCourses.map((courseData, index) => (
+              <div
+                key={index}
+                className="col-span-1 bg-active-bg p-5  py-10 center border-2 border-active-br rounded-lg  hover:bg-active  cursor-pointer text-center text-active hover:text-white"
+                onClick={() => navigateToCourseDetails(courseData._id)}
+              >
+                <span className="font-poppins font-semibold ">
+                  {courseData.title}
+                </span>
+              </div>
+            ))
+          ) : (
+            <>
+              <Skeleton variant="rounded" height={120} />
+              <Skeleton variant="rounded" height={120} />
+              <Skeleton variant="rounded" height={120} />
+              <Skeleton variant="rounded" height={120} />
+              <Skeleton variant="rounded" height={120} />
+              <Skeleton variant="rounded" height={120} />
+              <Skeleton variant="rounded" height={120} />
+            </>
+          )}
         </div>
-        
       </ListContainer>
       <aside className="w-full lg:w-4/12 hidden md:block">
         <ParentTimeTable />

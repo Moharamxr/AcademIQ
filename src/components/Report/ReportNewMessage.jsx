@@ -82,7 +82,7 @@ const ReportNewMessage = ({fetchReports}) => {
   };
 
   return (
-    <div className="bg-white container flex flex-col rounded-2xl w-full md:w-8/12">
+    <div className="bg-white container flex flex-col rounded-2xl w-full md:w-6/12 lg:w-8/12">
       <div className="container flex justify-between py-2 pt-4 px-4">
         <h5 className="font-poppins font-medium text-xl leading-10 text-gray-900">
           New Report

@@ -45,7 +45,7 @@ const Sidebar = () => {
     if (!selectedChild && data?.children?.length > 0) {
       const initialChild = data.children[0]._id;
       setSelectedChild(initialChild);
-      localStorage.setItem("gradeClassId", data.children[0]?.gradeClassId);
+      localStorage.setItem("gradeClassId", data?.children[0]?.gradeClassId);
       navigate(`/child/${initialChild}`);
     }
   };
@@ -246,6 +246,13 @@ const Sidebar = () => {
         icon: <AttendanceIcon />,
         activeIcon: <AttendanceIcon active={true} />,
         path: "/attendance",
+        active: false,
+      },
+      {
+        name: "Assignments",
+        icon: <AssignmentsIcon />,
+        activeIcon: <AssignmentsIcon active={true} />,
+        path: "/assignments",
         active: false,
       },
       {

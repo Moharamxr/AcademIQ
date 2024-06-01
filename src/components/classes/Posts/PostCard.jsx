@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-// import ThreeDots from "../../../../assets/icons/ThreeDots";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import {
   addComment,
   getPostComments,
   likePost,
-} from "../../../../services/discussion.service";
+} from "../../../services/discussion.service";
 import { CircularProgress, Skeleton } from "@mui/material";
 const PostCard = ({ post, courseId }) => {
   const formatDate = (time) => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createPost } from "../../../../services/discussion.service";
+import { createPost } from "../../../services/discussion.service";
 import { CircularProgress } from "@mui/material";
 
 const AddNewPost = ({ isOpen, onClose, courseId, getPostsData }) => {

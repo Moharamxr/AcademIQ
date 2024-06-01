@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import AddPostIcon from "../../../../assets/icons/AddPostIcon";
+import AddPostIcon from "../../../assets/icons/AddPostIcon";
 import PostCard from "./PostCard";
 import { useParams } from "react-router-dom";
-import { getDiscussion } from "../../../../services/discussion.service";
+import { getDiscussion } from "../../../services/discussion.service";
 import SkeletonPostCard from "./SkeletonPostCard";
 import AddNewPost from "./AddNewPost";
 

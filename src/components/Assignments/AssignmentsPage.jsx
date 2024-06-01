@@ -2,7 +2,7 @@ import React from "react";
 import AssignmentsDetails from "./AssignmentsDetails";
 import AssignmentsList from "./AssignmentsList";
 
-const StuAssignments = () => {
+const AssignmentsPage = () => {
   return (
     <>
       <div className="w-full lg:w-8/12 flex flex-col gap-3">
@@ -15,4 +15,4 @@ const StuAssignments = () => {
   );
 };
 
-export default StuAssignments;
+export default AssignmentsPage;

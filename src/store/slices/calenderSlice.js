@@ -2,9 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const currentDate = new Date();
 const currentYear = currentDate.getFullYear();
-const currentMonth = currentDate.getMonth();
-const currentDay = currentDate.getDate();
-const date = `${currentYear}-${currentMonth + 1}-${currentDay}`;
+const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0'); 
+const currentDay = String(currentDate.getDate()).padStart(2, '0');
+const date = `${currentYear}-${currentMonth}-${currentDay}`;
+
 const initialState = {
   date: date,
 };

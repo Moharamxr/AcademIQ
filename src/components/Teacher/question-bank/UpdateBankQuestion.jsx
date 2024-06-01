@@ -190,7 +190,7 @@ const UpdateBankQuestion = ({ isOpen, onClose, id ,question }) => {
               }
               placeholder="Description"
             />
-            {/* Input fields for options */}
+            
             {questionData.options.map((option, index) => (
               <div key={index} className="center gap-3 pt-3 ">
                 <span className="text-sm font-medium">{index + 1}.</span>
@@ -198,9 +198,9 @@ const UpdateBankQuestion = ({ isOpen, onClose, id ,question }) => {
                   <input
                     type="radio"
                     name="options"
-                    value={option.text}
                     checked={option.isCorrect}
                     onChange={() => handleOptionSelection(index)}
+                  
                   />
                 </label>
                 <input

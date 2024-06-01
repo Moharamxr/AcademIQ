@@ -5,60 +5,53 @@ import { getStudentToDos } from "../../../services/todo.service";
 import { useSelector } from "react-redux";
 
 const ToDoPage = () => {
+  const selectedDate = useSelector((state) => state.calenderData?.date);
+
   const [todos, setTodos] = useState([]);
   const [doneTodos, setDoneTodos] = useState([]);
   const [missingTodos, setMissingTodos] = useState([]);
-
-  const selectedDate = useSelector((state) => state.calenderData.date);
-
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  const fetchTodos = async () => {
-    setIsLoading(true);
-    try {
-      const data = await getStudentToDos(selectedDate);
-      const assigned = data?.todos?.filter(
-        (todo) =>
-          todo.completed === false && new Date(todo.schedule) >= new Date()
-      );
-      const done = data?.todos?.filter((todo) => todo.completed === true);
-      const missing = data?.todos?.filter(
-        (todo) =>
-          todo.completed === false && new Date(todo.schedule) < new Date()
-      );
-      console.log("data", data);
-      console.log("assigned", assigned);
-      console.log("done", done);
-      console.log("missing", missing);
-  
-      const combinedTodos = [
-        ...(data?.todos?.todo || []),
-        ...(data?.todos?.assessmentTodos || [])
-      ];
-  
-      setTodos(data?.todos?.todo);
-      console.log(todos)
-      console.log("combinedTodos", combinedTodos)
-      
-      setDoneTodos(done);
-      setMissingTodos(missing);
-    } catch (error) {
-      setError(error?.response?.data?.error);
-    } finally {
-      setIsLoading(false);
-    }
+  const isValidDateFormat = (dateStr) => {
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    return regex.test(dateStr);
   };
-  
-  console.log(todos)
+  const fetchTodos = async () => {
+    if (!isValidDateFormat(selectedDate)) {
+      return;
+    }
+
+    setIsLoading(true);
+    const data = await getStudentToDos(selectedDate);
+    const combinedTodos = [
+      ...(data?.todos?.todo || []),
+      ...(data?.todos?.assessmentTodos || []),
+    ];
+
+    const assigned = combinedTodos.filter(
+      (todo) => !todo.completed && new Date(todo.schedule) >= new Date()
+    );
+    const done = combinedTodos.filter((todo) => todo.completed);
+    const missing = combinedTodos.filter(
+      (todo) => !todo.completed && new Date(todo.schedule) < new Date()
+    );
+
+    setTodos(assigned);
+    setDoneTodos(done);
+    setMissingTodos(missing);
+
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    fetchTodos();
+    if (selectedDate) {
+      fetchTodos();
+    }
   }, [selectedDate]);
 
   return (
     <>
-      <div className="w-full lg:w-8/12  flex flex-col gap-3">
+      <div className="w-full lg:w-8/12 flex flex-col gap-3">
         <Calendar />
         <ToDoLists
           status="Assigned"
@@ -78,4 +71,5 @@ const ToDoPage = () => {
     </>
   );
 };
+
 export default ToDoPage;

@@ -120,3 +120,12 @@ export const removeChildFromParent = async (childId, parentId) => {
     handleError(error);
   }
 };
+
+export const getTeacherCounts = async () => {
+  try {
+    const response = await axiosInstance.get(`${path}/users/teachers/home`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+}

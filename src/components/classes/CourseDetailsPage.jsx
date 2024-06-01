@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
 import CoursePosts from "./Posts/CoursePosts";
 import CourseFiles from "./Files/CourseFiles";
 import CourseStudents from "./Students/CourseStudents";
 import CourseAssignments from "./Assignments/CourseAssignments";
 import { useState } from "react";
 import styled from "@emotion/styled";
-import { getCourseById } from "../../../services/courses.service";
 import { useParams } from "react-router-dom";
+import { getCourseById } from "../../services/courses.service";
+import ParentTimeTable from "../Layout/timeTables/parentTimeTable/ParentTimeTable";
 
 const FixedTopContent = styled.div`
   position: sticky;
@@ -24,19 +24,19 @@ const TeacherClassesContainer = styled("div")({
 });
 const CourseDetailsPage = () => {
   const [courseFiles, setCourseFiles] = useState([]);
-  const [courseAssignments, setCourseAssignments] = useState([]);
+  // const [courseAssignments, setCourseAssignments] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
   const { id } = useParams();
 
   const [gradeClassId, setGradeClassId] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getCourseData = async () => {
     try {
       setIsLoading(true);
       const data = await getCourseById(id);
       setCourseFiles(data?.course?.materials);
-      setCourseAssignments(data?.course?.assessments);
+      // setCourseAssignments(data?.course?.assessments);
       setGradeClassId(data?.course?.gradeClass?.gradeClassId);
       setIsLoading(false);
     } catch (error) {
@@ -59,16 +59,13 @@ const CourseDetailsPage = () => {
         />
       ),
     },
-    { label: "Students", content: <CourseStudents gradeClassId={gradeClassId} /> },
+    {
+      label: "Students",
+      content: <CourseStudents gradeClassId={gradeClassId} />,
+    },
     {
       label: "Assignment",
-      content: (
-        <CourseAssignments
-          assignments={courseAssignments}
-          getCourseData={getCourseData}
-          isLoading={isLoading}
-        />
-      ),
+      content: <CourseAssignments />,
     },
   ];
 

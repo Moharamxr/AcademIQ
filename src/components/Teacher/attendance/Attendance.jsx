@@ -1,18 +1,19 @@
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { DateField, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import React, { useEffect, useState } from "react";
 import SmCircle from "../../../assets/icons/SmCircle";
-import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
 import CheckedIcon from "../../../assets/icons/CheckedIcon";
 import { useParams } from "react-router-dom";
 import {
   getAttendance,
-  getGradeClassById,
+  reTakeAttendance,
   takeAttendance,
 } from "../../../services/gradClass.service";
 import { CircularProgress } from "@mui/material";
+import { getGradeCourses } from "../../../services/courses.service";
+import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
 
 const FixedTopContent = styled.div`
   position: sticky;
@@ -41,17 +42,15 @@ const Attendance = () => {
   const [students, setStudents] = useState([]);
   const [attendedStudents, setAttendedStudents] = useState([]);
   const [isAttendanceTaken, setIsAttendanceTaken] = useState(false);
-
   const [error, setError] = useState(null);
-
   const [attendanceLoading, setAttendanceLoading] = useState(false);
-
-  const [studentsLoading, setStudentsLoading] = useState(false);
-
   const [period, setPeriod] = useState(0);
+  const [courseId, setCourseId] = useState("");
+  const [courses, setCourses] = useState([]);
+  const [loadingCourses, setLoadingCourses] = useState(false);
+
   const handleSetPeriod = () => {
     const hour = new Date().getHours();
-    console.log("Hour: ", hour)
     if (hour >= 8 && hour < 9) {
       setPeriod(1);
     } else if (hour >= 9 && hour < 10) {
@@ -67,41 +66,69 @@ const Attendance = () => {
     } else {
       setPeriod(0);
     }
-
-    console.log("Period: ", period);
   };
 
-  const [courseId, setCourseId] = useState("");
+  // useEffect(() => {
+  //   handleSetPeriod();
+  //   const initialAttendance = async () => {
+  //     if (courseId) {
+  //       await takeAttendance(id, {
+  //         courseId,
+  //         period: 7,
+  //         students: [],
+  //       });
+  //     }
+  //   };
+  //   initialAttendance();
+  // }, [courseId]);
 
-  const getStudents = async () => {
-    setStudentsLoading(true);
+  const fetchCourses = async () => {
+    setLoadingCourses(true);
     try {
-      const data = await getGradeClassById(id);
-      setCourseId(data?.gradeClass?.courses[0]?._id);
-      const studentsData = data?.gradeClass?.students;
-
-      if (Array.isArray(studentsData)) {
-        const tempStudents = studentsData.map((student) => ({
-          id: student._id,
-          name: `${student.name.first} ${student.name.last}`,
-          checked: false,
-        }));
-
-        setStudents(tempStudents);
-      } else {
-        throw new Error("Students data is not an array.");
-      }
-      setStudentsLoading(false);
+      const data = await getGradeCourses();
+      setCourses(data?.courses);
+      setCourseId(data?.courses[0]?._id);
     } catch (error) {
-      console.log(error);
-      setError(error.response.data.error);
-      setStudentsLoading(false);
+      console.error("Error fetching grade courses: ", error);
+    } finally {
+      setLoadingCourses(false);
     }
   };
 
   useEffect(() => {
-    getStudents();
+    fetchCourses();
   }, []);
+
+  const fetchAttendance = async () => {
+    if (!courseId ) {
+      return;
+    }
+
+    try {
+      const response = await getAttendance(id, dayjs().format("YYYY-MM-DD"), 7);
+      const { attendance } = response;
+      if (attendance) {
+        setStudents(
+          attendance.students.map((student) => ({
+            id: student.student._id,
+            name: student.student.username,
+            checked: student?.status,
+          }))
+        );
+      }
+    } catch (error) {
+      setError("Failed to fetch attendance data.");
+      await takeAttendance(id, {
+        courseId,
+        period: 7,
+        students: [],
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchAttendance();
+  }, [period, courseId]);
 
   const toggleCheck = (id) => {
     setStudents(
@@ -113,20 +140,18 @@ const Attendance = () => {
 
   useEffect(() => {
     const updatedAttendedStudents = students
-      .filter((student) => student.checked)
-      .map((student) => student.id);
+      .map((student) => ({
+        studentId: student.id,
+        status: student?.checked ? "present" : "absent",
+      }));
     setAttendedStudents(updatedAttendedStudents);
   }, [students]);
 
+
+  
+
   const isValidate = () => {
-    // if (period === 0) {
-    //   setError("You can only take attendance between 8:00 AM and 2:00 PM");
-    //   setTimeout(() => {
-    //     setError(null);
-    //   }, 3000);
-    //   return false;
-    // } else
-     if (attendedStudents.length === 0) {
+    if (attendedStudents.length === 0) {
       setError("Please select at least one student.");
       setTimeout(() => {
         setError(null);
@@ -145,13 +170,13 @@ const Attendance = () => {
     }
     setAttendanceLoading(true);
     const newData = {
+      date : dayjs().format("YYYY-MM-DD"),
       students: attendedStudents,
-      period,
-      courseId ,
+      period: 7,
+      // courseId,
     };
-    console.log(newData);
     try {
-      await takeAttendance(id, newData);
+      await reTakeAttendance(id, newData);
       setIsAttendanceTaken(true);
       setAttendanceLoading(false);
     } catch (error) {
@@ -176,16 +201,6 @@ const Attendance = () => {
     return students.filter((student) => student.checked).length;
   };
 
-  const fetchAttendance = async () => {
-
-      await getAttendance(id , dayjs().format("YYYY-MM-DD"),6);
-    
-  };
-
-  useEffect(() => {
-    fetchAttendance();
-  }, [period]);
-
   return (
     <>
       <div className="w-full lg:w-8/12">
@@ -200,21 +215,24 @@ const Attendance = () => {
                   {error}
                 </p>
               )}
+              <select
+                className="h-12 border-2 p- border-gray-200 rounded-lg text-sm text-gray-700"
+                value={courseId}
+                onChange={(e) => setCourseId(e.target.value)}
+              >
+                {loadingCourses && <option >Loading...</option>}
 
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <CustomDateField
-                  className="w-40"
-                  defaultValue={dayjs()}
-                  format="LL"
-                  disabled
-                />
-              </LocalizationProvider>
+                {courses.map((course) => (
+                  <option key={course._id} value={course._id}>
+                    {course.title}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="flex justify-between pt-4 pb-1 border-b-2 border-gray-200/70">
               <span className="font-poppins font-normal text-base leading-7 text-active">
                 Name
               </span>
-
               <div className="flex gap-5">
                 <div className="flex items-center gap-1">
                   <SmCircle color={"#00769E"} />

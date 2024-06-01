@@ -1,7 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import RadioBtn from "../../../../assets/icons/RadioBtn";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { deleteAssessmentQuestion } from "../../../../services/assessment.service";
+import { useParams } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
+const QuestionCard = ({ question, index, fetchExam }) => {
+  const { id } = useParams();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deletedQuestion, setDeletedQuestion] = useState(null);
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    setDeletedQuestion(question?._id);
+    await deleteAssessmentQuestion(id, question?._id);
+    fetchExam();
+    setDeletedQuestion(null);
 
-const QuestionCard = ({ question, index }) => {
+    setIsDeleting(false);
+  };
+  const role =localStorage.getItem("role");
   return (
     <div className="w-full border-b-2 pb-5">
       <div className="between">
@@ -14,6 +30,13 @@ const QuestionCard = ({ question, index }) => {
         </div>
         <span className="text-gray-500 text-sm">
           ({question?.points} points)
+          {role==='teacher'&&<span onClick={handleDelete} className="ms-2 ">
+            {isDeleting && question?._id === deletedQuestion ? (
+              <CircularProgress size={15} color="inherit" />
+            ) : (
+              <DeleteIcon className="hover:text-red-500 " />
+            )}
+          </span>}
         </span>
       </div>
       <div className="flex flex-col gap-3 pt-4 ps-4">

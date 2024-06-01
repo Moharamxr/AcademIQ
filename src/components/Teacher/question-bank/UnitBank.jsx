@@ -146,7 +146,7 @@ const UnitBank = () => {
               onClick={(e) => toggleDropMenu(index, e)}
               ref={dropdownRef}
             >
-              <span>
+              <span className=" px-3 py-2">
                 <ThreeDots />
               </span>
               {openedIndex === index && (

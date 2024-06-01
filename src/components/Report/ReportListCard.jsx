@@ -54,7 +54,7 @@ const ReportListCard = ({ active, report, sent }) => {
           </p>
           <Badge
             color={`${report?.priority === "high" ? "error" : "primary"}`}
-            style={{ zIndex: 0 , marginTop: "0.5rem"}}
+            style={{ zIndex: 0, marginTop: "0.5rem" }}
             variant="dot"
           >
             <time className="font-poppins text-[9.5px] pe-3 text-slate-500">

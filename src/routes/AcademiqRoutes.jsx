@@ -4,7 +4,6 @@ import Connect from "../components/connect/Connect";
 import Report from "../components/Report/Report";
 import { Route } from "react-router-dom";
 import ToDoPage from "../components/Student/todo-list/ToDoPage";
-import StuAssignments from "../components/Student/assignments/StuAssignments";
 import Child from "../components/Parent/child/Child";
 import Teacher from "../components/Teacher/home/Teacher";
 import TeacherGrades from "../components/Teacher/grades/TeacherGrades";
@@ -23,8 +22,8 @@ import AdminCourses from "../components/Admin/AdminCourses/AdminCourses";
 import UserProfile from "../components/Admin/profile/UserProfile";
 import AdminCourseDetails from "../components/Admin/AdminCourses/AdminCourseDetails";
 import AdminClassDetails from "../components/Admin/AdminClasses/AdminClassDetails";
-import UserCourses from "../components/Teacher/classes/UserCourses";
-import CourseDetailsPage from "../components/Teacher/classes/CourseDetailsPage";
+import UserCourses from "../components/classes/UserCourses";
+import CourseDetailsPage from "../components/classes/CourseDetailsPage";
 import ClassesForAttendance from "../components/Teacher/attendance/ClassesForAttendance";
 import Parents from "../components/Admin/Parents/Parents";
 import SelectQuestions from "../components/Teacher/exams/examCreation/SelectQuestions";
@@ -33,6 +32,9 @@ import ExamsPage from "../components/Teacher/exams/ExamsPage";
 import StudentParentHome from "../components/Parent/home/StudentParentHome";
 import SupportAndHelp from "../components/Layout/Support&Help/SupportAndHelp";
 import Settings from "../components/Layout/Setting/Settings";
+import AssignmentsPage from "../components/Assignments/AssignmentsPage";
+import MarkAssignments from "../components/Assignments/mark/MarkAssignments";
+
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
   const routes = {
@@ -97,7 +99,7 @@ const AcademiqRoutes = () => {
       },
       {
         path: "/assignments",
-        component: <StuAssignments />,
+        component: <AssignmentsPage />,
       },
       {
         path: "/courses",
@@ -117,11 +119,7 @@ const AcademiqRoutes = () => {
       },
       {
         path: "/assignments",
-        component: <StuAssignments />,
-      }, 
-      {
-        path: "/assignments/:id",
-        component: <StuAssignments />,
+        component: <AssignmentsPage />,
       },
       {
         path: "todolist",
@@ -184,6 +182,14 @@ const AcademiqRoutes = () => {
       {
         path: "/exams/create/:id/select-questions",
         component: <SelectQuestions />,
+      },
+      {
+        path: "/assignments",
+        component: <AssignmentsPage />,
+      },
+      {
+        path: "/assignments/mark/:id",
+        component: <MarkAssignments />,
       },
       {
         path: "/report",

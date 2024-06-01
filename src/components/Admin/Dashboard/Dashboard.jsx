@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Announcements from "../../Parent/announcements/Announcements";
+import Announcements from "../../Layout/announcements/Announcements";
 import StudentsIcon from "../../../assets/icons/StudentsIcon";
 import TeachersIcon from "../../../assets/icons/TeachersIcon";
 import AdminsIcon from "../../../assets/icons/AdminsIcon";

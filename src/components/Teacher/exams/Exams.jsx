@@ -13,7 +13,13 @@ const Exams = ({ exams, isLoading }) => {
   const [loadingExam, setLoadingExam] = useState("");
 
   const handleGoto = async (id, status) => {
-    if (role === "student" && status !== "published") return;
+    if (
+      role === "student" &&
+      status !== "published" 
+    ) {
+      console.log("Student can't access this exam");
+      return;
+    }
     if (status === "draft") {
       navigate(`/exams/create/${id}`);
     } else {

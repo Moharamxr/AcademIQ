@@ -56,7 +56,7 @@ export const getReport = async (id, markAsSeen) => {
   const seenParams = markAsSeen ? `?markAsSeen=${markAsSeen}` : "";
   try {
     const response = await axiosInstance.get(
-      `${path}/reports/${id}${seenParams``}`
+      `${path}/reports/${id}${seenParams}`
     );
     return handleResponse(response);
   } catch (error) {

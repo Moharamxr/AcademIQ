@@ -100,6 +100,7 @@ export const getGradeClassStudents = async (id, isPoints) => {
 };
 
 export const takeAttendance = async (id, newData) => {
+  console.log(newData)
   try {
     const response = await axiosInstance.post(
       `${path}/gradeClasses/${id}/attendance`,
@@ -124,7 +125,6 @@ export const reTakeAttendance = async (id, newData) => {
 };
 
 export const getAttendance = async (id, date, period) => {
-  console.log(date, period, id);
   try {
     const response = await axiosInstance.get(
       `${path}/gradeClasses/${id}/attendance?date=${date}&period=${period}`

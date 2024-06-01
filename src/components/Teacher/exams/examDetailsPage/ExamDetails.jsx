@@ -45,7 +45,6 @@ const ExamDetails = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  // const [submissionId, setSubmissionId] = useState("");
 
   const fetchExam = async () => {
     setLoading(true);
@@ -91,6 +90,10 @@ const ExamDetails = () => {
       setSubmitting(false);
     }
   };
+
+  // useEffect(() => {
+  //   console.log(examStartDate);
+  // }, [examStartDate]);
 
   
   // useEffect(() => {
@@ -216,6 +219,7 @@ const ExamDetails = () => {
                   key={question._id ? question._id : question.id}
                   question={question}
                   index={index}
+                  fetchExam={fetchExam}
                 />
               ) : (
                 <StudentQuestionCard

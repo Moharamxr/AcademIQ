@@ -7,6 +7,7 @@ import {
   createAssessment,
   getAssessmentByCourse,
   getAssessmentByStatus,
+  getSubmissionsByStudent,
 } from "../../../services/assessment.service";
 import { getGradeCourses } from "../../../services/courses.service";
 
@@ -38,10 +39,16 @@ const ExamsPage = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [exams, setExams] = useState({
-    lastExams: [],
-    activeExams: [],
-    upcomingExams: [],
-    teacherActiveExams: [],
+    studentsExams: {
+      lastExams: [],
+      activeExams: [],
+      upcomingExams: [],
+    },
+    teachersExams: {
+      activeExams: [],
+      upcomingExams: [],
+      lastExams: [],
+    },
   });
   const [loading, setLoading] = useState({
     courses: false,
@@ -66,72 +73,90 @@ const ExamsPage = () => {
 
     fetchCourses();
   }, []);
-
-  useEffect(() => {
-    const fetchExamsByStatus = async () => {
-      setLoading((prev) => ({ ...prev, exams: true }));
-      try {
-        const data = await getAssessmentByStatus();
-        const examsData = data?.assessments || [];
-        const activeExamsData = examsData.filter(
-          (exam) => exam.status === "published"
-        );
-        const upcomingExamsData = examsData.filter(
-          (exam) => exam.status === "pending"
-        );
-        setExams((prev) => ({
-          ...prev,
+  const fetchExamsByStatus = async () => {
+    setLoading((prev) => ({ ...prev, exams: true }));
+    try {
+      const data = await getAssessmentByStatus(null, null, "exam");
+      const examsData =
+        data?.assessments?.filter((exam) => exam.type === "exam") || [];
+      const activeExamsData = examsData.filter(
+        (exam) => exam.status === "published"
+      );
+      const upcomingExamsData = examsData.filter(
+        (exam) => exam.status === "pending"
+      );
+      const lastExamsData = examsData.filter(
+        (exam) => exam.status === "completed"
+      );
+      setExams((prev) => ({
+        ...prev,
+        studentsExams: {
           activeExams: activeExamsData,
           upcomingExams: upcomingExamsData,
-        }));
-        if (role === "teacher") {
-          const pendingExamsData = examsData.filter(
-            (exam) => exam.status === "draft"
-          );
-          setExams((prev) => ({
-            ...prev,
-            teacherActiveExams: activeExamsData,
-            pendingExams: pendingExamsData,
-          }));
-        }
-      } catch (error) {
-        // console.error("Error fetching exams: ", error);
-      } finally {
-        setLoading((prev) => ({ ...prev, exams: false }));
-      }
-    };
-
-    fetchExamsByStatus();
-  }, [role]);
+          lastExams: lastExamsData,
+        },
+      }));
+      setExams((prev) => ({
+        ...prev,
+        teachersExams: {
+          activeExams: activeExamsData,
+          upcomingExams: upcomingExamsData,
+          lastExams: lastExamsData,
+        },
+      }));
+    } catch (error) {
+      // console.error("Error fetching exams: ", error);
+    } finally {
+      setLoading((prev) => ({ ...prev, exams: false }));
+    }
+  };
 
   useEffect(() => {
-    if (!selectedCourse) return;
+    fetchExamsByStatus();
+  }, []);
+  const fetchExamsByCourse = async () => {
+    setLoading((prev) => ({ ...prev, exams: true }));
+    try {
+      const data = await getAssessmentByCourse(selectedCourse,"exam");
+      const examsData = data?.assessments || [];
+      const lastExamsData = examsData.filter(
+        (exam) => exam.status === "completed"
+      );
+      const upcomingExamsData = examsData.filter(
+        (exam) => exam.status === "pending"
+      );
+      const activeExamsData = examsData.filter(
+        (exam) => exam.status === "published"
+      );
 
-    const fetchExamsByCourse = async () => {
-      setLoading((prev) => ({ ...prev, exams: true }));
-      try {
-        const data = await getAssessmentByCourse(selectedCourse);
-        const examsData = data?.assessments || [];
-        const lastExamsData = examsData.filter(
-          (exam) => exam.status === "completed"
-        );
-        const upcomingExamsData = examsData.filter(
-          (exam) => exam.status === "pending"
-        );
-        setExams((prev) => ({
-          ...prev,
+      setExams((prev) => ({
+        ...prev,
+        studentsExams: {
+          upcomingExams: upcomingExamsData,
+          activeExams: activeExamsData,
+          lastExams: lastExamsData,
+        },
+      }));
+      setExams((prev) => ({
+        ...prev,
+        teachersExams: {
+          activeExams: activeExamsData,
           lastExams: lastExamsData,
           upcomingExams: upcomingExamsData,
-        }));
-      } catch (error) {
-        console.error("Error fetching exams by course: ", error);
-      } finally {
-        setLoading((prev) => ({ ...prev, exams: false }));
-      }
-    };
-
+        },
+      }));
+    } catch (error) {
+      console.error("Error fetching exams by course: ", error);
+    } finally {
+      setLoading((prev) => ({ ...prev, exams: false }));
+    }
+  };
+  useEffect(() => {
+    if (!selectedCourse) return;
     fetchExamsByCourse();
   }, [selectedCourse]);
+
+  
 
   const handleCreateExam = async () => {
     setLoading((prev) => ({ ...prev, creatingExam: true }));
@@ -149,14 +174,25 @@ const ExamsPage = () => {
   const tabs = [
     {
       label: "Last Exams",
-      content: <Exams exams={exams.lastExams} isLoading={loading.exams} />,
+      content: (
+        <Exams
+          exams={
+            role === "teacher"
+              ? exams.teachersExams.lastExams
+              : exams.studentsExams.lastExams
+          }
+          isLoading={loading.exams}
+        />
+      ),
     },
     {
       label: "Active Exams",
       content: (
         <Exams
           exams={
-            role === "student" ? exams.activeExams : exams.teacherActiveExams
+            role === "student"
+              ? exams.studentsExams.activeExams
+              : exams.teachersExams.activeExams
           }
           isLoading={loading.exams}
         />
@@ -164,7 +200,16 @@ const ExamsPage = () => {
     },
     {
       label: "Upcoming Exams",
-      content: <Exams exams={exams.upcomingExams} isLoading={loading.exams} />,
+      content: (
+        <Exams
+          exams={
+            role === "teacher"
+              ? exams.teachersExams.upcomingExams
+              : exams.studentsExams.upcomingExams
+          }
+          isLoading={loading.exams}
+        />
+      ),
     },
   ];
 
@@ -201,7 +246,8 @@ const ExamsPage = () => {
             {tabs.map((tab, index) => (
               <h4
                 key={index}
-                className={`${
+                className={`
+                ${
                   activeTab === index
                     ? "border-b-2 border-active text-active"
                     : "text-gray-400"

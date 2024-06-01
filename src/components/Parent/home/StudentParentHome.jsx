@@ -1,5 +1,5 @@
 import React from "react";
-import Announcements from "../announcements/Announcements";
+import Announcements from "../../Layout/announcements/Announcements";
 import LeaderBoard from "../leaderBoard/LeaderBoard";
 import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
 

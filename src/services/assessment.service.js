@@ -59,6 +59,18 @@ export const updateAssessment = async (id, newData) => {
   }
 };
 
+export const addMaterialsToAssessment = async (id, materials) => {
+  try {
+    const response = await axiosInstance.patch(
+      `${path}/assessments/${id}/materials`,
+      materials
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
 export const getAssessmentById = async (id) => {
   try {
     const response = await axiosInstance.get(`${path}/assessments/${id}`);
@@ -68,24 +80,31 @@ export const getAssessmentById = async (id) => {
   }
 };
 
-export const getAssessmentByCourse = async (id) => {
+export const getAssessmentByCourse = async (id, type) => {
+  const typeParam = type ? `?type=${type}` : "";
   try {
     const response = await axiosInstance.get(
-      `${path}/assessments/courses/${id}`
+      `${path}/assessments/courses/${id}${typeParam}`
     );
     return handleResponse(response);
   } catch (error) {
     handleError(error);
   }
 };
-export const getAssessmentByStatus = async (status , studentId) => {
+export const getAssessmentByStatus = async (status, studentId, type) => {
   const statusQueryParam = status ? `?status=${status}` : "";
   const studentIdParam = studentId ? `studentId=${studentId}` : "";
-  const params = statusQueryParam && studentIdParam ? `${statusQueryParam}&${studentIdParam}` : statusQueryParam || `?${studentIdParam}`; 
+  const typeQueryParam = type ? `type=${type}` : "";
+
+  const paramsArray = [statusQueryParam, studentIdParam, typeQueryParam].filter(
+    (param) => param
+  );
+  const params = paramsArray.length
+    ? `?${paramsArray.join("&").replace("?", "")}`
+    : "";
+
   try {
-    const response = await axiosInstance.get(
-      `${path}/assessments${params}`
-    );
+    const response = await axiosInstance.get(`${path}/assessments${params}`);
     return handleResponse(response);
   } catch (error) {
     handleError(error);
@@ -129,11 +148,16 @@ export const createSubmission = async (id) => {
 };
 
 export const submitExamAnswers = async (id, answers) => {
-  console.log(answers)
   try {
-    const response = await axiosInstance.patch(
+    const response = await axios.patch(
       `${path}/submissions/assessments/${id}/submit`,
-      answers
+      answers,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
     );
     return handleResponse(response);
   } catch (error) {
@@ -143,7 +167,9 @@ export const submitExamAnswers = async (id, answers) => {
 
 export const getStartedSubmission = async (id) => {
   try {
-    const response = await axiosInstance.get(`${path}/submissions/assessments/${id}/started`);
+    const response = await axiosInstance.get(
+      `${path}/submissions/assessments/${id}/started`
+    );
     return handleResponse(response);
   } catch (error) {
     handleError(error);
@@ -181,7 +207,10 @@ export const getSubmissionsByStudent = async (id) => {
   }
 };
 
-export const getStudentSubmissionByAssessment  = async (assessmentId,studentId) => {
+export const getStudentSubmissionByAssessment = async (
+  assessmentId,
+  studentId
+) => {
   try {
     const response = await axiosInstance.get(
       `${path}/submissions/assessments/${assessmentId}students/${studentId}`
@@ -192,3 +221,13 @@ export const getStudentSubmissionByAssessment  = async (assessmentId,studentId) 
   }
 };
 
+export const deleteAssessmentQuestion = async (assessmentId, questionId) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${path}/assessments/${assessmentId}/questions/${questionId}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};

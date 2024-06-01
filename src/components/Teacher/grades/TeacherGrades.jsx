@@ -30,11 +30,14 @@ const TeacherGrades = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  const [fullScore ,setFullScore] = useState(1);
+
   const fetchExams = async () => {
     setIsExamsLoading(true);
     try {
-      const response = await getAssessmentByStatus("completed");
+      const response = await getAssessmentByStatus("completed",null,"exam");
       setExams(response?.assessments);
+      
     } catch (error) {
       setError(error?.response?.data?.error || "An error occurred");
     }
@@ -50,6 +53,7 @@ const TeacherGrades = () => {
     try {
       const response = await getSubmissionByAssessment(selectedExam);
       setGrades(response?.submissions?.studentsScores);
+      setFullScore(response?.submissions?.assessment?.score)
     } catch (error) {
       setError(true);
     }
@@ -61,8 +65,8 @@ const TeacherGrades = () => {
   };
 
   const calculateSuccessPercentage = () => {
-    const passed = grades.filter((grade) => grade?.score >= 25);
-    return (passed.length / grades?.length) * 100;
+    const passed = grades.filter((grade) => grade?.student?.points / fullScore >= 0.5);
+    return (passed.length / grades?.length).toFixed(2) * 100;
   };
 
   
@@ -128,16 +132,16 @@ const TeacherGrades = () => {
       </FixedTopContent>
       <div className="flex flex-col gap-3 p-3">
         {!isLoading &&
-          grades.map((grad) => (
-            <div className="between gap-1" key={grad?.studentId}>
+          grades.map((grade) => (
+            <div className="between gap-1" key={grade?.student?._id}>
               <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
-                {grad?.studentId}
+                {grade?.student?.name?.first} {grade?.student?.name?.last}
               </span>
               <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
-                {grad?.score}
+                {grade?.student?.points}
               </span>
               <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
-                {(grad?.score / grad?.fullScore) * 100}%
+                {(grade?.student?.points / fullScore ).toFixed(2) * 100}%
               </span>
             </div>
           ))}

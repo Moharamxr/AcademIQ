@@ -20,6 +20,16 @@ const ChildProfile = ({ child, isLoading }) => {
       {renderField("Email", child?.email, 150)}
       {renderField("Username", child?.username, 100)}
       {renderField("User Id", child?.userId, 100)}
+      {renderField(
+        "Class",
+        child?.gradeClass?.letter + " " + child?.gradeClass?.level,
+        100
+      )}
+      {renderField(
+        "Class Location",
+        child?.gradeClass?.room,
+        100
+      )}
       {renderField("Gender", child?.gender, 100)}
       {renderField("Birthdate", child?.birthdate?.slice(0, 10), 100)}
       {renderField("SSN", child?.ssn, 150)}

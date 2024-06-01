@@ -4,6 +4,7 @@ import calenderSlice from './slices/calenderSlice';
 import examSlice from './slices/examSlice';
 import parentSlice from './slices/parentSlice';
 import reportsSlice from './slices/reportsSlice';
+import assignmentSlice from './slices/assignmentSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         calenderData : calenderSlice,
         parentData: parentSlice,
         reportsData: reportsSlice,
+        assignmentData: assignmentSlice,
     },
     devTools: true 
 });

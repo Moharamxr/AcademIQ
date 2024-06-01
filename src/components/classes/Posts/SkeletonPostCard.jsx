@@ -1,5 +1,4 @@
 import React from "react";
-import ThreeDots from "../../../../assets/icons/ThreeDots";
 import { Skeleton } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
