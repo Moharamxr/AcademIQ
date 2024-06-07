@@ -68,20 +68,6 @@ const ReportListCard = ({ active, report, sent }) => {
         </p>
         <p className="font-poppins font-normal text-xs text-slate-400 max-w-full max-h-4 overflow-hidden">
           {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
-          {report?.body}
         </p>
       </div>
     </div>

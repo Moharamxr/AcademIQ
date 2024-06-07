@@ -4,7 +4,7 @@ const ReportIcon = ({ active }) => {
   const color = !active ? "rgba(148, 163, 184, 1)" : "rgba(0, 118, 158, 1)";
   return (
     <svg
-      className="ms-1"
+      className="ms-1 mt-1"
       width="19"
       height="19"
       viewBox="0 0 22 22"

@@ -20,6 +20,7 @@ const handleResponse = (response) => {
   console.log(response.data);
   return response.data;
 };
+
 const handleError = (error) => {
   if (error.response && error.response.status === 401) {
     console.log("User is unauthorized. Logging out...");
@@ -37,61 +38,9 @@ const handleError = (error) => {
   }
 };
 
-export const getUsers = async (role) => {
+export const createChat = async (newData) => {
   try {
-    const response = await axiosInstance.get(`${path}/users/roles/${role}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const createUser = async (newData) => {
-  try {
-    const response = await axiosInstance.post(
-      `${path}/users/${newData.role}`,
-      newData
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const getUserById = async (id) => {
-  try {
-    const response = await axiosInstance.get(`${path}/users/${id}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const getTeachersByCourse = async (courseId) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/users/teachers/courses/${courseId}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const getUsersCounts = async () => {
-  try {
-    const response = await axiosInstance.get(`${path}/users/counts`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const getChildrenByParent = async (id) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/users/students/parents/${id}`
-    );
+    const response = await axiosInstance.post(`${path}/chats`, newData);
     return handleResponse(response);
   } catch (error) {
     handleError(error);
@@ -99,21 +48,39 @@ export const getChildrenByParent = async (id) => {
 };
 
 
-export const assignChildToParent = async (childId, parentId) => {
+export const updateChat = async (id, newData) => {
+  try {
+    const response = await axiosInstance.put(`${path}/chats/${id}`, newData);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getMyChats = async () => {
+  try {
+    const response = await axiosInstance.get(`${path}/chats`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+export const addMemberToChat = async (chatId, memberId) => {
   try {
     const response = await axiosInstance.patch(
-      `${path}/users/students/${childId}/parents/${parentId}`
+      `${path}/chats/${chatId}/users/${memberId}`,
+      {}
     );
     return handleResponse(response);
   } catch (error) {
     handleError(error);
   }
 };
-
-export const removeChildFromParent = async (childId, parentId) => {
+export const removeMemberToChat = async (chatId, memberId) => {
   try {
     const response = await axiosInstance.delete(
-      `${path}/users/students/${childId}/parents/${parentId}`
+      `${path}/chats/${chatId}/users/${memberId}`,
+      {}
     );
     return handleResponse(response);
   } catch (error) {
@@ -121,18 +88,43 @@ export const removeChildFromParent = async (childId, parentId) => {
   }
 };
 
-export const getTeacherCounts = async () => {
+export const sendMessage = async (chatId, message) => {
   try {
-    const response = await axiosInstance.get(`${path}/users/teachers/home`);
+    const response = await axiosInstance.post(
+      `${path}/chats/${chatId}/messages`,
+      message
+    );
     return handleResponse(response);
   } catch (error) {
     handleError(error);
   }
-}
+};
 
-export const getNotifications = async () => {
+export const getChatMessages = async (chatId) => {
   try {
-    const response = await axiosInstance.get(`${path}/users/notifications`);
+    const response = await axiosInstance.get(
+      `${path}/chats/${chatId}/messages`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getChatMessageWithAttachment = async (chatId, messageId) => {
+  try {
+    const response = await axiosInstance.get(
+      `${path}/chats/${chatId}/messages/${messageId}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const getChatWithUser = async (userId) => {
+  try {
+    const response = await axiosInstance.get(`${path}/chats/users/${userId}`);
     return handleResponse(response);
   } catch (error) {
     handleError(error);

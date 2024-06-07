@@ -5,6 +5,7 @@ import examSlice from './slices/examSlice';
 import parentSlice from './slices/parentSlice';
 import reportsSlice from './slices/reportsSlice';
 import assignmentSlice from './slices/assignmentSlice';
+import chatSlice from './slices/chatSlice';
 
 export const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
         parentData: parentSlice,
         reportsData: reportsSlice,
         assignmentData: assignmentSlice,
+        chatData : chatSlice,
     },
     devTools: true 
 });

@@ -220,6 +220,7 @@ const ExamDetails = () => {
                   question={question}
                   index={index}
                   fetchExam={fetchExam}
+                  status ={exam?.status}
                 />
               ) : (
                 <StudentQuestionCard

@@ -17,7 +17,7 @@ const Layout = (props) => {
     }
   }, [isLoggedIn, path, navigate]);
   return isLoggedIn ? (
-    <main className="flex gap-4  w-full md:p-6 p-0  pt-14 md:pb-4 md:pt-6 pb-12">
+    <main className="flex gap-4  w-full md:p-5 p-0  pt-14 md:pb-4 md:pt-5 pb-12">
       <section className="hidden  md:block md:w-2/6 lg:w-3/12 xl:w-1/6  ">
         <Sidebar />
       </section>

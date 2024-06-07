@@ -68,20 +68,6 @@ const Attendance = () => {
     }
   };
 
-  // useEffect(() => {
-  //   handleSetPeriod();
-  //   const initialAttendance = async () => {
-  //     if (courseId) {
-  //       await takeAttendance(id, {
-  //         courseId,
-  //         period: 7,
-  //         students: [],
-  //       });
-  //     }
-  //   };
-  //   initialAttendance();
-  // }, [courseId]);
-
   const fetchCourses = async () => {
     setLoadingCourses(true);
     try {
@@ -118,11 +104,21 @@ const Attendance = () => {
       }
     } catch (error) {
       setError("Failed to fetch attendance data.");
-      await takeAttendance(id, {
-        courseId,
-        period: 7,
-        students: [],
-      });
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+      try {
+        console.log("Automatic taking attendance: ", courseId, 7)
+        await takeAttendance(id, {
+          courseId,
+          period:7,
+          students: [],
+        });
+        await getAttendance(id, dayjs().format("YYYY-MM-DD"), 7);
+      } catch (error) {
+        console.error("Error automatic taking attendance: ", error.response.data.error)
+      }
+      
     }
   };
 
@@ -172,7 +168,7 @@ const Attendance = () => {
     const newData = {
       date : dayjs().format("YYYY-MM-DD"),
       students: attendedStudents,
-      period: 7,
+      period :7,
       // courseId,
     };
     try {

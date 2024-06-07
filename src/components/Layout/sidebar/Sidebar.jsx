@@ -135,6 +135,13 @@ const Sidebar = () => {
         path: "/report",
         active: false,
       },
+      {
+        name: "Connect",
+        icon: <ConnectIcon />,
+        activeIcon: <ConnectIcon active={true} />,
+        path: "/connect",
+        active: false,
+      },
     ],
 
     parent: [
@@ -204,6 +211,13 @@ const Sidebar = () => {
         path: "/exams",
         active: false,
       },
+      {
+        name: "Connect",
+        icon: <ConnectIcon />,
+        activeIcon: <ConnectIcon active={true} />,
+        path: "/connect",
+        active: false,
+      },
     ],
     teacher: [
       {
@@ -262,6 +276,13 @@ const Sidebar = () => {
         path: "/report",
         active: false,
       },
+      {
+        name: "Connect",
+        icon: <ConnectIcon />,
+        activeIcon: <ConnectIcon active={true} />,
+        path: "/connect",
+        active: false,
+      },
     ],
   });
 
@@ -311,7 +332,7 @@ const Sidebar = () => {
   };
 
   return (
-    <nav className="w-full min-w-[fit-content] h-full max-h-[50rem] min-h-min bg-white rounded-2xl">
+    <nav className="w-full min-w-[fit-content] max-h-[55rem] h-fit min-h-min bg-white rounded-2xl">
       <div className="py-10 flex justify-center items-center">
         <Logo />
       </div>

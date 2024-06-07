@@ -72,13 +72,13 @@ const ClassesForAttendance = () => {
           ))
         ) : (
           <>
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
-            <Skeleton variant="rounded" height={50} />
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
+            <Skeleton variant="rounded" height={110} />
           </>
         )}
         </div>

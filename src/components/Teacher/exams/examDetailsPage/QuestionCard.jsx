@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteAssessmentQuestion } from "../../../../services/assessment.service";
 import { useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
-const QuestionCard = ({ question, index, fetchExam }) => {
+const QuestionCard = ({ question, index, fetchExam ,status }) => {
   const { id } = useParams();
   const [isDeleting, setIsDeleting] = useState(false);
   const [deletedQuestion, setDeletedQuestion] = useState(null);
@@ -30,7 +30,7 @@ const QuestionCard = ({ question, index, fetchExam }) => {
         </div>
         <span className="text-gray-500 text-sm">
           ({question?.points} points)
-          {role==='teacher'&&<span onClick={handleDelete} className="ms-2 ">
+          {role==='teacher'&&status==='pending'&& <span onClick={handleDelete} className="ms-2 ">
             {isDeleting && question?._id === deletedQuestion ? (
               <CircularProgress size={15} color="inherit" />
             ) : (

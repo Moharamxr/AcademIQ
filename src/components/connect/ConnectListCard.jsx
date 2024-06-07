@@ -1,18 +1,71 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { setSelectedChat } from "../../store/slices/chatSlice";
 
-const ConnectListCard = ({ img, active }) => {
+const ConnectListCard = ({ chat, active }) => {
+  const chatTitle =
+    chat?.type === "private"
+      ? chat?.member?.name?.first + " " + chat?.member?.name?.last
+      : chat?.title;
+  const img =
+    chat?.type === "private" ? chat?.member?.profilePicture?.url : chat?.image;
+
+  function formatISODateToTime(isoDate) {
+    const date = new Date(isoDate);
+    if (isNaN(date)) {
+      return "Invalid Date";
+    }
+    const options = {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    return new Intl.DateTimeFormat("en-US", options).format(date);
+  }
+  const createdAt = chat?.createdAt
+    ? formatISODateToTime(chat.createdAt)
+    : "No date available";
+
+  const dispatch = useDispatch();
+
+  const handleSetSelectedChat = () => {
+    dispatch(setSelectedChat({ chat }));
+  };
   return (
-    <div className={`w-full flex ${active ? 'bg-blue-100/55 rounded-xl' : 'bg-white border-b-slate-400 border-opacity-20 border-b-2'} p-2 py-1 gap-2 `}>
-      <img src={img} alt="teacher" className="w-12 h-12" />
+    <div
+      className={`w-full flex ${
+        active
+          ? "bg-blue-100/55 rounded-xl"
+          : "bg-white border-b-slate-400 border-opacity-20 border-b-2"
+      } p-2 py-1 gap-2 cursor-pointer`}
+      onClick={handleSetSelectedChat}
+    >
+      {img ? (
+        <img src={img} className="w-12 h-12 rounded-full" />
+      ) : (
+        <div
+          className="w-14 h-12 bg-gray-200 center rounded-full text-2xl"
+          style={{ backgroundColor: chat?.member?.profilePicture?.color }}
+        >
+          {chatTitle[0].toUpperCase()}
+        </div>
+      )}
       <div className="w-full flex flex-col gap-1 p-1 overflow-hidden">
         <div className="between">
-          <p className="font-poppins font-normal lg:text-sm md:text-[12px] text-sm">Guy Hawkins</p>
-          <p className="font-poppins text-[9.5px] text-slate-500">01:00 AM</p>
+          <p className="font-poppins font-medium lg:text-sm md:text-lg text-sm">
+            {chatTitle}
+          </p>
+          <p className="font-poppins text-[9.5px] text-slate-500">
+            {createdAt}
+          </p>
         </div>
-
-        <p className="font-poppins font-normal text-xs text-slate-400 max-w-full max-h-4 overflow-hidden">
-          first statement item forward statement
+        <p className="font-poppins font-medium text-sm text-slate-500 max-w-full  overflow-hidden">
+          {chat?.message}
         </p>
+        <p className=" text-xs text-gray-400 max-w-full  overflow-hidden">
+          {chat?.member?.email}
+        </p>
+
       </div>
     </div>
   );

@@ -202,10 +202,6 @@ const AcademiqRoutes = () => {
         component: <StudentParentHome />,
       },
       {
-        path: "/connect",
-        component: <Connect />,
-      },
-      {
         path: "/report",
         component: <Report />,
       },
@@ -223,6 +219,10 @@ const AcademiqRoutes = () => {
     {
       path: "/login",
       component: <Login />,
+    },
+    {
+      path: "/connect",
+      component: <Connect />,
     },
     {
       path: "/support",

@@ -1,55 +1,120 @@
-import React from "react";
+import React, { useState } from "react";
 import SearchIcon from "../../assets/icons/SearchIcon";
-import Teacher1 from "../../assets/connect-teatcher (1).png";
-import Teacher2 from "../../assets/connect-teatcher (2).png";
 import ConnectListCard from "./ConnectListCard";
 import styled from "@emotion/styled";
+import { Skeleton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { useSelector } from "react-redux";
 
-const ConnectListContainer = styled("section")({
-  height: "36rem",
+const ConnectListContainer = styled("div")({
+  height: "38rem",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
     background: "transparent",
   },
 });
+
 const FixedTopContent = styled.div`
   position: sticky;
   top: 0;
   z-index: 1;
 `;
 
-const ConnectList = () => {
-  return (
-    <ConnectListContainer className="w-full bg-white  md:w-4/12  rounded-xl min-h-80 p-4 pt-0 overflow-hidden">
-      <FixedTopContent className="bg-white pt-4">
-        <h3 className="font-poppins font-normal text-lg lg:text-xl xl:text-2xl leading-normal md:leading-relaxed text-center py-1 pb-2">
-          Connect
-        </h3>
-        <div className="flex border-opacity-40 border-b border-b-slate-400 pb-2 px-2 ">
-          <div className="hover:shadow-sm hover:bg-gray-100 rounded-lg hover:cursor-pointer">
-            <SearchIcon />
-          </div>
+const ConnectList = ({ chats, loading }) => {
+  const selectedChat = useSelector((state) => state.chatData.selectedChat);
 
+  const [filteredChats, setFilteredChats] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+
+  const handleSearch = (e) => {
+    setShowSearch(true);
+    setSearchTerm(e.target.value);
+    const searchTermLower = e.target.value.toLowerCase();
+
+    const filtered = chats?.filter((chat) => {
+      if (chat.type === "private") {
+        return (
+          chat.member &&
+          `${chat.member.name.first} ${chat.member.name.last}`
+            .toLowerCase()
+            .includes(searchTermLower)
+        );
+      } else if (chat.type === "group") {
+        const membersMatch = chat.members.some(
+          (member) =>
+            `${member.name.first} ${member.name.last}`
+              .toLowerCase()
+              .includes(searchTermLower)
+        );
+        const titleMatch =
+          chat.title?.toLowerCase().includes(searchTermLower) || false;
+        const descriptionMatch =
+          chat.description?.toLowerCase().includes(searchTermLower) || false;
+
+        return membersMatch || titleMatch || descriptionMatch;
+      }
+      return false;
+    });
+
+    setFilteredChats(filtered);
+  };
+
+  const toggleSearch = () => {
+    setShowSearch(false);
+    setSearchTerm("");
+    setFilteredChats([]);
+  };
+
+  const checkIsActive = (chat) => {
+    return selectedChat?._id === chat?._id;
+  };
+
+  const displayContacts = showSearch ? filteredChats : chats;
+
+  return (
+    <ConnectListContainer className="bg-white w-full md:w-6/12 lg:w-4/12 rounded-xl max-h-[50rem] h-fit min-h-min p-4 pt-0 overflow-hidden">
+      <FixedTopContent className="bg-white pt-4">
+        <h3 className="font-poppins font-normal select-none text-base md:text-lg lg:text-xl xl:text-2xl leading-normal md:leading-relaxed text-center py-1 pb-2">
+          Inbox
+        </h3>
+
+        <div className="flex border-opacity-40 border-b border-b-slate-400 pb-2 px-2">
+          <div
+            className="hover:shadow-sm hover:bg-gray-100 rounded-lg hover:cursor-pointer"
+            onClick={toggleSearch}
+          >
+            {showSearch ? <CloseIcon /> : <SearchIcon />}
+          </div>
           <input
-            type="search"
-            className="bg-transparent  outline-none  text-center text-sm font-normal"
-            placeholder="Search for teachers"
+            type="text"
+            className="bg-transparent w-full outline-none text-center text-sm font-normal"
+            placeholder="Search for Chats"
+            value={searchTerm}
+            onChange={handleSearch}
           />
         </div>
       </FixedTopContent>
 
       <div className="w-full mx-auto flex flex-col gap-y-2 py-2">
-        <ConnectListCard img={Teacher1} active={true} />
-        <ConnectListCard img={Teacher2} active={false} />
-        <ConnectListCard img={Teacher1} active={false} />
-        <ConnectListCard img={Teacher2} active={false} />
-        <ConnectListCard img={Teacher1} active={false} />
-        <ConnectListCard img={Teacher2} active={false} />
-        <ConnectListCard img={Teacher1} active={false} />
-        <ConnectListCard img={Teacher2} active={false} />
-        <ConnectListCard img={Teacher1} active={false} />
-        <ConnectListCard img={Teacher2} active={false} />
+        {loading ? (
+          <>
+            {[...Array(7)].map((_, index) => (
+              <Skeleton key={index} variant="rounded" height={55} />
+            ))}
+          </>
+        ) : displayContacts?.length > 0 ? (
+          displayContacts.map((chat) => (
+            <ConnectListCard
+              key={chat?._id}
+              chat={chat}
+              active={checkIsActive(chat)}
+            />
+          ))
+        ) : (
+          <p className="text-gray-400 text-center pt-4">No Chats found</p>
+        )}
       </div>
     </ConnectListContainer>
   );

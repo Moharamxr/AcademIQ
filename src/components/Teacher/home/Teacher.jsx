@@ -10,7 +10,7 @@ const Teacher = () => {
   const [counts, setCounts] = useState({
     coursesCount: 0,
     studentsCount: 0,
-    department: ""
+    department: "",
   });
 
   const fetchCounts = async () => {
@@ -22,14 +22,14 @@ const Teacher = () => {
     } catch (error) {
       console.error("Error fetching teacher counts: ", error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchCounts();
   }, []);
 
   return (
-    <div className="flex flex-wrap">
+    <div className="flex gap-4 w-full">
       <div className="w-full lg:w-8/12">
         <div className="flex flex-col gap-4 pt-1 w-full">
           <div className="bg-white rounded-xl p-4">
@@ -59,8 +59,9 @@ const Teacher = () => {
             <div className="border-active-br border-[1px] rounded-lg flex flex-col items-center text-center p-3 lg:py-1 xl:py-3 py-1 w-1/3 min-h-full">
               <img src={Book} alt="Book icon" />
               <div className="font-poppins py-2">
-                <p className="text-active text-2xl">
-                  {counts.department.charAt(0).toUpperCase() + counts.department.slice(1)}
+                <p className="text-active text-xl">
+                  {counts.department.charAt(0).toUpperCase() +
+                    counts.department.slice(1)}
                 </p>
                 Department
               </div>

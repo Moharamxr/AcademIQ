@@ -9,7 +9,7 @@ const TableCard = ({ timeTable, isLast, index }) => {
   const isActive =
     timeTable?.startTime?.hour >= new Date().getHours() &&
     timeTable?.startTime?.minute >= new Date().getMinutes();
-  const periods = ["8:00", "9:00", "10:00", "11:00", "12:00", "1:00"];
+  const periods = ["8:00", "9:00", "10:00", "11:00", "12:00", "1:00", "2:00", "3:00", "4:00"];
   const role = localStorage.getItem("role");
   const initials =
     timeTable?.course?.title
@@ -49,16 +49,24 @@ const TableCard = ({ timeTable, isLast, index }) => {
         </div>
 
         <div className="flex flex-col items-center ps-3">
-          <p className="font-poppins font-normal xl:text-sm text-xs leading-6 text-center text-green-600">
+          <p className="font-poppins font-normal xl:text-sm text-xs leading-6 text-center text-active">
             {timeTable?.startTime
               ? timeTable?.startTime?.hour +
                 ":" +
                 (timeTable?.startTime?.minute === 0
                   ? "00"
                   : timeTable?.startTime?.minute)
-              : index === 0
-              ? periods[index]
               : periods[index]}
+          </p>
+
+          <p className="font-poppins font-normal xl:text-sm text-xs leading-6 text-center text-active">
+            {timeTable?.endTime
+              ? timeTable?.endTime?.hour +
+                ":" +
+                (timeTable?.endTime?.minute === 0
+                  ? "00"
+                  : timeTable?.endTime?.minute)
+              : periods[index+1]}
           </p>
           {/* <p className="font-poppins font-normal xl:text-sm text-xs leading-5 flex items-end text-gray-700">
             lab 2

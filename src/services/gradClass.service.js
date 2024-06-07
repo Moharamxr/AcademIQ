@@ -156,3 +156,24 @@ export const removeStudentFromGradClass = async (gradClassId, studentId) => {
     handleError(error);
   }
 };
+export const assignCourseToGradClass = async (gradClassId, courseId) => {
+  try {
+    const response = await axiosInstance.patch(
+      `${path}/gradeClasses/${gradClassId}/courses/${courseId}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const removeCourseFromGradClass = async (gradClassId, courseId) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${path}/gradeClasses/${gradClassId}/courses/${courseId}`
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};

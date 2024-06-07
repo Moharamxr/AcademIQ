@@ -30,14 +30,13 @@ const TeacherGrades = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const [fullScore ,setFullScore] = useState(1);
+  const [fullScore, setFullScore] = useState(1);
 
   const fetchExams = async () => {
     setIsExamsLoading(true);
     try {
-      const response = await getAssessmentByStatus("completed",null,"exam");
+      const response = await getAssessmentByStatus("completed", null, "exam");
       setExams(response?.assessments);
-      
     } catch (error) {
       setError(error?.response?.data?.error || "An error occurred");
     }
@@ -53,7 +52,7 @@ const TeacherGrades = () => {
     try {
       const response = await getSubmissionByAssessment(selectedExam);
       setGrades(response?.submissions?.studentsScores);
-      setFullScore(response?.submissions?.assessment?.score)
+      setFullScore(response?.submissions?.assessment?.score);
     } catch (error) {
       setError(true);
     }
@@ -65,11 +64,11 @@ const TeacherGrades = () => {
   };
 
   const calculateSuccessPercentage = () => {
-    const passed = grades.filter((grade) => grade?.student?.points / fullScore >= 0.5);
+    const passed = grades.filter(
+      (grade) => grade?.student?.points / fullScore >= 0.5
+    );
     return (passed.length / grades?.length).toFixed(2) * 100;
   };
-
-  
 
   return (
     <TeacherGradesContainer className="bg-white w-full rounded-xl">
@@ -107,13 +106,13 @@ const TeacherGrades = () => {
           <div className="center gap-2">
             <SmCircle color={"#00769E"} />{" "}
             <span className="font-poppins text-xs text-gray-500">
-             {calculateSuccessPercentage()||''}% Passed
+              {calculateSuccessPercentage() || ""}% Passed
             </span>
           </div>
           <div className="center gap-2">
             <SmCircle color={"#FE626B"} />{" "}
             <span className="font-poppins text-xs text-gray-500">
-              {(100-calculateSuccessPercentage())||''}% Failed
+              {100 - calculateSuccessPercentage() || ""}% Failed
             </span>
           </div>
         </div>
@@ -141,11 +140,13 @@ const TeacherGrades = () => {
                 {grade?.student?.points}
               </span>
               <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
-                {(grade?.student?.points / fullScore ).toFixed(2) * 100}%
+                {((grade?.student?.points / fullScore) * 100).toFixed(2)}%
               </span>
             </div>
           ))}
-          {!isLoading&&grades?.length === 0 && <span className="center pt-8 text-gray-500">No grades yet!</span>}
+        {!isLoading && grades?.length === 0 && (
+          <span className="center pt-8 text-gray-500">No grades yet!</span>
+        )}
         {isLoading && (
           <div className="center w-full py-10">
             <BiLoader />

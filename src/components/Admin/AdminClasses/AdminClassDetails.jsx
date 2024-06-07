@@ -5,6 +5,7 @@ import { getGradeClassById } from "../../../services/gradClass.service";
 import UpdateClass from "./UpdateClass";
 import { AddAlarm, AddCircle } from "@mui/icons-material";
 import AssignNewStudent from "./AssignNewStudent";
+import AssignNewCourse from "./AssignNewCourse";
 
 const FixedBottomContent = styled.div`
   position: sticky;
@@ -47,13 +48,23 @@ const AdminClassDetails = () => {
     setAssignStudentModal(false);
     getData();
   };
+  const [assignCourseModal, setAssignCourseModal] = useState(false);
+
+  const openAssignCourseModal = () => {
+    setAssignCourseModal(true);
+  };
+
+  const closeAssignCourseModal = () => {
+    setAssignCourseModal(false);
+    getData();
+  };
 
   return (
     <div className="bg-white p-2 rounded-xl w-full">
       {classData && (
         <>
           <div className="center flex-col py-10 gap-2">
-            <p className="font-poppins font-light text-xl text-active leading-8">
+            <p className="font-poppins font-medium text-3xl text-active leading-8">
               Class {classData?.level} {classData?.letter}
             </p>
           </div>
@@ -113,6 +124,16 @@ const AdminClassDetails = () => {
                     </p>
                   </div>
                 ))}
+                <span onClick={openAssignCourseModal}>
+                <AddCircle color="action" className="cursor-pointer pt-1" />
+              </span>
+              <AssignNewCourse
+                isOpen={assignCourseModal}
+                getData={getData}
+                onClose={closeAssignCourseModal}
+                gradeClassId={id}
+                currentCourses={classData?.courses}
+              />
               </div>
             </div>
 
