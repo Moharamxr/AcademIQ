@@ -2,13 +2,12 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import ChildProfile from "./ChildProfile.jsx";
 import ChildAssignments from "./childAssignments/ChildAssignments.jsx";
-import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable.jsx";
-import ChildClasses from "./childClasses/ChildClasses.jsx";
+import TimeTable from "../../Layout/timeTables/TimeTable.jsx";
 import ChildExaminations from "./childExaminations/ChildExaminations.jsx";
 import { useParams } from "react-router-dom";
-import { getUserById } from "../../../services/user.service.js";
-import ChildGrades from "./chlidGrades/ChildGrades.jsx";
+import ChildGrades from "./childGrades/ChildGrades.jsx";
 import { Skeleton } from "@mui/material";
+import { getUserById } from "../../../services/user.service.js";
 const Child = () => {
   const { childID } = useParams();
 
@@ -91,7 +90,7 @@ const Child = () => {
       </div>
 
       <aside className="w-full lg:w-4/12  hidden md:block">
-        <ParentTimeTable />
+        <TimeTable />
       </aside>
     </>
   );

@@ -122,7 +122,7 @@ const TeacherGrades = () => {
           </span>
 
           <span className="text-active w-2/12 lg:w-1/12 sm:text-base md:text-sm lg:text-base text-xs px-2">
-            {"Grade [50]"}
+            {"Grade [" + fullScore + "]"}
           </span>
           <span className="text-active w-2/12 lg:w-1/12 sm:text-base md:text-sm lg:text-base text-xs px-2">
             {"Percentage%"}
@@ -134,7 +134,8 @@ const TeacherGrades = () => {
           grades.map((grade) => (
             <div className="between gap-1" key={grade?.student?._id}>
               <span className="p-2 px-3 w-8/12 lg:w-10/12 bg-gray-100 rounded-lg sm:text-base md:text-sm lg:text-base text-xs">
-                {grade?.student?.name?.first} {grade?.student?.name?.last}
+                {/* {grade?.student?.name?.first} {grade?.student?.name?.last} */}
+                {grade?.student?.email}
               </span>
               <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
                 {grade?.student?.points}

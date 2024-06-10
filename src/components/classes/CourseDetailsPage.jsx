@@ -7,19 +7,28 @@ import { useState } from "react";
 import styled from "@emotion/styled";
 import { useParams } from "react-router-dom";
 import { getCourseById } from "../../services/courses.service";
-import ParentTimeTable from "../Layout/timeTables/parentTimeTable/ParentTimeTable";
+import TimeTable from "../Layout/timeTables/TimeTable";
 
 const FixedTopContent = styled.div`
   position: sticky;
   top: 0;
   z-index: 1;
 `;
-const TeacherClassesContainer = styled("div")({
-  height: "95vh",
+const ClassesContainer = styled("div")({
+  height: "100vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
-    width: "0",
-    background: "transparent",
+    width: "8px",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "lightgray",
+    borderRadius: "4px",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: "#555",
+  },
+  "&::-webkit-scrollbar-track": {
+    backgroundColor: "#f1f1f1",
   },
 });
 const CourseDetailsPage = () => {
@@ -72,7 +81,7 @@ const CourseDetailsPage = () => {
   return (
     <>
       <div className="w-full lg:w-8/12 ">
-        <TeacherClassesContainer className="bg-white w-full rounded-xl  ">
+        <ClassesContainer className="bg-white w-full rounded-xl  ">
           <FixedTopContent className="bg-white">
             <h2 className="font-poppins font-medium text-2xl leading-10 p-3 text-gray-800">
               Course Details
@@ -94,10 +103,10 @@ const CourseDetailsPage = () => {
             </div>
           </FixedTopContent>
           <div className="pt-7 ">{tabs[activeTab].content}</div>
-        </TeacherClassesContainer>
+        </ClassesContainer>
       </div>
       <aside className="w-full lg:w-4/12 hidden md:block">
-        <ParentTimeTable />
+        <TimeTable />
       </aside>
     </>
   );

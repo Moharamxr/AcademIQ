@@ -31,7 +31,7 @@ const AssignNewStudent = ({ isOpen, onClose, getData, currentStudents }) => {
 
   useEffect(() => {
     fetchStudents();
-  }, []);
+  }, [currentStudents]);
 
   const isValidate = () => {
     if (!selectedStudent) {
@@ -56,8 +56,6 @@ const AssignNewStudent = ({ isOpen, onClose, getData, currentStudents }) => {
     try {
       await assignStudentToGradClass(gradeClassId, selectedStudent);
       getData();
-      fetchStudents();
-      onClose();
     } catch (error) {
       console.error("Failed to assign student:", error);
       setError("Failed to assign student");

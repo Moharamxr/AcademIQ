@@ -1,18 +1,24 @@
 import React from "react";
 import Announcements from "../../Layout/announcements/Announcements";
 import LeaderBoard from "../leaderBoard/LeaderBoard";
-import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
+import TimeTable from "../../Layout/timeTables/TimeTable";
 
 const StudentParentHome = () => {
+  const role = localStorage.getItem("role");
+
   return (
     <>
-      <div className="w-full  ">
+      <div
+        className={`w-full ${role !== "parent" ? "lg:w-8/12" : ""}`}
+      >
         <Announcements />
         <LeaderBoard />
       </div>
-      {/* <aside className="w-full lg:w-4/12 ">
-        <ParentTimeTable />
-      </aside> */}
+      {role === "student" && (
+        <aside className="w-full lg:w-4/12">
+          <TimeTable />
+        </aside>
+      )}
     </>
   );
 };

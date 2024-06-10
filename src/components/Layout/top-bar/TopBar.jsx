@@ -2,8 +2,30 @@ import React, { useState, useEffect } from "react";
 import SearchIcon from "../../../assets/icons/SearchIcon";
 import NotificationIcon from "../../../assets/icons/NotificationIcon";
 import { useNavigate } from "react-router-dom";
-import { getNotifications } from "../../../services/user.service";
-import { Skeleton } from "@mui/material";
+import { getNotifications, searchAll } from "../../../services/user.service";
+import { Skeleton, styled } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading, setSearchData } from "../../../store/slices/searchSlice";
+import { BiLoader } from "react-icons/bi";
+import { socket } from "../../../services/connect.service";
+
+const NotificationContainer = styled("div")({
+  MaxHeight: "90vh",
+  overflowY: "auto",
+  "&::-webkit-scrollbar": {
+    width: "8px",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "lightgray",
+    borderRadius: "4px",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: "#555",
+  },
+  "&::-webkit-scrollbar-track": {
+    backgroundColor: "#f1f1f1",
+  },
+});
 
 const NotificationCard = ({ notification }) => {
   const timePassed = (date) => {
@@ -25,7 +47,9 @@ const NotificationCard = ({ notification }) => {
     <div className="p-2 border-b border-gray-200 bg-active-bg rounded-lg">
       <h3 className="font-semibold text">{notification.title}</h3>
       <p className="text-sm text-gray-700">{notification.message}</p>
-      <p className="text-xs text-end text-active">{timePassed(notification.date)}</p>
+      <p className="text-xs text-end text-active">
+        {timePassed(notification.date)}
+      </p>
     </div>
   );
 };
@@ -36,7 +60,7 @@ const TopBar = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchNotifications = async () => {
-    if (localStorage.getItem('role')==='admin') return;
+    if (localStorage.getItem("role") === "admin") return;
     try {
       const data = await getNotifications();
       setNotifications(data.notifications);
@@ -50,6 +74,18 @@ const TopBar = () => {
     fetchNotifications();
   }, []);
 
+  const handleNewNotification = (notification) => {
+    setNotifications((prev) => [notification, ...prev]);
+  };
+
+  useEffect(() => {
+    socket.on("newNotification", handleNewNotification);
+    return () => {
+      socket.off("newNotification", handleNewNotification);
+    };
+  }, []);
+
+
   const fullName = localStorage.getItem("fullName");
   const userEmail = localStorage.getItem("email");
   const userId = localStorage.getItem("userId");
@@ -61,6 +97,7 @@ const TopBar = () => {
   const isProfilePicture = profilePictureUrl !== "undefined";
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleGotoProfile = () => {
     navigate(`/profile/${userId}`);
@@ -69,14 +106,37 @@ const TopBar = () => {
   const toggleNotificationDropdown = () => {
     setIsNotificationOpen(!isNotificationOpen);
   };
-  
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchLoading = useSelector((state) => state.searchData.loading);
+
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearch = async () => {
+    console.log("searching...");
+    dispatch(setLoading({ loading: true }));
+    navigate(`/search`);
+    try {
+      const data = await searchAll(searchTerm);
+      dispatch(setSearchData({ data }));
+    } catch (error) {
+      console.error("Error searching: ", error);
+    } finally {
+      dispatch(setLoading({ loading: false }));
+    }
+  };
 
   return (
     <div className="grid grid-cols-12 gap-3 mb-4 pt-0 w-full relative">
       <div className="bg-white center xl:col-span-8 lg:col-span-7 col-span-6   h-14 p-3 px-4 rounded-xl">
         <div className="w-full bg-gray-200 bg-opacity-30 center p-1 rounded-lg">
-          <div className="w-6 h-6 center rounded-md hover:shadow-gray-300 hover:bg-gray-200 hover:shadow-sm">
-            <SearchIcon />
+          <div
+            className="w-6 h-6 center rounded-md hover:shadow-gray-300 hover:bg-gray-200 hover:shadow-sm"
+            onClick={handleSearch}
+          >
+            {searchLoading ? <BiLoader /> : <SearchIcon />}
           </div>
           <div className="w-full">
             <input
@@ -85,6 +145,8 @@ const TopBar = () => {
               id="topSearch"
               placeholder="Search number, customer name..."
               className="bg-transparent w-full h-6 rounded-lg text-center font-dubai font-normal text-sm leading-6 text-gray-500 outline-none"
+              onChange={handleChange}
+              value={searchTerm}
             />
           </div>
         </div>
@@ -126,7 +188,7 @@ const TopBar = () => {
             </span>
           </div>
           {isNotificationOpen && (
-            <div className="fixed top-20 right-5 mt-2 p-2 flex flex-col gap-2  w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+            <NotificationContainer className="fixed top-20 right-5 mt-2 p-2 flex flex-col gap-2  w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
               {isLoading ? (
                 <Skeleton variant="rectangular" height={70} />
               ) : (
@@ -144,7 +206,7 @@ const TopBar = () => {
                   )}
                 </>
               )}
-            </div>
+            </NotificationContainer>
           )}
         </div>
       </div>

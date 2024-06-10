@@ -52,7 +52,7 @@ const ConnectListCard = ({ chat, active }) => {
       )}
       <div className="w-full flex flex-col gap-1 p-1 overflow-hidden">
         <div className="between">
-          <p className="font-poppins font-medium lg:text-sm md:text-lg text-sm">
+          <p className="font-poppins font-medium  md:text-base text-sm">
             {chatTitle}
           </p>
           <p className="font-poppins text-[9.5px] text-slate-500">

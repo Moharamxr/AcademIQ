@@ -4,10 +4,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Skeleton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import ThreeDots from "../../../assets/icons/ThreeDots";
-import { getUserById } from "../../../services/user.service";
 import { getGradeClasses } from "../../../services/gradClass.service";
-import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
+import TimeTable from "../../Layout/timeTables/TimeTable";
 const ListContainer = styled("div")({
   height: "38rem",
   overflowY: "auto",
@@ -84,7 +82,7 @@ const ClassesForAttendance = () => {
         </div>
       </ListContainer>
       <aside className="w-full xl:w-4/12 hidden md:block">
-        <ParentTimeTable />
+        <TimeTable />
       </aside>
     </>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
+import TimeTable from "../../Layout/timeTables/TimeTable";
 import Laptop from "../../../assets/laptop white screen.png";
 import Cap from "../../../assets/black graduation cap.png";
 import Book from "../../../assets/red opened book.png";
@@ -10,7 +10,7 @@ const Teacher = () => {
   const [counts, setCounts] = useState({
     coursesCount: 0,
     studentsCount: 0,
-    department: "",
+    department: "department",
   });
 
   const fetchCounts = async () => {
@@ -70,7 +70,7 @@ const Teacher = () => {
         </div>
       </div>
       <aside className="w-full lg:w-4/12 hidden md:block">
-        <ParentTimeTable />
+        <TimeTable />
       </aside>
     </div>
   );

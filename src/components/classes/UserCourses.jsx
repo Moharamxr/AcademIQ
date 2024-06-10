@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Skeleton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import ParentTimeTable from "../Layout/timeTables/parentTimeTable/ParentTimeTable";
+import TimeTable from "../Layout/timeTables/TimeTable";
 import { getCourseByGradeClass } from "../../services/courses.service";
 import { getUserById } from "../../services/user.service";
 const ListContainer = styled("div")({
@@ -88,7 +88,7 @@ const UserCourses = () => {
         </div>
       </ListContainer>
       <aside className="w-full lg:w-4/12 hidden md:block">
-        <ParentTimeTable />
+        <TimeTable />
       </aside>
     </>
   );

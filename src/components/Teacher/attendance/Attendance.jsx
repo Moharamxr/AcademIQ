@@ -13,7 +13,7 @@ import {
 } from "../../../services/gradClass.service";
 import { CircularProgress } from "@mui/material";
 import { getGradeCourses } from "../../../services/courses.service";
-import ParentTimeTable from "../../Layout/timeTables/parentTimeTable/ParentTimeTable";
+import TimeTable from "../../Layout/timeTables/TimeTable";
 
 const FixedTopContent = styled.div`
   position: sticky;
@@ -103,7 +103,7 @@ const Attendance = () => {
         );
       }
     } catch (error) {
-      setError("Failed to fetch attendance data.");
+      setError("There is no attendance for this period.");
       setTimeout(() => {
         setError(null);
       }, 3000);
@@ -303,7 +303,7 @@ const Attendance = () => {
         </div>
       </div>
       <aside className="w-full lg:w-4/12 hidden md:block">
-        <ParentTimeTable />
+        <TimeTable />
       </aside>
     </>
   );

@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import ThreeDots from "../../assets/icons/ThreeDots";
 import ConnectChatMessage from "./ConnectChatMessage";
 import SendMessageIcon from "../../assets/icons/SendMessageIcon";
-import { getChatMessages, sendMessage } from "../../services/connect.service";
+import { getChatMessages, sendMessage, socket } from "../../services/connect.service";
 import { useSelector } from "react-redux";
 import { Skeleton } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -12,11 +12,21 @@ import { BiLoader } from "react-icons/bi";
 const ConnectChatContainer = styled("section")({
   display: "flex",
   flexDirection: "column",
-  height: "38rem",
+  height: "88vh", // You can adjust this as needed
+  minHeight: "24rem",
+  overflow: "hidden", // Ensure overflow is hidden to prevent double scrollbars
+  position: "relative", // Needed for absolute positioning of FixedBottomContent
+});
+
+const ChatContainer = styled("section")({
+  display: "flex",
+  flexDirection: "column",
+  flex: 1, // Allow the chat messages container to grow and push FixedBottomContent down
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
-    background: "transparent",
+    background: "lightGray",
+    borderRadius: "0.5rem",
   },
 });
 
@@ -34,9 +44,13 @@ const FixedBottomContent = styled.div`
   bottom: 0;
   z-index: 1;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
 `;
 
-const ConnectChat = ({fetchChats}) => {
+const ConnectChat = ({ fetchChats }) => {
   const bottomRef = useRef(null);
   const chatContainerRef = useRef(null);
   const textareaRef = useRef(null);
@@ -49,6 +63,7 @@ const ConnectChat = ({fetchChats}) => {
   const [message, setMessage] = useState("");
   const [messageAttachment, setMessageAttachment] = useState(null);
   const [sendingMessage, setSendingMessage] = useState(false);
+
 
   const handleAttachmentChange = (e) => {
     setMessageAttachment(e.target.files[0]);
@@ -70,12 +85,29 @@ const ConnectChat = ({fetchChats}) => {
   }, [selectedChat]);
 
   useEffect(() => {
+    socket.on("newMessage", handleNewMessage);
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, []);
+
+  const handleNewMessage = (data) => {
+    setMessages((prevMessages) => [...prevMessages, {
+      content: data.content,
+      sender: data.sender,
+      createdAt: data.createdAt,
+    }]);
+    scrollToBottom();
+  };
+  console.log(messages);
+
+  useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
   const scrollToBottom = () => {
-    if (bottomRef.current && chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = bottomRef.current.offsetTop;
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   };
 
@@ -89,7 +121,7 @@ const ConnectChat = ({fetchChats}) => {
       : selectedChat?.title;
 
   const handleSendMessage = async () => {
-    if (!message ) return; // Check if either message or attachment exists
+    if (!message) return; // Check if either message or attachment exists
     setSendingMessage(true);
 
     try {
@@ -100,10 +132,13 @@ const ConnectChat = ({fetchChats}) => {
       }
 
       await sendMessage(selectedChat._id, formData);
-      fetchChat();
+      socket.emit("sendMessage", {
+        content: message,
+        chatId: selectedChat._id,
+      });
 
-      setMessage(""); // Clear message input after sending
-      setMessageAttachment(null); // Clear attachment after sending
+      setMessage("");
+      setMessageAttachment(null);
     } finally {
       setSendingMessage(false);
     }
@@ -136,10 +171,7 @@ const ConnectChat = ({fetchChats}) => {
   }
 
   return (
-    <ConnectChatContainer
-      ref={chatContainerRef}
-      className="bg-white rounded-2xl w-full md:w-8/12 overflow-hidden"
-    >
+    <ConnectChatContainer className="bg-white rounded-2xl w-full md:w-8/12">
       <FixedTopContent className="w-full between bg-white px-4 pe-6 py-3 border-b-gray-300 border-b-2 border-opacity-40">
         <div className="flex gap-2">
           {(selectedChat?.type === "private" &&
@@ -170,7 +202,7 @@ const ConnectChat = ({fetchChats}) => {
             </div>
           )}
           <div className="flex flex-col gap-y-1 p-1">
-            <p className="font-poppins font-normal text-xs sm:text-sm">
+            <p className="font-poppins font-medium text-base  sm:text-sm">
               {chatTitle}
             </p>
           </div>
@@ -179,34 +211,26 @@ const ConnectChat = ({fetchChats}) => {
           <ThreeDots />
         </div>
       </FixedTopContent>
-      <ConnectChatContainer className="w-full flex flex-col gap-1 pb-4 overflow-auto min-h-[26rem]">
-        {chatLoading ? (
-          Array.from(new Array(5)).map((_, index) => (
-            <Skeleton
-              key={index}
-              variant="rounded"
-              width="90%"
-              height={60}
-              className="mx-auto my-2"
-            />
-          ))
-        ) : (
-          <>
-            {messages?.map((message) => (
-              <ConnectChatMessage
-                key={message._id}
-                forward={message.sender._id !== localStorage.getItem("userId")}
-                content={message.content}
-                senderName={`${message.sender.name.first} ${message.sender.name.last}`}
-                senderImage={message?.sender?.profilePicture?.url}
-                createdAt={message.createdAt}
-              />
-            ))}
-          </>
-        )}
-        <div ref={bottomRef} />
-      </ConnectChatContainer>
-      <FixedBottomContent className="w-full between border-t border-t-gray-400 border-opacity-40 px-4 py-2 pt-5 max-h-full ">
+      <ChatContainer
+        className="w-full flex flex-col gap-1 overflow-auto min-h-[26rem]"
+        ref={chatContainerRef}
+      >
+        {messages?.map((message,index) => (
+          <ConnectChatMessage
+            key={message._id || message.content + index}
+            forward={message.sender._id !== localStorage.getItem("userId")}
+            content={message.content}
+            senderName={`${message.sender.name.first} ${message.sender.name.last}`}
+            senderImage={message?.sender?.profilePicture?.url}
+            createdAt={message.createdAt}
+          />
+        ))}
+        <div className="p-2"></div>
+      </ChatContainer>
+      <FixedBottomContent
+        className="w-full between gap-2 border-t border-t-gray-400 border-opacity-40 px-4 py-2 pt-5  pb-3 max-h-32 bg-black "
+        ref={bottomRef}
+      >
         <label htmlFor="file-upload" className="cursor-pointer">
           <AttachFileIcon />
           <input
@@ -221,13 +245,13 @@ const ConnectChat = ({fetchChats}) => {
           name="connectTextInp"
           id="connectTextInp"
           placeholder="Type a message"
-          className="outline-none w-full overflow-hidden resize-none bg-active-bg rounded-lg p-2 h-10 sm:h-12 md:h-14 lg:h-16 xl:h-20 2xl:h-24 font-poppins font-normal text-xs sm:text-sm leading-6 text-gray-500"
+          className="outline-none w-full overflow-hidden resize-none bg-active-bg rounded-lg p-2 h-10 max-h-28  font-poppins font-normal text-xs sm:text-sm leading-6 text-gray-700"
           style={{ resize: "none", height: "1.5" }}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <button onClick={handleSendMessage}>
-        {sendingMessage? <BiLoader /> :<SendMessageIcon />}
+        <button onClick={handleSendMessage} className="outline-none">
+          {sendingMessage ? <BiLoader /> : <SendMessageIcon active={message} />}
         </button>
       </FixedBottomContent>
     </ConnectChatContainer>

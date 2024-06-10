@@ -6,6 +6,8 @@ import parentSlice from './slices/parentSlice';
 import reportsSlice from './slices/reportsSlice';
 import assignmentSlice from './slices/assignmentSlice';
 import chatSlice from './slices/chatSlice';
+import timetableSlice from './slices/timetableSlice';
+import searchSlice from './slices/searchSlice';
 
 export const store = configureStore({
     reducer: {
@@ -16,6 +18,8 @@ export const store = configureStore({
         reportsData: reportsSlice,
         assignmentData: assignmentSlice,
         chatData : chatSlice,
+        timetableData: timetableSlice,
+        searchData : searchSlice,
     },
     devTools: true 
 });

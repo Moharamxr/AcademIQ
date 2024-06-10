@@ -237,7 +237,7 @@ const ExamDetails = () => {
               </div>
             )}
       </div>
-      {!loading && (
+      {!loading &&exam?.status==='pending'&& (
         <div className="bg-white w-full rounded-xl p-5 px-6">
           {role === "teacher" ? (
             <>

@@ -25,12 +25,16 @@ const ReportList = ({ sentReports, receivedReports, loading }) => {
   const selectedReport = useSelector(
     (state) => state.reportsData.selectedReport
   );
+  const userRole = localStorage.getItem("role");
   const isSent = useSelector((state) => state.reportsData.isSent);
-  const contact = isSent ? selectedReport?.to : selectedReport?.from;
-  const tabs = {
-    sent: sentReports,
-    received: receivedReports,
-  };
+  // const contact = isSent ? selectedReport?.to : selectedReport?.from;
+  const tabs =
+    userRole === "parent"
+      ? { received: receivedReports }
+      : {
+          sent: sentReports,
+          received: receivedReports,
+        };
 
   const [activeTab, setActiveTab] = useState("received");
 
@@ -46,7 +50,6 @@ const ReportList = ({ sentReports, receivedReports, loading }) => {
     setSearchTerm(e.target.value);
     const filtered = tabs[activeTab].filter(
       (report) =>
-
         (!isSent &&
           report?.from?.name?.first
             .toLowerCase()

@@ -138,3 +138,12 @@ export const getNotifications = async () => {
     handleError(error);
   }
 };
+
+export const searchAll = async (query) => {
+  try {
+    const response = await axiosInstance.get(`${path}/search?query=${query}`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};

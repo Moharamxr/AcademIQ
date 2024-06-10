@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
 
 const ConnectListContainer = styled("div")({
-  height: "38rem",
+  height: "88vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",

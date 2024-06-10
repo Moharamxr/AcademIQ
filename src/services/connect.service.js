@@ -1,6 +1,14 @@
 import axios from "axios";
 const path = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
 
+import io from "socket.io-client";
+
+export const socket = io(import.meta.env.VITE_ACADEMIQ_BACKEND_URL, {
+  extraHeaders: {
+    Authorization: `Bearer ${localStorage.getItem('token')}`, 
+  }
+});
+
 const axiosInstance = axios.create();
 
 const handleRequest = async (config) => {
@@ -47,7 +55,6 @@ export const createChat = async (newData) => {
   }
 };
 
-
 export const updateChat = async (id, newData) => {
   try {
     const response = await axiosInstance.put(`${path}/chats/${id}`, newData);
@@ -89,10 +96,16 @@ export const removeMemberToChat = async (chatId, memberId) => {
 };
 
 export const sendMessage = async (chatId, message) => {
+  console.log(message.get("attachment"));
   try {
     const response = await axiosInstance.post(
       `${path}/chats/${chatId}/messages`,
-      message
+      message,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
     return handleResponse(response);
   } catch (error) {

@@ -36,7 +36,7 @@ const LeaderCard = ({ student, index }) => {
             <div className="flex-grow md:w-full w-48">
               <BorderLinearProgress
                 variant="determinate"
-                value={student?.points}
+                value={student?.points / 1000 * 100}
               />
             </div>
             {/* <div className="flex gap-x-3">

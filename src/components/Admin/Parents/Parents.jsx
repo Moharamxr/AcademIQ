@@ -8,11 +8,20 @@ import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../../services/user.service";
 import { Skeleton } from "@mui/material";
 const ListContainer = styled("div")({
-  maxHeight: "38rem",
+  height: "90vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
-    width: "0",
-    background: "transparent",
+    width: "8px",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "lightgray",
+    borderRadius: "4px",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: "#555",
+  },
+  "&::-webkit-scrollbar-track": {
+    backgroundColor: "#f1f1f1",
   },
 });
 const FixedTopContent = styled.div`

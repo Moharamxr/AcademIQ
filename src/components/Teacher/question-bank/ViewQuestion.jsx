@@ -16,7 +16,10 @@ const ViewQuestion = ({ isOpen, onClose, selectedQuestion, bankId }) => {
     } catch (error) {
       console.error("Error fetching question: ", error);
       setIsLoading(false);
+    }finally{
+      setIsLoading(false);
     }
+
   };
   useEffect(() => {
     if (isOpen) {

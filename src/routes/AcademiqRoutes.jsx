@@ -19,7 +19,7 @@ import QuestionBank from "../components/Teacher/question-bank/Questionbank";
 import UnitBank from "../components/Teacher/question-bank/UnitBank";
 import AdminClasses from "../components/Admin/AdminClasses/AdminClasses";
 import AdminCourses from "../components/Admin/AdminCourses/AdminCourses";
-import UserProfile from "../components/Admin/profile/UserProfile";
+import UserProfile from "../components/profile/UserProfile";
 import AdminCourseDetails from "../components/Admin/AdminCourses/AdminCourseDetails";
 import AdminClassDetails from "../components/Admin/AdminClasses/AdminClassDetails";
 import UserCourses from "../components/classes/UserCourses";
@@ -34,6 +34,7 @@ import SupportAndHelp from "../components/Layout/Support&Help/SupportAndHelp";
 import Settings from "../components/Layout/Setting/Settings";
 import AssignmentsPage from "../components/Assignments/AssignmentsPage";
 import MarkAssignments from "../components/Assignments/mark/MarkAssignments";
+import SearchPage from "../components/Layout/SearchPage/SearchPage";
 
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
@@ -59,10 +60,7 @@ const AcademiqRoutes = () => {
         path: "/home",
         component: <Dashboard />,
       },
-      {
-        path: "/profile/:id",
-        component: <UserProfile />,
-      },
+
       {
         path: "/admin/courses",
         component: <AdminCourses />,
@@ -93,10 +91,7 @@ const AcademiqRoutes = () => {
         path: "/home",
         component: <StudentParentHome />,
       },
-      {
-        path: "/profile/:id",
-        component: <UserProfile />,
-      },
+
       {
         path: "/assignments",
         component: <AssignmentsPage />,
@@ -131,10 +126,7 @@ const AcademiqRoutes = () => {
         path: "/home",
         component: <Teacher />,
       },
-      {
-        path: "/profile/:id",
-        component: <UserProfile />,
-      },
+
       {
         path: "/courses",
         component: <UserCourses />,
@@ -209,10 +201,6 @@ const AcademiqRoutes = () => {
         path: "/child/:childID",
         component: <Child />,
       },
-      {
-        path: "/profile/:id",
-        component: <UserProfile />,
-      },
     ],
   };
   const staticRoutes = [
@@ -237,6 +225,14 @@ const AcademiqRoutes = () => {
       component: <Settings />,
     },
     {
+      path: "/profile/:id",
+      component: <UserProfile />,
+    },
+    {
+      path: "/search",
+      component: <SearchPage />,
+    },
+    {
       path: "*",
       component: <Login />,
     },
@@ -245,7 +241,7 @@ const AcademiqRoutes = () => {
     <>
       <Routes>
         {staticRoutes.map((route, index) => (
-          <Route key={index+99} path={route.path} element={route.component} />
+          <Route key={index + 99} path={route.path} element={route.component} />
         ))}
         {routes[role]?.map((route, index) => (
           <Route key={index} path={route.path} element={route.component} />
