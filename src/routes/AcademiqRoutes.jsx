@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes } from "react-router-dom";
-import Connect from "../components/Connect/Connect";
 import Report from "../components/Report/Report";
 import { Route } from "react-router-dom";
 import ToDoPage from "../components/Student/todo-list/ToDoPage";
@@ -37,6 +36,7 @@ import MarkAssignments from "../components/Assignments/mark/MarkAssignments";
 import SearchPage from "../components/Layout/SearchPage/SearchPage";
 import UpdateUserProfile from "../components/profile/UpdateUserProfile";
 import ForgotPassword from "../components/login/ForgotPassword";
+import ConnectPage from "../components/Chat/ConnectPage";
 
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
@@ -128,7 +128,7 @@ const AcademiqRoutes = () => {
       },
       {
         path: "/connect",
-        component: <Connect />,
+        component: <ConnectPage />,
       },
     ],
     teacher: [
@@ -198,7 +198,7 @@ const AcademiqRoutes = () => {
       },
       {
         path: "/connect",
-        component: <Connect />,
+        component: <ConnectPage />,
       },
     ],
     parent: [
@@ -216,7 +216,7 @@ const AcademiqRoutes = () => {
       },
       {
         path: "/connect",
-        component: <Connect />,
+        component: <ConnectPage />,
       },
     ],
   };
