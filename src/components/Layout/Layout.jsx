@@ -4,7 +4,8 @@ import TopBar from "./top-bar/TopBar";
 import BottomBar from "./Mobile/bottom-bar/BottomBar";
 import MobileTopBar from "./Mobile/top-bar/MobileTopBar";
 import Login from "../login/Login";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import ForgotPassword from "../login/ForgotPassword";
 
 const Layout = (props) => {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -12,7 +13,8 @@ const Layout = (props) => {
   const navigate = useNavigate();
   const path = location.pathname;
   useEffect(() => {
-    if (!isLoggedIn && path !== "/") {
+    if ((!isLoggedIn && (path !== "/") && path !== "/forgot-password")) {
+      console.log("Not logged in");
       navigate("/");
     }
   }, [isLoggedIn, path, navigate]);
@@ -34,8 +36,10 @@ const Layout = (props) => {
       </section>
       <BottomBar />
     </main>
-  ) : (
+  ) : path === "/" ? (
     <Login />
+  ) : (
+    <ForgotPassword />
   );
 };
 

@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 import { Skeleton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
+import { searchUsers } from "../../services/user.service";
 
 const ConnectListContainer = styled("div")({
   height: "88vh",
@@ -21,19 +22,27 @@ const FixedTopContent = styled.div`
   z-index: 1;
 `;
 
-const ConnectList = ({ chats, loading }) => {
+const ConnectList = ({ chats, loading, fetchChats }) => {
   const selectedChat = useSelector((state) => state.chatData.selectedChat);
 
   const [filteredChats, setFilteredChats] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearch, setShowSearch] = useState(false);
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     setShowSearch(true);
     setSearchTerm(e.target.value);
     const searchTermLower = e.target.value.toLowerCase();
 
-    const filtered = chats?.filter((chat) => {
+    if (searchTermLower.trim() === "") {
+      setFilteredChats([]);
+      return;
+    }
+
+    const data = await searchUsers(searchTermLower);
+    const users = data?.users || [];
+
+    const filtered = chats.filter((chat) => {
       if (chat.type === "private") {
         return (
           chat.member &&
@@ -42,11 +51,10 @@ const ConnectList = ({ chats, loading }) => {
             .includes(searchTermLower)
         );
       } else if (chat.type === "group") {
-        const membersMatch = chat.members.some(
-          (member) =>
-            `${member.name.first} ${member.name.last}`
-              .toLowerCase()
-              .includes(searchTermLower)
+        const membersMatch = chat.members.some((member) =>
+          `${member.name.first} ${member.name.last}`
+            .toLowerCase()
+            .includes(searchTermLower)
         );
         const titleMatch =
           chat.title?.toLowerCase().includes(searchTermLower) || false;
@@ -58,11 +66,12 @@ const ConnectList = ({ chats, loading }) => {
       return false;
     });
 
-    setFilteredChats(filtered);
+    setFilteredChats([...users, ...filtered]);
   };
 
   const toggleSearch = () => {
     setShowSearch(false);
+    fetchChats();
     setSearchTerm("");
     setFilteredChats([]);
   };
@@ -81,11 +90,14 @@ const ConnectList = ({ chats, loading }) => {
         </h3>
 
         <div className="flex border-opacity-40 border-b border-b-slate-400 pb-2 px-2">
-          <div
-            className="hover:shadow-sm hover:bg-gray-100 rounded-lg hover:cursor-pointer"
-            onClick={toggleSearch}
-          >
-            {showSearch ? <CloseIcon /> : <SearchIcon />}
+          <div className="hover:shadow-sm hover:bg-gray-100 rounded-lg hover:cursor-pointer">
+            {showSearch ? (
+              <span onClick={toggleSearch}>
+                <CloseIcon />
+              </span>
+            ) : (
+              <SearchIcon />
+            )}
           </div>
           <input
             type="text"
@@ -99,17 +111,16 @@ const ConnectList = ({ chats, loading }) => {
 
       <div className="w-full mx-auto flex flex-col gap-y-2 py-2">
         {loading ? (
-          <>
-            {[...Array(7)].map((_, index) => (
-              <Skeleton key={index} variant="rounded" height={55} />
-            ))}
-          </>
-        ) : displayContacts?.length > 0 ? (
+          [...Array(7)].map((_, index) => (
+            <Skeleton key={index} variant="rounded" height={55} />
+          ))
+        ) : displayContacts.length > 0 ? (
           displayContacts.map((chat) => (
             <ConnectListCard
-              key={chat?._id}
+              key={chat?._id + (chat?.title || "")}
               chat={chat}
               active={checkIsActive(chat)}
+              closeSearch={toggleSearch}
             />
           ))
         ) : (

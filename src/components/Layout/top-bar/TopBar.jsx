@@ -63,7 +63,7 @@ const TopBar = () => {
     if (localStorage.getItem("role") === "admin") return;
     try {
       const data = await getNotifications();
-      setNotifications(data.notifications);
+      setNotifications(data?.notifications);
     } catch (error) {
       console.error("Error fetching notifications: ", error);
     }
@@ -115,7 +115,6 @@ const TopBar = () => {
   };
 
   const handleSearch = async () => {
-    console.log("searching...");
     dispatch(setLoading({ loading: true }));
     navigate(`/search`);
     try {
@@ -143,7 +142,7 @@ const TopBar = () => {
               type="text"
               name="topSearch"
               id="topSearch"
-              placeholder="Search number, customer name..."
+              placeholder="Search users, classes, courses, etc."
               className="bg-transparent w-full h-6 rounded-lg text-center font-dubai font-normal text-sm leading-6 text-gray-500 outline-none"
               onChange={handleChange}
               value={searchTerm}

@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { updateToDoItem } from "../../../services/todo.service";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import styled from "@emotion/styled";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Switch } from "@mui/material";
 
 const FixedBottomContent = styled.div`
   position: sticky;
@@ -15,16 +15,16 @@ const FixedBottomContent = styled.div`
 
 const ViewTodoItem = ({ onClose, isOpen, todoItem }) => {
   const [todo, setTodo] = useState({
-    title: todoItem?.title || '',
-    description: todoItem?.description || '',
+    title: todoItem?.title || "",
+    description: todoItem?.description || "",
     schedule: dayjs(todoItem?.schedule) || dayjs(),
     completed: todoItem?.completed || false,
   });
 
   useEffect(() => {
     setTodo({
-      title: todoItem?.title || '',
-      description: todoItem?.description || '',
+      title: todoItem?.title || "",
+      description: todoItem?.description || "",
       schedule: dayjs(todoItem?.schedule) || dayjs(),
       completed: todoItem?.completed || false,
     });
@@ -43,6 +43,10 @@ const ViewTodoItem = ({ onClose, isOpen, todoItem }) => {
 
   const handleScheduleChange = (e) => {
     setTodo({ ...todo, schedule: e });
+  };
+
+  const handleCompletedChange = (e) => {
+    setTodo({ ...todo, completed: e.target.checked });
   };
 
   const isValidate = () => {
@@ -159,6 +163,16 @@ const ViewTodoItem = ({ onClose, isOpen, todoItem }) => {
                   className="outline-none border border-active rounded-md h-32 text-start px-2 resize-none"
                   value={todo.description}
                   onChange={handleDescriptionChange}
+                />
+              </div>
+              <div className="flex items-center">
+                <span className="font-poppins font-normal text-sm leading-6 text-gray-900">
+                  Completed
+                </span>
+                <Switch
+                  checked={todo.completed}
+                  onChange={handleCompletedChange}
+                  color="primary"
                 />
               </div>
             </div>

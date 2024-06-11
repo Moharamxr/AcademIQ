@@ -30,7 +30,7 @@ const ExamDetails = () => {
 
   const role = localStorage.getItem("role");
 
-  const examStartDate = new Date (localStorage.getItem("examStartDate"));
+  const examStartDate = new Date(localStorage.getItem("examStartDate"));
 
   const answers = useSelector((state) => state.examData.examSubmission.answers);
 
@@ -51,7 +51,7 @@ const ExamDetails = () => {
     try {
       const examData = await getAssessmentById(id);
       setExam(examData?.assessment);
-      
+
       setQuestions(examData?.assessment?.questions);
       setLoading(false);
     } catch (error) {
@@ -76,8 +76,6 @@ const ExamDetails = () => {
     };
     setSubmitting(true);
     try {
-      // const submissionData = await getStartedSubmission(id);
-      // setSubmissionId(submissionData?.submission?._id);
       await submitExamAnswers(id, requestedBody);
       setSubmitting(false);
       dispatch(resetState());
@@ -86,39 +84,10 @@ const ExamDetails = () => {
       setError(error.response?.data?.error);
       setTimeout(() => {
         setError("");
-      } , 5000)
+      }, 5000);
       setSubmitting(false);
     }
   };
-
-  // useEffect(() => {
-  //   console.log(examStartDate);
-  // }, [examStartDate]);
-
-  
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     submitAnswers();
-  //   }, exam?.duration * 60 * 1000);
-
-  //   if (exam?.endDate && new Date(exam?.endDate) < new Date()) {
-  //     submitAnswers();
-  //   }
-  // }, []);
-  
-
-  // useEffect(() => {
-  //   const handlePopstate = () => {
-  //     console.log("Navigating back or forward...");
-  //     submitAnswers();
-  //   };
-
-  //   window.addEventListener("popstate", handlePopstate);
-
-  //   return () => {
-  //     window.removeEventListener("popstate", handlePopstate);
-  //   };
-  // }, [dispatch]);
 
   return (
     <TeacherExamsContainer className="fixed top-0 right-0 bottom-0 left-0 w-screen h-screen">
@@ -176,12 +145,6 @@ const ExamDetails = () => {
           </div>
         </div>
         <div className="grid grid-cols-3 py-4">
-          {/* <p className="text-active font-poppins">
-            Date :
-            <time className="text-gray-600  ">
-              {exam?.startDate?.slice(0, 10)}{" "}
-            </time>
-          </p> */}
           <div className="col-span-1 flex gap-2">
             <span className="text-active font-poppins ">Duration :</span>
             {loading ? (
@@ -220,7 +183,7 @@ const ExamDetails = () => {
                   question={question}
                   index={index}
                   fetchExam={fetchExam}
-                  status ={exam?.status}
+                  status={exam?.status}
                 />
               ) : (
                 <StudentQuestionCard
@@ -237,9 +200,9 @@ const ExamDetails = () => {
               </div>
             )}
       </div>
-      {!loading &&exam?.status==='pending'&& (
+      {!loading && exam?.status === "pending" && (
         <div className="bg-white w-full rounded-xl p-5 px-6">
-          {role === "teacher" ? (
+          {role === "teacher" && (
             <>
               <h3 className="text-gray-700 text-xl py-4">Do you want to...</h3>
               <div className="center gap-7 py-4">
@@ -259,26 +222,27 @@ const ExamDetails = () => {
               </div>
               <AddQuestion isOpen={isAddOpen} onClose={onAddClose} id={id} />
             </>
-          ) : (
-            <div className="center flex-col pb-4 gap-3 ">
-              {error && (
-                <span className="text-red-700 p-1 bg-red-200 rounded-md px-2">
-                  {error}
-                </span>
-              )}
-              <button
-                className="bg-active border-2 border-active-br p-4 px-8 rounded-lg text-white"
-                onClick={submitAnswers}
-                disabled={submitting}
-              >
-                {submitting ? (
-                  <CircularProgress size={16} color="inherit" />
-                ) : (
-                  "Submit Exam"
-                )}
-              </button>
-            </div>
           )}
+        </div>
+      )}
+      {role === "student" && (
+        <div className="center flex-col pb-4 gap-3 ">
+          {error && (
+            <span className="text-red-700 p-1 bg-red-200 rounded-md px-2">
+              {error}
+            </span>
+          )}
+          <button
+            className="bg-active border-2 border-active-br p-4 px-8 rounded-lg text-white"
+            onClick={submitAnswers}
+            disabled={submitting}
+          >
+            {submitting ? (
+              <CircularProgress size={16} color="inherit" />
+            ) : (
+              "Submit Exam"
+            )}
+          </button>
         </div>
       )}
     </TeacherExamsContainer>

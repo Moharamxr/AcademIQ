@@ -44,3 +44,22 @@ export const login = async (email, password) => {
   console.log(response?.data);
   return response.data;
 };
+
+export const forgotPassword = async (newData) => {
+  try {
+    const response = await axios.post(
+      `${path}/users/password/forget`,
+      newData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log('forget Password set correctly')
+    return response.data;
+  } catch (error) {
+    console.error(error)
+    return error ;
+  }
+};

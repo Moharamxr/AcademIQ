@@ -96,10 +96,10 @@ const CourseCard = styled.div`
 const SkeletonUserCard = () => (
   <UserCard>
     <Skeleton variant="circular" width={50} height={50} />
-    <div className="user-info" style={{ marginLeft: "1rem" }}>
-      <Skeleton variant="text" width="60%" height={24} />
-      <Skeleton variant="text" width="40%" height={20} />
-      <Skeleton variant="text" width="30%" height={20} style={{ marginTop: "0.5rem" }} />
+    <div className="user-info w-full" style={{ marginLeft: "1rem" }}>
+      <Skeleton variant="text" width="100%" height={24} />
+      <Skeleton variant="text" width="60%" height={20} />
+      <Skeleton variant="text" width="40%" height={20} style={{ marginTop: "0.5rem" }} />
     </div>
   </UserCard>
 );

@@ -5,8 +5,8 @@ import io from "socket.io-client";
 
 export const socket = io(import.meta.env.VITE_ACADEMIQ_BACKEND_URL, {
   extraHeaders: {
-    Authorization: `Bearer ${localStorage.getItem('token')}`, 
-  }
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
 });
 
 const axiosInstance = axios.create();
@@ -96,7 +96,6 @@ export const removeMemberToChat = async (chatId, memberId) => {
 };
 
 export const sendMessage = async (chatId, message) => {
-  console.log(message.get("attachment"));
   try {
     const response = await axiosInstance.post(
       `${path}/chats/${chatId}/messages`,

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Stu1 from "../../../assets/connect-teatcher (2).png";
 import { getGradeClassStudents } from "../../../services/gradClass.service";
 import { Skeleton } from "@mui/material";
 const CourseStudents = ({ gradeClassId }) => {

@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const ReplyCard = ({ report }) => {
   function formatISODateToTime(isoDate) {
@@ -16,6 +17,8 @@ const ReplyCard = ({ report }) => {
 
   const createdAt = report?.createdAt ? formatISODateToTime(report.createdAt) : "No date available";
 
+  const selectedReport = useSelector((state) => state.reportsData.selectedReport);
+
   return report?.body ? (
     <div className={`flex flex-row-reverse gap-x-4 p-5   bg-white shadow-sm`}>
       <div className={`flex flex-col items-end w-full`}>
@@ -23,7 +26,7 @@ const ReplyCard = ({ report }) => {
           <div className={`font-poppins font-light leading-4 text-slate-800 text-sm bg-blue-100/55 rounded-lg p-4 px-0 break-inside-auto w-full`}>
             <div className={`flex flex-col justify-start border-b-2 border-gray-300  pb-5 px-4 `}>
               <p className="font-semibold text-xl pb-1">You</p>
-              <p className="text-gray-400">to : {report?.from?.name?.first} {report?.from?.name?.last}</p>
+              <p className="text-gray-500 text-sm">to : {selectedReport?.from?.email}</p>
 
             
             </div>

@@ -57,6 +57,17 @@ export const createUser = async (newData) => {
     handleError(error);
   }
 };
+export const updateUser = async (userId,newData) => {
+  try {
+    const response = await axiosInstance.put(
+      `${path}/users/${userId}?role=${newData.role}`,
+      newData
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
 
 export const getUserById = async (id) => {
   try {
@@ -147,3 +158,13 @@ export const searchAll = async (query) => {
     handleError(error);
   }
 };
+
+export const searchUsers = async (query) => {
+  try {
+    const response = await axiosInstance.get(`${path}/users/search?query=${query}`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+

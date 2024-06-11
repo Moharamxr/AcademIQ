@@ -110,7 +110,7 @@ const AdminClassDetails = () => {
               </p>
             </div>
 
-            <div className="flex gap-5 py-2 px-1">
+            <div className="flex gap-5 pt-4 px-1">
               <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
                 Courses of this Class :
               </p>
@@ -139,7 +139,7 @@ const AdminClassDetails = () => {
 
             <div className="flex gap-5 py-2 px-1">
               <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400 pt-1">
-                students of this Class :
+                Students of this Class :
               </p>
               {classData?.students?.length > 0 && (
                 <div className="flex flex-wrap gap-5">

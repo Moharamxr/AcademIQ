@@ -3,7 +3,11 @@ import styled from "@emotion/styled";
 import ThreeDots from "../../assets/icons/ThreeDots";
 import ConnectChatMessage from "./ConnectChatMessage";
 import SendMessageIcon from "../../assets/icons/SendMessageIcon";
-import { getChatMessages, sendMessage, socket } from "../../services/connect.service";
+import {
+  getChatMessages,
+  sendMessage,
+  socket,
+} from "../../services/connect.service";
 import { useSelector } from "react-redux";
 import { Skeleton } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -12,16 +16,16 @@ import { BiLoader } from "react-icons/bi";
 const ConnectChatContainer = styled("section")({
   display: "flex",
   flexDirection: "column",
-  height: "88vh", // You can adjust this as needed
+  height: "88vh",
   minHeight: "24rem",
-  overflow: "hidden", // Ensure overflow is hidden to prevent double scrollbars
-  position: "relative", // Needed for absolute positioning of FixedBottomContent
+  overflow: "hidden",
+  position: "relative",
 });
 
 const ChatContainer = styled("section")({
   display: "flex",
   flexDirection: "column",
-  flex: 1, // Allow the chat messages container to grow and push FixedBottomContent down
+  flex: 1,
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -50,20 +54,18 @@ const FixedBottomContent = styled.div`
   align-items: center;
 `;
 
-const ConnectChat = ({ fetchChats }) => {
+const ConnectChat = () => {
   const bottomRef = useRef(null);
   const chatContainerRef = useRef(null);
   const textareaRef = useRef(null);
 
   const selectedChat = useSelector((state) => state.chatData.selectedChat);
-
   const [messages, setMessages] = useState([]);
   const [chatLoading, setChatLoading] = useState(false);
 
   const [message, setMessage] = useState("");
   const [messageAttachment, setMessageAttachment] = useState(null);
   const [sendingMessage, setSendingMessage] = useState(false);
-
 
   const handleAttachmentChange = (e) => {
     setMessageAttachment(e.target.files[0]);
@@ -92,14 +94,16 @@ const ConnectChat = ({ fetchChats }) => {
   }, []);
 
   const handleNewMessage = (data) => {
-    setMessages((prevMessages) => [...prevMessages, {
-      content: data.content,
-      sender: data.sender,
-      createdAt: data.createdAt,
-    }]);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        content: data.content,
+        sender: data.sender,
+        createdAt: data?.createdAt,
+      },
+    ]);
     scrollToBottom();
   };
-  console.log(messages);
 
   useEffect(() => {
     scrollToBottom();
@@ -107,11 +111,13 @@ const ConnectChat = ({ fetchChats }) => {
 
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   };
 
   const getInitials = (firstName, lastName) => {
+    if (!firstName || !lastName) return "";
     return `${firstName[0]?.toUpperCase()}${lastName[0]?.toUpperCase()}`;
   };
 
@@ -121,7 +127,7 @@ const ConnectChat = ({ fetchChats }) => {
       : selectedChat?.title;
 
   const handleSendMessage = async () => {
-    if (!message) return; // Check if either message or attachment exists
+    if (!message) return;
     setSendingMessage(true);
 
     try {
@@ -144,7 +150,6 @@ const ConnectChat = ({ fetchChats }) => {
     }
   };
 
-  // Function to resize textarea height based on its content
   const resizeTextarea = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -153,7 +158,6 @@ const ConnectChat = ({ fetchChats }) => {
     }
   };
 
-  // Resize textarea on initial load and whenever message changes
   useEffect(() => {
     resizeTextarea();
   }, []);
@@ -215,16 +219,17 @@ const ConnectChat = ({ fetchChats }) => {
         className="w-full flex flex-col gap-1 overflow-auto min-h-[26rem]"
         ref={chatContainerRef}
       >
-        {messages?.map((message,index) => (
-          <ConnectChatMessage
-            key={message._id || message.content + index}
-            forward={message.sender._id !== localStorage.getItem("userId")}
-            content={message.content}
-            senderName={`${message.sender.name.first} ${message.sender.name.last}`}
-            senderImage={message?.sender?.profilePicture?.url}
-            createdAt={message.createdAt}
-          />
-        ))}
+        {!chatLoading &&
+          messages?.map((message, index) => (
+            <ConnectChatMessage
+              key={message._id || message.content + index}
+              forward={message.sender._id !== localStorage.getItem("userId")}
+              content={message.content}
+              senderName={`${message.sender.name.first} ${message.sender.name.last}`}
+              senderImage={message?.sender?.profilePicture?.url}
+              createdAt={message.createdAt}
+            />
+          ))}
         <div className="p-2"></div>
       </ChatContainer>
       <FixedBottomContent

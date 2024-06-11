@@ -122,7 +122,7 @@ const Login = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
-            <span className="float-end select-none cursor-pointer">
+            <span className="float-end select-none cursor-pointer" onClick={()=>navigate('/forgot-password')}>
               Forget Password?
             </span>
             <button

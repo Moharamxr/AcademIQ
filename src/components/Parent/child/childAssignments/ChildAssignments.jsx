@@ -1,38 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ChildAssignmentsCard from "./ChildAssignmentsCard";
+import { getAssessmentByStatus } from "../../../../services/assessment.service";
+import { useParams } from "react-router-dom";
+import { Skeleton } from "@mui/material";
+import { BiLoader } from "react-icons/bi";
 
 const ChildAssignments = () => {
-  return (
-    <div className="flex flex-col pb-2 gap-y-3  w-full">
-      <div className="flex flex-row-reverse gap-x-1">
-        <select
-          name="days"
-          id="childAssYear"
-          className="border border-active-br outline-none rounded-md text-active px-px text-sm font-poppins font-normal"
-        >
-          <option value="1">Year</option>
-          <option value="2024">2024</option>
-        </select>
-        <select
-          name="days"
-          id="childAssMonth"
-          className="border border-active-br outline-none rounded-md text-active px-px text-sm font-poppins font-normal"
-        >
-          <option value="1">Month</option>
-          <option value="1">Jan</option>
-        </select>
-        <select
-          name="days"
-          id="childAssDays"
-          className="border border-active-br outline-none rounded-md text-active px-px text-sm font-poppins font-normal"
-        >
-          <option value="1">Day</option>
-          <option value="1">1</option>
-        </select>
+  const { childID } = useParams();
+  const [assignments, setAssignments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const getAssignments = async () => {
+    setLoading(true);
+    try {
+      const data = await getAssessmentByStatus(false, childID, "assignment");
+      setAssignments(data?.assessments);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAssignments();
+  }, [childID]);
+
+  if (loading) {
+    return (
+      <>
+        <Skeleton height={100} />
+        <Skeleton height={100} />
+        <Skeleton height={100} />
+        <Skeleton height={100} />
+        <Skeleton height={100} />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-red-500 text-center font-medium">
+        Error: {error?.message}
       </div>
-      <ChildAssignmentsCard />
-      <ChildAssignmentsCard />
-      <ChildAssignmentsCard />
+    );
+  }
+
+  return (
+    <div className="flex flex-col pb-2 gap-y-3 w-full">
+      {assignments?.length > 0 ? (
+        assignments.map((assignment) => (
+          <ChildAssignmentsCard key={assignment?._id} assignment={assignment} />
+        ))
+      ) : (
+        <p className="text-gray-400 text-center pt-3">No Assignments yet!</p>
+      )}
     </div>
   );
 };

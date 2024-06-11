@@ -14,7 +14,7 @@ const ChildExaminations = () => {
   const getAssessments = async () => {
     setLoading(true);
     try {
-      const data = await getAssessmentByStatus(false,childID,'exam');
+      const data = await getAssessmentByStatus(false, childID, 'exam');
       setAssessments(data?.assessments);
       setLoading(false);
     } catch (error) {
@@ -29,11 +29,16 @@ const ChildExaminations = () => {
 
   if (loading) {
     return (
-      <div className="center">
-        <BiLoader />
-      </div>
+      <>
+        <Skeleton height={100} />
+        <Skeleton height={100} />
+        <Skeleton height={100} />
+        <Skeleton height={100} />
+        <Skeleton height={100} />
+      </>
     );
   }
+
   if (error) {
     return (
       <div className="text-red-500 text-center font-medium">
@@ -41,18 +46,16 @@ const ChildExaminations = () => {
       </div>
     );
   }
+
   return (
-    <div className="flex flex-col pb-2 gap-y-3  w-full">
-      {!loading ? 
-      assessments?.length > 0 ?
-      assessments?.map((ass) => (
-        <ChildExaminationsCard key={ass?.key} assessment={ass} />
-      )) : <p className="text-gray-400 text-center pt-3">No Exams yet !</p> : 
-      (
-        <Skeleton variant="rounded" height={50} />
-      )
-      
-      }
+    <div className="flex flex-col pb-2 gap-y-3 w-full">
+      {assessments?.length > 0 ? (
+        assessments.map((ass) => (
+          <ChildExaminationsCard key={ass?._id} assessment={ass} />
+        ))
+      ) : (
+        <p className="text-gray-400 text-center pt-3">No Exams yet!</p>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes } from "react-router-dom";
-import Connect from "../components/connect/Connect";
+import Connect from "../components/Connect/Connect";
 import Report from "../components/Report/Report";
 import { Route } from "react-router-dom";
 import ToDoPage from "../components/Student/todo-list/ToDoPage";
@@ -22,8 +22,8 @@ import AdminCourses from "../components/Admin/AdminCourses/AdminCourses";
 import UserProfile from "../components/profile/UserProfile";
 import AdminCourseDetails from "../components/Admin/AdminCourses/AdminCourseDetails";
 import AdminClassDetails from "../components/Admin/AdminClasses/AdminClassDetails";
-import UserCourses from "../components/classes/UserCourses";
-import CourseDetailsPage from "../components/classes/CourseDetailsPage";
+import UserCourses from "../components/Classes/UserCourses";
+import CourseDetailsPage from "../components/Classes/CourseDetailsPage";
 import ClassesForAttendance from "../components/Teacher/attendance/ClassesForAttendance";
 import Parents from "../components/Admin/Parents/Parents";
 import SelectQuestions from "../components/Teacher/exams/examCreation/SelectQuestions";
@@ -35,6 +35,8 @@ import Settings from "../components/Layout/Setting/Settings";
 import AssignmentsPage from "../components/Assignments/AssignmentsPage";
 import MarkAssignments from "../components/Assignments/mark/MarkAssignments";
 import SearchPage from "../components/Layout/SearchPage/SearchPage";
+import UpdateUserProfile from "../components/profile/UpdateUserProfile";
+import ForgotPassword from "../components/login/ForgotPassword";
 
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
@@ -85,6 +87,10 @@ const AcademiqRoutes = () => {
         path: "/report",
         component: <Report />,
       },
+      {
+        path: '/updateUser/:id',
+        component: <UpdateUserProfile />,
+      }
     ],
     student: [
       {
@@ -120,13 +126,16 @@ const AcademiqRoutes = () => {
         path: "todolist",
         component: <ToDoPage />,
       },
+      {
+        path: "/connect",
+        component: <Connect />,
+      },
     ],
     teacher: [
       {
         path: "/home",
         component: <Teacher />,
       },
-
       {
         path: "/courses",
         component: <UserCourses />,
@@ -187,6 +196,10 @@ const AcademiqRoutes = () => {
         path: "/report",
         component: <Report />,
       },
+      {
+        path: "/connect",
+        component: <Connect />,
+      },
     ],
     parent: [
       {
@@ -201,17 +214,13 @@ const AcademiqRoutes = () => {
         path: "/child/:childID",
         component: <Child />,
       },
+      {
+        path: "/connect",
+        component: <Connect />,
+      },
     ],
   };
   const staticRoutes = [
-    {
-      path: "/login",
-      component: <Login />,
-    },
-    {
-      path: "/connect",
-      component: <Connect />,
-    },
     {
       path: "/support",
       component: <SupportAndHelp />,
@@ -219,6 +228,10 @@ const AcademiqRoutes = () => {
     {
       path: "/",
       component: <Login />,
+    },
+    {
+      path: "/forgot-password",
+      component: <ForgotPassword />,
     },
     {
       path: "/settings",

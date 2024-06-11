@@ -44,17 +44,18 @@ const ToDoLists = ({ status, todos, isLoading, fetchTodos }) => {
     const total = todos?.length;
     const done = todos?.filter((todo) => todo?.completed).length;
     const progress = (done / total) * 100;
-    return progress.toFixed(0);
+    return parseInt(progress);
   };
   const [isView, setIsView] = useState(false);
   const [viewTodo, setViewTodo] = useState({});
   const openView = (todo) => {
+    if (status === "Done" || status === "Missing") return;
     setViewTodo(todo);
     setIsView(true);
   };
   const closeView = () => {
     setIsView(false);
-    fetchTodos(); 
+    fetchTodos();
   };
 
   return (
@@ -96,7 +97,7 @@ const ToDoLists = ({ status, todos, isLoading, fetchTodos }) => {
         {isLoading && <Skeleton variant="rounded" height={70} />}
         {todos?.length > 0
           ? !isLoading &&
-            todos?.map((todo,i) => (
+            todos?.map((todo, i) => (
               <div
                 className="bg-gray-100 rounded-2xl p-3 cursor-pointer hover:bg-gray-200"
                 key={i}

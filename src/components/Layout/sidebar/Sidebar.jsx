@@ -135,15 +135,7 @@ const Sidebar = () => {
         path: "/report",
         active: false,
       },
-      {
-        name: "Connect",
-        icon: <ConnectIcon />,
-        activeIcon: <ConnectIcon active={true} />,
-        path: "/connect",
-        active: false,
-      },
     ],
-
     parent: [
       {
         name: "Home",
@@ -328,7 +320,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "/";
+    navigate("/");
   };
 
   return (
