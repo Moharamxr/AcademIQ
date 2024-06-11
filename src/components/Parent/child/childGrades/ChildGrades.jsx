@@ -13,12 +13,8 @@ const ChildGrades = () => {
     setLoading(true);
     try {
       const data = await getSubmissionsByStudent(childID);
-      // Ensure that data is an array before setting it
-      if (Array.isArray(data)) {
-        setGrades(data);
-      } else {
-        setGrades([]);
-      }
+        setGrades(data?.submissions); 
+      
       setLoading(false);
     } catch (error) {
       setError(error);
@@ -45,7 +41,7 @@ const ChildGrades = () => {
   if (error) {
     return (
       <div className="text-red-500 text-center font-medium">
-        Error: {error?.message}
+        Error: {error?.message || "Unknown error occurred"}
       </div>
     );
   }
@@ -58,15 +54,26 @@ const ChildGrades = () => {
 
   return (
     <div className="flex flex-col pb-2 w-full bg-white">
-      {grades.map((grade) => (
-        <div key={grade?._id} className="bg-white p-2 rounded-xl w-full">
-          <div className="flex flex-row justify-between">
-            <p className="font-poppins font-light text-lg text-active">
-              {grade?.assessment?.title}
-            </p>
-            <p className="font-poppins font-light text-lg text-active">
-              {grade?.grade}
-            </p>
+      {grades.map((submission) => (
+        <div key={submission.assessment.id} className="bg-active-bg p-4 rounded-lg shadow-md my-4">
+          <div className="flex flex-col">
+            <p className="font-bold text-lg text-gray-800">{submission.assessment.title}</p>
+            <div className="flex flex-row justify-between mt-2">
+              <p className="text-sm text-gray-600">Type: {submission.assessment.type}</p>
+              <p className="text-sm text-gray-600">Status: {submission.assessment.status}</p>
+            </div>
+            <div className="flex flex-row justify-between mt-1">
+              <p className="text-sm text-gray-600">Start Date: {new Date(submission.assessment.startDate).toLocaleDateString()}</p>
+              {submission.submissionData.submittedAt && (
+                <p className="text-sm text-gray-600">Submitted At: {new Date(submission.submissionData.submittedAt).toLocaleString()}</p>
+              )}
+            </div>
+            <div className="flex flex-row justify-between mt-1">
+              <p className="text-sm text-gray-600">Score: {submission.submissionData.score}</p>
+              {submission.submissionData.fullScore && (
+                <p className="text-sm text-gray-600">Full Score: {submission.submissionData.fullScore}</p>
+              )}
+            </div>
           </div>
         </div>
       ))}

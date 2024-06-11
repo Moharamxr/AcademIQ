@@ -3,7 +3,7 @@ import SearchIcon from "../../../assets/icons/SearchIcon";
 import NotificationIcon from "../../../assets/icons/NotificationIcon";
 import { useNavigate } from "react-router-dom";
 import { getNotifications, searchAll } from "../../../services/user.service";
-import { Skeleton, styled } from "@mui/material";
+import { Badge, Skeleton, styled } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setSearchData } from "../../../store/slices/searchSlice";
 import { BiLoader } from "react-icons/bi";
@@ -44,7 +44,7 @@ const NotificationCard = ({ notification }) => {
     }
   };
   return (
-    <div className="p-2 border-b border-gray-200 bg-active-bg rounded-lg">
+    <div className="p-2 border-b border-gray-200 bg-active-bg rounded-lg cursor-pointer">
       <h3 className="font-semibold text">{notification.title}</h3>
       <p className="text-sm text-gray-700">{notification.message}</p>
       <p className="text-xs text-end text-active">
@@ -57,10 +57,14 @@ const NotificationCard = ({ notification }) => {
 const TopBar = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [newNotification, setNewNotification] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchNotifications = async () => {
-    if (localStorage.getItem("role") === "admin") return;
+    if (localStorage.getItem("role") === "admin") {
+      setIsLoading(false);
+      return;
+    }
     try {
       const data = await getNotifications();
       setNotifications(data?.notifications);
@@ -75,6 +79,7 @@ const TopBar = () => {
   }, []);
 
   const handleNewNotification = (notification) => {
+    setNewNotification(true);
     setNotifications((prev) => [notification, ...prev]);
   };
 
@@ -82,9 +87,9 @@ const TopBar = () => {
     socket.on("newNotification", handleNewNotification);
     return () => {
       socket.off("newNotification", handleNewNotification);
+      setNewNotification(null);
     };
   }, []);
-
 
   const fullName = localStorage.getItem("fullName");
   const userEmail = localStorage.getItem("email");
@@ -104,6 +109,7 @@ const TopBar = () => {
   };
 
   const toggleNotificationDropdown = () => {
+    setNewNotification(false    );
     setIsNotificationOpen(!isNotificationOpen);
   };
 
@@ -183,11 +189,17 @@ const TopBar = () => {
             onClick={toggleNotificationDropdown}
           >
             <span className="relative inline-block">
-              <NotificationIcon />
+              <Badge
+                badgeContent={newNotification ? "" : 0}
+                color="error"
+                className={newNotification ? "absolute top-0 right-0" : "hidden"}
+              >
+                <NotificationIcon />
+              </Badge>
             </span>
           </div>
           {isNotificationOpen && (
-            <NotificationContainer className="fixed top-20 right-5 mt-2 p-2 flex flex-col gap-2  w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+            <NotificationContainer className="fixed top-20 max-h-[70vh] right-5 mt-2 p-2 flex flex-col gap-2  w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
               {isLoading ? (
                 <Skeleton variant="rectangular" height={70} />
               ) : (

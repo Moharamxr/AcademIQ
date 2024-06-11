@@ -3,7 +3,6 @@ import ChildAssignmentsCard from "./ChildAssignmentsCard";
 import { getAssessmentByStatus } from "../../../../services/assessment.service";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@mui/material";
-import { BiLoader } from "react-icons/bi";
 
 const ChildAssignments = () => {
   const { childID } = useParams();

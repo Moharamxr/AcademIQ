@@ -63,3 +63,24 @@ export const forgotPassword = async (newData) => {
     return error ;
   }
 };
+export const resetPassword = async (newData) => {
+  console.log('resetPassword',newData)
+
+  try {
+    const response = await axios.post(
+      `${path}/users/password/reset`,
+      newData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    console.log('Reset Password set correctly')
+    return response.data;
+  } catch (error) {
+    console.error(error)
+    return error ;
+  }
+};

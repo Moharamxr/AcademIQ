@@ -1,5 +1,5 @@
-import { Skeleton } from "@mui/material";
 import React from "react";
+import { Skeleton } from "@mui/material";
 
 const ChildProfile = ({ child, isLoading }) => {
   const renderField = (label, value, width = 100) => (
@@ -25,11 +25,7 @@ const ChildProfile = ({ child, isLoading }) => {
         child?.gradeClass?.letter + " " + child?.gradeClass?.level,
         100
       )}
-      {renderField(
-        "Class Location",
-        child?.gradeClass?.room,
-        100
-      )}
+      {renderField("Class Location", child?.gradeClass?.room, 100)}
       {renderField("Gender", child?.gender, 100)}
       {renderField("Birthdate", child?.birthdate?.slice(0, 10), 100)}
       {renderField("SSN", child?.ssn, 150)}

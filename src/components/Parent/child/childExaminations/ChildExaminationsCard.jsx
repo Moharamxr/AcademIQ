@@ -9,28 +9,50 @@ const ChildExaminationsCard = ({ assessment }) => {
     }
     const options = {
       day: "numeric",
-      month: "numeric",
+      month: "short",
       year: "numeric",
     };
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
 
   return (
-    <div className="bg-gray-100 rounded-lg px-2 between py-2 gap-x-10">
-      <div className="flex items-center gap-x-5 w-full px-1">
-        <span>
-          <DoneIcon color={"true"} />
-        </span>
-        <div className="flex flex-col w-full gap-y-1">
-          <span className="font-poppins text-base">Examinations</span>
-          <span className="font-poppins text-gray-400">
-            {assessment?.title}
+    <div className="bg-active-bg rounded-lg shadow-md p-4 my-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          {assessment.status === "published" && (
+            <span className="text-green-500">
+              <DoneIcon color={true} />
+            </span>
+          )}
+          <div>
+            <span className="block text-xl font-bold">{assessment.title}</span>
+            <span className="block text-sm text-gray-500">{assessment.description}</span>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          <span className="text-sm text-gray-500">Status:</span>
+          <span className={`text-sm font-medium ${assessment.status === "published" ? "text-green-600" : "text-gray-600"}`}>
+            {assessment.status}
           </span>
         </div>
       </div>
-      <div className="flex flex-col gap-y-3 text-end w-20">
-        <time className="font-poppins">{formatDate(assessment?.date)}</time>
-        <time className="text-green-400 font-poppins">15/12</time>
+      <div className="flex justify-between mt-4">
+        <div className="flex flex-col space-y-2">
+          <span className="text-sm text-gray-500">Start Date:</span>
+          <span className="font-medium">{formatDate(assessment.startDate)}</span>
+        </div>
+        <div className="flex flex-col space-y-2">
+          <span className="text-sm text-gray-500">End Date:</span>
+          <span className="font-medium">{formatDate(assessment.endDate)}</span>
+        </div>
+        <div className="flex flex-col space-y-2">
+          <span className="text-sm text-gray-500">Duration:</span>
+          <span className="font-medium">{assessment.duration} mins</span>
+        </div>
+        <div className="flex flex-col space-y-2">
+          <span className="text-sm text-gray-500">Score:</span>
+          <span className="font-medium">{assessment.score}</span>
+        </div>
       </div>
     </div>
   );
