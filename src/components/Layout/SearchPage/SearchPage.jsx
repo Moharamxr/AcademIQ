@@ -130,7 +130,7 @@ const SearchPage = () => {
       <h2 className="text-2xl font-semibold mb-4">Search Results</h2>
       
       {/* Users Section */}
-      <SectionContainer className="max-h-[88vh] overflow-auto ">
+      <SectionContainer className="max-h-[85vh] overflow-auto ">
         <h3 className="text-xl font-semibold mb-2">Users</h3>
         {loading ? (
           <>
@@ -167,7 +167,7 @@ const SearchPage = () => {
       </SectionContainer>
 
       {/* Grade Classes Section */}
-      <SectionContainer className="max-h-[88vh] overflow-auto">
+      <SectionContainer className="max-h-[85vh] overflow-auto">
         <h3 className="text-xl font-semibold mb-2">Grade Classes</h3>
         {loading ? (
           <>
@@ -188,7 +188,7 @@ const SearchPage = () => {
       </SectionContainer>
 
       {/* Courses Section */}
-      <SectionContainer className="max-h-[88vh] overflow-auto">
+      <SectionContainer className="max-h-[85vh] overflow-auto">
         <h3 className="text-xl font-semibold mb-2">Courses</h3>
         {loading ? (
           <>

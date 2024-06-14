@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { setSelectedChat } from "../../store/slices/chatSlice";
 import { createChat as createChatService } from "../../services/connect.service";
 
-const ConnectListCard = ({ chat, active,closeSearch }) => {
+const ConnectListCard = ({ chat, active, closeSearch }) => {
   const chatTitle = chat?.type
     ? chat?.type === "private"
       ? `${chat?.member?.name?.first} ${chat?.member?.name?.last}`
@@ -48,11 +48,22 @@ const ConnectListCard = ({ chat, active,closeSearch }) => {
 
   return (
     <div
-      className={`w-full flex ${active ? "bg-blue-100/55 rounded-xl" : "bg-white border-b-slate-400 border-opacity-20 border-b-2"} p-2 py-1 gap-2 cursor-pointer`}
+      className={`w-full flex ${
+        active
+          ? "bg-blue-100/55 rounded-xl"
+          : "bg-white border-b-slate-400 border-opacity-20 border-b-2"
+      } p-2 py-1 gap-2 cursor-pointer`}
       onClick={handleSetSelectedChat}
     >
       {img ? (
-        <img src={img} className="w-12 h-12 rounded-full" alt="Profile" />
+        chat?.type === "group" ? (
+          <div className="w-12 h-12 center rounded-full bg-gray-200 text-2xl flex items-center justify-center">
+            {
+               chat?.title.split(" ").map((word) => word[0].toUpperCase()).join("")}
+          </div>
+        ) : (
+          <img src={img} className="w-12 h-12 rounded-full" alt="Profile" />
+        )
       ) : (
         <div
           className="w-14 h-12 bg-gray-200 center rounded-full text-2xl"
@@ -74,7 +85,7 @@ const ConnectListCard = ({ chat, active,closeSearch }) => {
           {chat?.lastMessage[0]?.content || "No messages yet"}
         </p> */}
         <p className="text-xs text-gray-400 max-w-full overflow-hidden">
-          {chat?.member?.email}
+          {chat?.member?.email || chat?.email}
         </p>
       </div>
     </div>

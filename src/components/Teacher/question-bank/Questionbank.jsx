@@ -9,7 +9,7 @@ import AddNewBank from "./AddNewBank";
 import AddPostIcon from "../../../assets/icons/AddPostIcon";
 import { getQuestionBanks } from "../../../services/questionBank.service";
 const ListContainer = styled("div")({
-  height: "38rem",
+  height: "85vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",

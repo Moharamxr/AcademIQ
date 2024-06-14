@@ -12,7 +12,7 @@ import ViewQuestion from "./ViewQuestion";
 import UpdateBankQuestion from "./UpdateBankQuestion";
 
 const ListContainer = styled("div")({
-  height: "38rem",
+  height: "85vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -129,12 +129,13 @@ const UnitBank = () => {
       >
         <h2 className="text-2xl ">Unit Bank</h2>
       </FixedTopContent>
+      <div className="min-h-[68vh] bg-white ">
       {!isLoading ? (
         Array.isArray(questions) &&
         questions.map((question, index) => (
           <div
             key={question._id}
-            className="between py-3 border-2 border-gray-200/60 rounded-md px-6 hover:cursor-pointer hover:bg-gray-100"
+            className="between  py-3 border-2 border-gray-200/60 rounded-md px-6 hover:cursor-pointer hover:bg-gray-100"
             onClick={() => openViewQuestion(question._id)}
           >
             <div className="flex items-center gap-5">
@@ -179,6 +180,7 @@ const UnitBank = () => {
           <Skeleton variant="rounded" height={50} />
         </>
       )}
+      </div>
 
       <FixedBottomContent
         className="bg-white py-5 flex flex-row-reverse"

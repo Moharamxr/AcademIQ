@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchIcon from "../../assets/icons/SearchIcon";
 import ReportListCard from "./ReportListCard";
 import styled from "@emotion/styled";
 import { Skeleton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchReports } from "../../store/slices/reportsSlice";
 
 const ConnectListContainer = styled("div")({
-  height: "36rem",
+  height: "85vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -21,26 +22,24 @@ const FixedTopContent = styled.div`
   z-index: 1;
 `;
 
-const ReportList = ({ sentReports, receivedReports, loading }) => {
-  const selectedReport = useSelector(
-    (state) => state.reportsData.selectedReport
+const ReportList = () => {
+  const { sentReports, receivedReports, loading, selectedReport, isSent } = useSelector(
+    (state) => state.reportsData
   );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchReports());
+  }, [dispatch]);
+
   const userRole = localStorage.getItem("role");
-  const isSent = useSelector((state) => state.reportsData.isSent);
-  // const contact = isSent ? selectedReport?.to : selectedReport?.from;
-  const tabs =
-    userRole === "parent"
-      ? { received: receivedReports }
-      : {
-          sent: sentReports,
-          received: receivedReports,
-        };
+
+  const tabs = userRole === "parent"
+    ? { received: receivedReports }
+    : { sent: sentReports, received: receivedReports };
 
   const [activeTab, setActiveTab] = useState("received");
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-  };
   const [filteredReports, setFilteredReports] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -48,27 +47,18 @@ const ReportList = ({ sentReports, receivedReports, loading }) => {
   const handleSearch = (e) => {
     setShowSearch(true);
     setSearchTerm(e.target.value);
-    const filtered = tabs[activeTab].filter(
-      (report) =>
-        (!isSent &&
-          report?.from?.name?.first
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase())) ||
-        (!isSent &&
-          report?.from?.name?.last
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase())) ||
-        (isSent &&
-          report?.to?.name?.first
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase())) ||
-        (isSent &&
-          report?.to?.name?.last
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase())) ||
-        report?.body.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        report?.subject.toLowerCase().includes(e.target.value.toLowerCase())
-    );
+    const filtered = tabs[activeTab].filter((report) => {
+      const fromName = `${report?.from?.name?.first} ${report?.from?.name?.last}`.toLowerCase();
+      const toName = `${report?.to?.name?.first} ${report?.to?.name?.last}`.toLowerCase();
+      const term = e.target.value.toLowerCase();
+
+      return (
+        (!isSent && fromName.includes(term)) ||
+        (isSent && toName.includes(term)) ||
+        report?.body.toLowerCase().includes(term) ||
+        report?.subject.toLowerCase().includes(term)
+      );
+    });
     setFilteredReports(filtered);
   };
 
@@ -78,13 +68,12 @@ const ReportList = ({ sentReports, receivedReports, loading }) => {
     setFilteredReports([]);
   };
 
-  const checkIsActive = (report) => {
-    return selectedReport?._id === report?._id;
-  };
+  const checkIsActive = (report) => selectedReport?._id === report?._id;
 
-  const displayContacts = showSearch ? filteredReports : tabs[activeTab];
+  const displayReports = showSearch ? filteredReports : tabs[activeTab];
+
   return (
-    <ConnectListContainer className="bg-white w-full md:w-6/12 lg:w-4/12  rounded-xl min-h-80 p-4 pt-0 overflow-hidden">
+    <ConnectListContainer className="bg-white w-full md:w-6/12 lg:w-4/12 rounded-xl min-h-80 p-4 pt-0 overflow-hidden">
       <FixedTopContent className="bg-white pt-4">
         <h3 className="font-poppins font-normal text-base md:text-lg lg:text-xl xl:text-2xl leading-normal md:leading-relaxed text-center py-1 pb-2">
           Inbox
@@ -111,7 +100,7 @@ const ReportList = ({ sentReports, receivedReports, loading }) => {
             {Object.keys(tabs).map((tab) => (
               <button
                 key={tab}
-                onClick={() => handleTabChange(tab)}
+                onClick={() => setActiveTab(tab)}
                 className={`${
                   activeTab === tab
                     ? "bg-blue-100/55 text-active"
@@ -127,13 +116,11 @@ const ReportList = ({ sentReports, receivedReports, loading }) => {
 
       <div className="w-full mx-auto flex flex-col gap-y-2 py-2">
         {loading ? (
-          <>
-            {[...Array(7)].map((_, index) => (
-              <Skeleton key={index} variant="rounded" height={55} />
-            ))}
-          </>
-        ) : displayContacts?.length > 0 ? (
-          displayContacts.map((report) => (
+          Array.from({ length: 7 }, (_, index) => (
+            <Skeleton key={index} variant="rounded" height={55} />
+          ))
+        ) : displayReports?.length > 0 ? (
+          displayReports.map((report) => (
             <ReportListCard
               key={report?._id}
               report={report}

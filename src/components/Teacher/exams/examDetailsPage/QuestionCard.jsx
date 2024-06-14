@@ -10,8 +10,8 @@ const QuestionCard = ({ question, index, fetchExam ,status }) => {
   const [deletedQuestion, setDeletedQuestion] = useState(null);
   const handleDelete = async () => {
     setIsDeleting(true);
-    setDeletedQuestion(question?._id);
-    await deleteAssessmentQuestion(id, question?._id);
+    setDeletedQuestion(question.question?.id);
+    await deleteAssessmentQuestion(id, question.question?.id);
     fetchExam();
     setDeletedQuestion(null);
 
@@ -25,13 +25,13 @@ const QuestionCard = ({ question, index, fetchExam ,status }) => {
           <span className="font-medium text-lg">
             {index + 1}
             {") "}
-            {question?.text}
+            {question?.question?.text}
           </span>
         </div>
         <span className="text-gray-500 text-sm">
           ({question?.points} points)
           {role==='teacher'&&status==='pending'&& <span onClick={handleDelete} className="ms-2 ">
-            {isDeleting && question?._id === deletedQuestion ? (
+            {isDeleting && question.question?._id === deletedQuestion ? (
               <CircularProgress size={15} color="inherit" />
             ) : (
               <DeleteIcon className="hover:text-red-500 " />
@@ -40,7 +40,7 @@ const QuestionCard = ({ question, index, fetchExam ,status }) => {
         </span>
       </div>
       <div className="flex flex-col gap-3 pt-4 ps-4">
-        {question?.options?.map((op) => (
+        {question?.question?.options?.map((op) => (
           <div className="flex gap-3" key={op.id ? op.id : op._id}>
             {op?.isCorrect ? (
               <RadioBtn />

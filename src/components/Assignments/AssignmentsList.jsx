@@ -6,8 +6,8 @@ import { getAssessmentByStatus } from "../../services/assessment.service";
 import { setSelectedAssignment } from "../../store/slices/assignmentSlice";
 import AddNewAssignment from "./AddNewAssignment";
 
-const TodoListContainer = styled("div")({
-  maxHeight: "36.3rem",
+const AssignmentsContainer = styled("div")({
+  maxHeight: "75vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -138,7 +138,7 @@ const AssignmentsList = () => {
   };
 
   return (
-    <TodoListContainer className="bg-white flex flex-col justify-center items-center p-3 pt-0 rounded-xl">
+    <AssignmentsContainer className="bg-white flex flex-col justify-center items-center p-3 pt-0 rounded-xl">
       <FixedTopContent className="bg-white py-3 w-full">
         <select
           value={assignmentStatus}
@@ -162,7 +162,7 @@ const AssignmentsList = () => {
 
         {isAssignmentsError && <div>Error loading assignments</div>}
       </div>
-    </TodoListContainer>
+    </AssignmentsContainer>
   );
 };
 

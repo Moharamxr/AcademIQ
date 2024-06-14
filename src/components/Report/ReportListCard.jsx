@@ -4,20 +4,22 @@ import {
   setSelectedReport,
   setToggleNewMessage,
 } from "../../store/slices/reportsSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Badge from "@mui/material/Badge";
 
 const ReportListCard = ({ active, report, sent }) => {
   const dispatch = useDispatch();
 
-  const handleSelectedReport = (report) => {
-    dispatch(setSelectedReport({ report }));
-    dispatch(setToggleNewMessage({ toggleNewMessage: false }));
-    dispatch(setIsSent({ isSent: sent }));
+  
+  const handleSelectedReport = () => {
+    dispatch(setSelectedReport(report));
+    dispatch(setToggleNewMessage(false));
+    dispatch(setIsSent(sent));
   };
 
   const contact = sent ? report?.to : report?.from;
-  function formatISODateToTime(isoDate) {
+
+  const formatISODateToTime = (isoDate) => {
     const date = new Date(isoDate);
     if (isNaN(date)) {
       return "Invalid Date";
@@ -28,11 +30,12 @@ const ReportListCard = ({ active, report, sent }) => {
       hour12: true,
     };
     return new Intl.DateTimeFormat("en-US", options).format(date);
-  }
+  };
 
   const createdAt = report?.createdAt
     ? formatISODateToTime(report.createdAt)
     : "No date available";
+
   return (
     <div
       className={`w-full cursor-pointer flex ${
@@ -40,7 +43,7 @@ const ReportListCard = ({ active, report, sent }) => {
           ? "bg-blue-100/55 rounded-2xl"
           : "bg-white border-b-slate-400 border-opacity-20 border-b-2"
       } p-2 py-1 gap-2`}
-      onClick={() => handleSelectedReport(report)}
+      onClick={handleSelectedReport}
     >
       <div className="w-full flex flex-col gap-1 p-3 overflow-hidden">
         <div className="between">

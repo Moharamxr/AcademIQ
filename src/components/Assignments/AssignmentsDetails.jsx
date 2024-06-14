@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
+  addMaterialsToAssessment,
   createSubmission,
   getAssessmentById,
+  removeMaterialsToAssessment,
   submitExamAnswers,
 } from "../../services/assessment.service";
 import { CircularProgress, Skeleton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import { AddAPhoto } from "@mui/icons-material";
 
 const AssignmentDetails = () => {
   const navigate = useNavigate();
@@ -16,7 +21,9 @@ const AssignmentDetails = () => {
 
   const [assignment, setAssignment] = useState(selectedAssignment);
   const [loading, setLoading] = useState(false);
-  const [files, setFiles] = useState([]);
+  const [addingMaterial, setAddingMaterial] = useState(false);
+  const [answerFiles, setAnswerFiles] = useState([]);
+  const [newFiles, setNewFiles] = useState([]);
   const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -42,8 +49,8 @@ const AssignmentDetails = () => {
     }
   }, [selectedAssignment]);
 
-  const handleFileChange = (e) => {
-    setFiles([...files, ...e.target.files]);
+  const handleAnswerFileChange = (e) => {
+    setAnswerFiles([...answerFiles, ...e.target.files]);
   };
 
   const handleCommentChange = (e) => {
@@ -51,7 +58,7 @@ const AssignmentDetails = () => {
   };
 
   const isValid = () => {
-    if (files.length === 0) {
+    if (answerFiles.length === 0) {
       setError("Please select a file");
       setTimeout(() => {
         setError(null);
@@ -67,7 +74,7 @@ const AssignmentDetails = () => {
 
     setIsSubmitting(true);
     const formData = new FormData();
-    files.forEach((file) => formData.append("answers", file));
+    answerFiles.forEach((file) => formData.append("answers", file));
 
     try {
       await createSubmission(assignment._id);
@@ -86,9 +93,43 @@ const AssignmentDetails = () => {
     navigate(`/assignments/mark/${selectedAssignment._id}`);
   };
 
+  const handleRemoveMaterial = async (id) => {
+    if (selectedAssignment?.status !== "pending") return;
+    await removeMaterialsToAssessment(selectedAssignment?._id, id);
+    setAssignment((prevAssignment) => ({
+      ...prevAssignment,
+      materials: prevAssignment.materials.filter(
+        (material) => material._id !== id
+      ),
+    }));
+  };
+
+  const handleAssessmentNewFileChange = async (e) => {
+    setNewFiles([...newFiles, ...e.target.files]);
+    const body = new FormData();
+    for (const file of e.target.files) {
+      body.append("materials", file);
+    }
+
+    setAddingMaterial(true);
+    try {
+      await addMaterialsToAssessment(selectedAssignment?._id, body);
+      const updatedAssignment = await getAssessmentById(selectedAssignment._id);
+      setAssignment(updatedAssignment?.assessment);
+      setNewFiles([]);
+    } catch (error) {
+      setError("Failed to add materials");
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+    } finally {
+      setAddingMaterial(false);
+    }
+  };
+
   if (!selectedAssignment?._id && !loading) {
     return (
-      <div className="bg-white p-5 rounded-xl min-h-[38rem] center">
+      <div className="bg-white p-5 rounded-xl min-h-[85vh] center">
         <p className="text-gray-600">Select an assignment to view details</p>
       </div>
     );
@@ -98,8 +139,7 @@ const AssignmentDetails = () => {
     <>
       <Skeleton variant="text" height={30} width="60%" />
       <Skeleton variant="text" height={20} width="40%" />
-      <Skeleton variant="rectangular" height={100} />
-      <Skeleton variant="rectangular" height={100} />
+      <Skeleton variant="rectangular" height={400} />
     </>
   );
 
@@ -143,18 +183,56 @@ const AssignmentDetails = () => {
         <div className="py-2 flex flex-wrap gap-3">
           {assignment?.materials?.length > 0 ? (
             assignment.materials.map((material) => (
-              <img
-                src={material.url}
-                alt="Material"
-                className=" h-32 rounded"
+              <div
+                className="relative center col-span-full"
                 key={material._id}
-              />
+                onClick={() => handleRemoveMaterial(material?._id)}
+              >
+                <img
+                  src={material.url}
+                  alt="Material"
+                  className=" h-32 rounded"
+                />
+
+                {selectedAssignment?.status === 'pending'&&<label
+                  htmlFor="profile-pic-input"
+                  className="absolute inset-0 bg-black bg-opacity-0 rounded-full flex justify-center items-center opacity-0 hover:opacity-100 transition-all ease-out  cursor-pointer"
+                >
+                  <div className="w-10 h-10 bg-white rounded-full flex justify-center items-center">
+                    <DeleteIcon style={{ color: "red" }} />
+                  </div>
+                </label>}
+              </div>
             ))
           ) : (
-            <p className="font-poppins font-light text-sm leading-10 text-gray-400">
+            <p className="font-poppins font-light text-sm leading-10 text-gray-400  text-center">
               No materials available
             </p>
           )}
+          {localStorage.getItem("role") === "teacher" &&
+            selectedAssignment?.status === "pending" && (
+              <>
+                <label
+                  htmlFor="material"
+                  className="center p-5 bg-gray-100 rounded-lg w- cursor-pointer hover:bg-gray-300"
+                >
+                  {addingMaterial ? (
+                    <CircularProgress size={24} />
+                  ) : (
+                    <AddAPhoto />
+                  )}
+                </label>
+
+                <input
+                  type="file"
+                  name="material"
+                  id="material"
+                  className="hidden"
+                  onChange={handleAssessmentNewFileChange}
+                  multiple
+                />
+              </>
+            )}
         </div>
       </div>
       {assignment?.status === "published" &&
@@ -167,7 +245,7 @@ const AssignmentDetails = () => {
                 name="assignmentAns"
                 id="assignmentAns"
                 className="w-full h-14 py-3 px-2 cursor-pointer outline-none bg-gray-100 border border-gray-300 rounded-lg"
-                onChange={handleFileChange}
+                onChange={handleAnswerFileChange}
                 multiple
               />
             </div>

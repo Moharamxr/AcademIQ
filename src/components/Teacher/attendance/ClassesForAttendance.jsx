@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { getGradeClasses } from "../../../services/gradClass.service";
 import TimeTable from "../../Layout/timeTables/TimeTable";
 const ListContainer = styled("div")({
-  height: "38rem",
+  height: "80vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",

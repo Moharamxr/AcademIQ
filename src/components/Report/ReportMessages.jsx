@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
-import { setToggleNewMessage } from "../../store/slices/reportsSlice";
+import {
+  fetchReports,
+  setToggleNewMessage,
+} from "../../store/slices/reportsSlice";
 import EditIcon from "../../assets/icons/EditIcon";
 import ReportMessageCard from "./ReportMessageCard";
 import { getReport, replayReport } from "../../services/report.service";
@@ -10,7 +13,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ReplyCard from "./ReplyCard";
 
 const ConnectChatContainer = styled("div")({
-  height: "36rem",
+  height: "85vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -30,9 +33,11 @@ const FixedBottomContent = styled.div`
   z-index: 1;
 `;
 
-const ReportMessages = ({ fetchReports }) => {
+const ReportMessages = () => {
   const role = localStorage.getItem("role");
-  const selectedReport = useSelector((state) => state.reportsData.selectedReport);
+  const selectedReport = useSelector(
+    (state) => state.reportsData.selectedReport
+  );
 
   const dispatch = useDispatch();
   const [report, setReport] = useState(selectedReport);
@@ -62,7 +67,7 @@ const ReportMessages = ({ fetchReports }) => {
   const contact = isSent ? selectedReport?.to : selectedReport?.from;
 
   const handleOpenAddMessage = () => {
-    dispatch(setToggleNewMessage({ toggleNewMessage: true }));
+    dispatch(setToggleNewMessage(true));
   };
 
   const initials =
@@ -79,7 +84,7 @@ const ReportMessages = ({ fetchReports }) => {
 
     try {
       await replayReport(report._id, { body: replay });
-      fetchReports();
+      dispatch(fetchReports());
       setReplay("");
       setReplaySuccess(true);
       setTimeout(() => {
@@ -91,7 +96,20 @@ const ReportMessages = ({ fetchReports }) => {
   };
 
   if (!selectedReport?._id) {
-    return <div className="w-full min-h-[36rem] center bg-white rounded-xl md:w-6/12 lg:w-8/12">No report selected</div>;
+    return (
+      <div className="w-full min-h-[85vh] grid grid-rows-8  bg-white rounded-xl md:w-6/12 lg:w-8/12">
+        {role !== "parent" && (
+          <div
+            className="border-b row-span-1 flex flex-row-reverse p-5"
+            onClick={handleOpenAddMessage}
+          >
+            <EditIcon />
+          </div>
+        )}
+
+        <p className="row-span-7 center">No report selected</p>
+      </div>
+    );
   }
 
   return (
@@ -108,7 +126,9 @@ const ReportMessages = ({ fetchReports }) => {
             />
           ) : (
             <div
-              className={`w-14 h-14 bg-${contact?.profilePicture?.color || "white"} text-white text-2xl rounded-full center select-none cursor-pointer`}
+              className={`w-14 h-14 bg-${
+                contact?.profilePicture?.color || "white"
+              } text-white text-2xl rounded-full center select-none cursor-pointer`}
               style={{ backgroundColor: contact?.profilePicture?.color }}
             >
               {initials}
@@ -145,7 +165,7 @@ const ReportMessages = ({ fetchReports }) => {
         )}
       </FixedTopContent>
       {loading ? (
-        <Skeleton variant="rectangular" width="100%" height={300} />
+        <Skeleton variant="rectangular" width="100%" height={500} />
       ) : report ? (
         <div className="w-full flex flex-col gap-1 pb-4 min-h-[28rem]">
           <ReportMessageCard
@@ -153,7 +173,7 @@ const ReportMessages = ({ fetchReports }) => {
             forward={report?.from?._id === localStorage.getItem("userId")}
             report={report}
           />
-          {report?.reply && !isSent && <ReplyCard report={report} />}
+          {report?.reply && <ReplyCard report={report} />}
         </div>
       ) : (
         <div className="w-full h-full center">{error}</div>

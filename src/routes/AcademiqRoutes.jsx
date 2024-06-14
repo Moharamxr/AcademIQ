@@ -21,7 +21,7 @@ import AdminCourses from "../components/Admin/AdminCourses/AdminCourses";
 import UserProfile from "../components/profile/UserProfile";
 import AdminCourseDetails from "../components/Admin/AdminCourses/AdminCourseDetails";
 import AdminClassDetails from "../components/Admin/AdminClasses/AdminClassDetails";
-import UserCourses from "../components/GradeClasses/UserCourses";
+import UserCourses from "../components/Courses/UserCourses";
 import ClassesForAttendance from "../components/Teacher/attendance/ClassesForAttendance";
 import Parents from "../components/Admin/Parents/Parents";
 import SelectQuestions from "../components/Teacher/exams/examCreation/SelectQuestions";
@@ -36,7 +36,7 @@ import SearchPage from "../components/Layout/SearchPage/SearchPage";
 import UpdateUserProfile from "../components/profile/UpdateUserProfile";
 import ForgotPassword from "../components/login/ForgotPassword";
 import ConnectPage from "../components/Chat/ConnectPage";
-import CourseDetailsPage from "../components/GradeClasses/CourseDetailsPage";
+import CourseDetailsPage from "../components/Courses/CourseDetailsPage";
 
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
@@ -224,6 +224,10 @@ const AcademiqRoutes = () => {
     {
       path: "/support",
       component: <SupportAndHelp />,
+    },
+    {
+      path: "/login",
+      component: <Login />,
     },
     {
       path: "/",

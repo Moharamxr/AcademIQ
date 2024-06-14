@@ -8,7 +8,7 @@ import TimeTable from "../Layout/timeTables/TimeTable";
 import { getCourseByGradeClass } from "../../services/courses.service";
 import { getUserById } from "../../services/user.service";
 const ListContainer = styled("div")({
-  height: "34.5rem",
+  maxHeight: "85vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -66,7 +66,7 @@ const UserCourses = () => {
             gradeCourses.map((courseData, index) => (
               <div
                 key={index}
-                className="col-span-1 bg-active-bg p-5  py-10 center border-2 border-active-br rounded-lg  hover:bg-active  cursor-pointer text-center text-active hover:text-white"
+                className="col-span-1 bg-active-bg p-5  py-10 center border-2 border-active-br rounded-lg  hover:bg-active transition-all ease-in-out  cursor-pointer text-center text-active hover:text-white"
                 onClick={() => navigateToCourseDetails(courseData._id)}
               >
                 <span className="font-poppins font-semibold ">

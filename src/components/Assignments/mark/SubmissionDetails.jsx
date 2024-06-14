@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { getSubmissionById } from "../../../services/assessment.service";
+import { useSelector, useDispatch } from "react-redux";
+import { getSubmissionById, markAssessment } from "../../../services/assessment.service";
+import { fetchSubmissionsByAssessment } from "../../../store/slices/assignmentSlice";
+import Skeleton from "@mui/material/Skeleton";
 
 const SubmissionDetails = () => {
+  const dispatch = useDispatch();
   const selectedSubmission = useSelector(
     (state) => state.assignmentData.selectedAssignmentSubmission
   );
+  const { id } = useSelector((state) => state.assignmentData.selectedAssignment);
 
   const [submission, setSubmission] = useState(selectedSubmission);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [newScore, setNewScore] = useState("");
   const [fullScore, setFullScore] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchSubmission = async () => {
+      if (!selectedSubmission?._id) return;
       setLoading(true);
       try {
         const data = await getSubmissionById(selectedSubmission?._id);
@@ -23,9 +29,7 @@ const SubmissionDetails = () => {
         setFullScore(data?.submission?.fullScore || "");
       } catch (error) {
         setError("Failed to fetch submission details");
-        setTimeout(() => {
-          setError(null);
-        }, 3000);
+        setTimeout(() => setError(null), 3000);
       } finally {
         setLoading(false);
       }
@@ -38,19 +42,32 @@ const SubmissionDetails = () => {
     setNewScore(event.target.value);
   };
 
-  const handleFullScoreChange = (event) => {
-    setFullScore(event.target.value);
-  };
-
-  const handleSubmitScore = async () => {
-    // Your logic for submitting the new score
-    // For example, you can call an API to update the score
-    console.log("New Score:", newScore);
+  const handleSubmitScore = async (e) => {
+    e.preventDefault();
+    if (!newScore) {
+      setError("Score is required");
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      await markAssessment(selectedSubmission?._id, { score: newScore });
+      setSubmission((prevSubmission) => ({
+        ...prevSubmission,
+        score: newScore,
+      }));
+      dispatch(fetchSubmissionsByAssessment({ id }));
+    } catch (error) {
+      setError("Failed to submit score");
+      setTimeout(() => setError(null), 3000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!selectedSubmission?._id) {
     return (
-      <div className="bg-white p-5 rounded-lg min-h-[30rem] center">
+      <div className="bg-white p-5 rounded-lg h-[70vh] center ">
         <p className="text-gray-600">Select a submission to view details</p>
       </div>
     );
@@ -60,7 +77,12 @@ const SubmissionDetails = () => {
     <div className="bg-white p-5 rounded-lg">
       <h2 className="text-xl font-semibold mb-4">Submission Details</h2>
       {loading ? (
-        <p className="text-gray-600">Loading...</p>
+        <>
+          <Skeleton variant="text" width={200} height={30} />
+          <Skeleton variant="text" width={200} height={30} />
+          <Skeleton variant="rectangular" width="100%" height={200} />
+          <Skeleton variant="rectangular" width="100%" height={200} />
+        </>
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (
@@ -83,6 +105,7 @@ const SubmissionDetails = () => {
                 value={newScore}
                 onChange={handleScoreChange}
                 className="border rounded px-2 py-1"
+                disabled={isSubmitting}
               />
             )}
           </div>
@@ -125,8 +148,9 @@ const SubmissionDetails = () => {
             <button
               onClick={handleSubmitScore}
               className="bg-active text-white px-4 py-2 rounded-lg mt-4"
+              disabled={isSubmitting}
             >
-              Submit Score
+              {isSubmitting ? "Submitting..." : "Submit Score"}
             </button>
           )}
         </div>

@@ -26,7 +26,7 @@ const FixedBottomContent = styled.div`
 `;
 
 const TeacherExamsContainer = styled.div`
-  max-height: 38rem;
+  max-height: 85vh;
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 0;

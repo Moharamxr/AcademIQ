@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getGradeClasses } from "../../../services/gradClass.service";
 import { Skeleton } from "@mui/material";
 const ListContainer = styled("div")({
-  maxHeight: "38rem",
+  maxHeight: "85vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",

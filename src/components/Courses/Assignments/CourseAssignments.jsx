@@ -32,10 +32,10 @@ const CourseAssignments = () => {
   return (
     <div className="center flex-col  gap-5 w-full pb-5 px-6">
       {role === "teacher" && (
-        <div className="border-2 border-gray-200/70 rounded-xl  flex gap-4 w-full ">
+        <div className="border-2 border-gray-200/70 rounded-xl  flex gap-4 p-3 w-full ">
           <AddNewAssignment fetchAssignments={fetchAssignments} />
 
-          <p className="font-medium text-gray-700 pt-4 text-lg leading-7">
+          <p className="font-medium text-gray-700 pt-2 text-lg leading-7">
             Add new assignment
           </p>
         </div>

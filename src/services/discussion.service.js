@@ -1,128 +1,118 @@
 import axios from "axios";
-const path = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
 
-const axiosInstance = axios.create();
-
-const handleRequest = async (config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-};
-
-axiosInstance.interceptors.request.use(handleRequest, (error) => {
-  return Promise.reject(error);
+const baseURL = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
+const axiosInstance = axios.create({
+  baseURL,
 });
 
+// Request interceptor to add authorization token to headers if available
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response handler to log response data and return data only
 const handleResponse = (response) => {
-  console.log(response.data.message);
-  console.log(response.data);
+  console.log(response.data.message); // Assuming you want to log the message
   return response.data;
 };
 
+// Error handler to handle specific errors like 401 unauthorized
 const handleError = (error) => {
   if (error.response && error.response.status === 401) {
     console.log("User is unauthorized. Logging out...");
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("role");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("fullName");
-    localStorage.removeItem("email");
-
-    window.location.href = "/login";
+    // Clear local storage on unauthorized
+    const itemsToRemove = [
+      "token",
+      "userId",
+      "role",
+      "isLoggedIn",
+      "fullName",
+      "email",
+    ];
+    itemsToRemove.forEach((item) => localStorage.removeItem(item));
+    window.location.href = "/login"; // Redirect to login page
   } else {
     console.error("Error occurred:", error);
-    throw error;
   }
+  throw error; // Always throw error to maintain consistency in handling
 };
 
-export const getDiscussion = async (courseId) => {
+// Generic function to make HTTP requests
+const makeRequest = async (method, url, data = null, config = {}) => {
   try {
-    const response = await axiosInstance.get(`${path}/discussions/${courseId}`);
+    const response = await axiosInstance({
+      method,
+      url,
+      data,
+      ...config,
+    });
     return handleResponse(response);
   } catch (error) {
     handleError(error);
   }
+};
+
+// API functions using the generic makeRequest function
+export const getDiscussion = async (courseId) => {
+  return makeRequest("get", `/discussions/${courseId}`);
 };
 
 export const createPost = async (post) => {
   const token = localStorage.getItem("token");
-  try {
-  const response = await axios.post(`${path}/discussions/posts`, post, {
+  const formData = new FormData();
+  for (const key in post) {
+    formData.append(key, post[key]);
+  }
+  const config = {
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     },
-  });
-  return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  };
+  return makeRequest("post", "/discussions/posts", formData, config);
 };
 
 export const likePost = async (postId) => {
-  try {
-    const response = await axiosInstance.post(
-      `${path}/discussions/posts/likes/${postId}`,
-      {}
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("post", `/discussions/posts/likes/${postId}`);
 };
 
 export const addComment = async (postId, comment) => {
-  try {
-    const response = await axiosInstance.post(
-      `${path}/discussions/posts/comments/${postId}`,
-      comment
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("post", `/discussions/posts/comments/${postId}`, comment);
 };
 
 export const getPostComments = async (postId) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/discussions/posts/comments/${postId}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("get", `/discussions/posts/comments/${postId}`);
 };
 
 export const getAnnouncements = async () => {
-  try {
-    const response = await axiosInstance.get(`${path}/discussions/global`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("get", "/discussions/global");
 };
 
 export const createAnnouncement = async (announcement) => {
   const token = localStorage.getItem("token");
-
-  try {
-    const response = await axios.post(
-      `${path}/discussions/global/announcements`,
-      announcement,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
+  const formData = new FormData();
+  for (const key in announcement) {
+    formData.append(key, announcement[key]);
   }
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  return makeRequest(
+    "post",
+    "/discussions/global/announcements",
+    formData,
+    config
+  );
 };

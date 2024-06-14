@@ -46,41 +46,28 @@ export const login = async (email, password) => {
 };
 
 export const forgotPassword = async (newData) => {
-  try {
-    const response = await axios.post(
-      `${path}/users/password/forget`,
-      newData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log('forget Password set correctly')
-    return response.data;
-  } catch (error) {
-    console.error(error)
-    return error ;
-  }
+  const response = await axios.post(`${path}/users/password/forget`, newData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  console.log("forget Password set correctly");
+  return response.data;
 };
 export const resetPassword = async (newData) => {
-  console.log('resetPassword',newData)
+  console.log("resetPassword", newData);
 
   try {
-    const response = await axios.post(
-      `${path}/users/password/reset`,
-      newData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-    console.log('Reset Password set correctly')
+    const response = await axios.post(`${path}/users/password/reset`, newData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    console.log("Reset Password set correctly");
     return response.data;
   } catch (error) {
-    console.error(error)
-    return error ;
+    console.error(error);
+    return error;
   }
 };

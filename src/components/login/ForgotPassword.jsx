@@ -63,7 +63,7 @@ const ForgotPassword = () => {
       try {
         await forgotPassword(newData);
         setErrorMessage("");
-        navigate("/login"); // Navigate to login page after successful password reset
+        navigate("/"); 
       } catch (error) {
         console.error("Forgot password error:", error);
         setIsLoading(false);

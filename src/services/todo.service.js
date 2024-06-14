@@ -1,83 +1,82 @@
 import axios from "axios";
-const path = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
 
-const axiosInstance = axios.create();
+const baseURL = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
+const axiosInstance = axios.create({ baseURL });
 
-const handleRequest = async (config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+// Request interceptor to add authorization token to headers if available
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  return config;
-};
+);
 
-axiosInstance.interceptors.request.use(handleRequest, (error) => {
-  return Promise.reject(error);
-});
-
+// Response handler to log response data and return data only
 const handleResponse = (response) => {
-  console.log(response.data.message);
-  console.log(response.data);
+  console.log(response.data.message); // Assuming you want to log the message
   return response.data;
 };
 
+// Error handler to handle specific errors like 401 unauthorized
 const handleError = (error) => {
   if (error.response && error.response.status === 401) {
     console.log("User is unauthorized. Logging out...");
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("role");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("fullName");
-    localStorage.removeItem("email");
-
-    window.location.href = "/login";
+    // Clear local storage on unauthorized
+    const itemsToRemove = [
+      "token",
+      "userId",
+      "role",
+      "isLoggedIn",
+      "fullName",
+      "email",
+    ];
+    itemsToRemove.forEach((item) => localStorage.removeItem(item));
+    window.location.href = "/login"; // Redirect to login page
   } else {
     console.error("Error occurred:", error);
-    throw error;
   }
+  throw error; // Always throw error to maintain consistency in handling
 };
 
-export const createTodoItem = async (newData) => {
+// Generic function to make HTTP requests
+const makeRequest = async (method, url, data = null) => {
   try {
-    const response = await axiosInstance.post(`${path}/todos`, newData);
+    const response = await axiosInstance({
+      method,
+      url,
+      data,
+    });
     return handleResponse(response);
   } catch (error) {
     handleError(error);
   }
+};
+
+// API functions using the generic makeRequest function
+
+export const createTodoItem = async (newData) => {
+  return makeRequest("post", `${baseURL}/todos`, newData);
 };
 
 export const getStudentToDos = async (date) => {
   const dateParam = date ? `?date=${date}` : "";
-  try {
-    const response = await axiosInstance.get(`${path}/todos${dateParam}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-export const getToDoItem = async (id) => {
-  try {
-    const response = await axiosInstance.get(`${path}/todos/${id}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-export const updateToDoItem = async (id, newData) => {
-  try {
-    const response = await axiosInstance.put(`${path}/todos/${id}`, newData);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("get", `${baseURL}/todos${dateParam}`);
 };
 
-export const deleteToDoItem = async () => {
-  try {
-    const response = await axiosInstance.delete(`${path}/todos/${id}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+export const getToDoItem = async (id) => {
+  return makeRequest("get", `${baseURL}/todos/${id}`);
+};
+
+export const updateToDoItem = async (id, newData) => {
+  return makeRequest("put", `${baseURL}/todos/${id}`, newData);
+};
+
+export const deleteToDoItem = async (id) => {
+  return makeRequest("delete", `${baseURL}/todos/${id}`);
 };

@@ -11,7 +11,7 @@ const FixedTopContent = styled.div`
 `;
 
 const TeacherGradesContainer = styled.div`
-  height: 35.8rem;
+  height: 80vh;
   width: 100%;
   background-color: white;
   border-radius: 0.75rem;

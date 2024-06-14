@@ -14,7 +14,7 @@ const FixedTopContent = styled.div`
   z-index: 1;
 `;
 const TeacherGradesContainer = styled("div")({
-  height: "38.1rem",
+  height: "85vh",
   width: "100%",
   overflowY: "auto",
   "&::-webkit-scrollbar": {

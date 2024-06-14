@@ -14,7 +14,7 @@ const ChildExaminations = () => {
   const getAssessments = async () => {
     setLoading(true);
     try {
-      const data = await getAssessmentByStatus(false, childID, 'exam');
+      const data = await getAssessmentByStatus(null, childID, 'exam');
       setAssessments(data?.assessments);
       setLoading(false);
     } catch (error) {

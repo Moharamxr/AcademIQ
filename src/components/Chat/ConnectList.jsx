@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchIcon from "../../assets/icons/SearchIcon";
 import ConnectListCard from "./ConnectListCard";
 import styled from "@emotion/styled";
@@ -6,9 +6,11 @@ import { Skeleton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
 import { searchUsers } from "../../services/user.service";
+import { getMyChats } from "../../services/connect.service";
+import CreateGroupModal from "./CreateGroupModal";
 
 const ConnectListContainer = styled("div")({
-  height: "88vh",
+  height: "85vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -22,12 +24,36 @@ const FixedTopContent = styled.div`
   z-index: 1;
 `;
 
-const ConnectList = ({ chats, loading, fetchChats }) => {
+const ConnectList = () => {
   const selectedChat = useSelector((state) => state.chatData.selectedChat);
 
   const [filteredChats, setFilteredChats] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [chats, setChats] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+
+  const fetchChats = async () => {
+    setLoading(true);
+    try {
+      const response = await getMyChats();
+      const sortedChats = response?.chats.sort((a, b) => {
+        const dateA = new Date(a.lastMessage[0]?.updatedAt || a.createdAt);
+        const dateB = new Date(b.lastMessage[0]?.updatedAt || b.createdAt);
+        return dateB - dateA;
+      });
+      setChats(sortedChats || []);
+    } catch (error) {
+      console.error("Failed to fetch chats", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchChats();
+  }, []);
 
   const handleSearch = async (e) => {
     setShowSearch(true);
@@ -82,6 +108,9 @@ const ConnectList = ({ chats, loading, fetchChats }) => {
 
   const displayContacts = showSearch ? filteredChats : chats;
 
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
   return (
     <ConnectListContainer className="bg-white w-full md:w-6/12 lg:w-4/12 rounded-xl max-h-[50rem] h-fit min-h-min p-4 pt-0 overflow-hidden">
       <FixedTopContent className="bg-white pt-4">
@@ -110,6 +139,12 @@ const ConnectList = ({ chats, loading, fetchChats }) => {
       </FixedTopContent>
 
       <div className="w-full mx-auto flex flex-col gap-y-2 py-2">
+        <div
+          className="center bg-gray-100 cursor-pointer hover:bg-gray-200 rounded-lg py-2 font-semibold"
+          onClick={handleOpenModal}
+        >
+          Create a group
+        </div>
         {loading ? (
           [...Array(7)].map((_, index) => (
             <Skeleton key={index} variant="rounded" height={55} />
@@ -127,6 +162,11 @@ const ConnectList = ({ chats, loading, fetchChats }) => {
           <p className="text-gray-400 text-center pt-4">No Chats found</p>
         )}
       </div>
+      <CreateGroupModal
+        open={openModal}
+        onClose={handleCloseModal}
+        onGroupCreated={fetchChats}
+      />
     </ConnectListContainer>
   );
 };

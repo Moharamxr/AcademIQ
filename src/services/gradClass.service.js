@@ -1,179 +1,119 @@
 import axios from "axios";
-const path = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
 
-const axiosInstance = axios.create();
+const baseURL = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
+const axiosInstance = axios.create({ baseURL });
 
-const handleRequest = async (config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+// Request interceptor to add authorization token to headers if available
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  return config;
-};
+);
 
-axiosInstance.interceptors.request.use(handleRequest, (error) => {
-  return Promise.reject(error);
-});
-
+// Response handler to log response data and return data only
 const handleResponse = (response) => {
-  console.log(response.data.message);
-  console.log(response.data);
+  console.log(response.data.message); // Assuming you want to log the message
   return response.data;
 };
 
+// Error handler to handle specific errors like 401 unauthorized
 const handleError = (error) => {
   if (error.response && error.response.status === 401) {
     console.log("User is unauthorized. Logging out...");
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("role");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("fullName");
-    localStorage.removeItem("email");
-
-    window.location.href = "/login";
+    // Clear local storage on unauthorized
+    const itemsToRemove = [
+      "token",
+      "userId",
+      "role",
+      "isLoggedIn",
+      "fullName",
+      "email",
+    ];
+    itemsToRemove.forEach((item) => localStorage.removeItem(item));
+    window.location.href = "/login"; // Redirect to login page
   } else {
     console.error("Error occurred:", error);
-    throw error;
   }
+  throw error; // Always throw error to maintain consistency in handling
 };
 
-export const createGradeClass = async (newData) => {
+// Generic function to make HTTP requests
+const makeRequest = async (method, url, data = null, params = null) => {
   try {
-    const response = await axiosInstance.post(`${path}/gradeClasses/`, newData);
+    const response = await axiosInstance({
+      method,
+      url,
+      data,
+      params,
+    });
     return handleResponse(response);
   } catch (error) {
     handleError(error);
   }
+};
+
+// API functions using the generic makeRequest function
+
+export const createGradeClass = async (newData) => {
+  return makeRequest("post", "/gradeClasses/", newData);
 };
 
 export const getGradeClasses = async () => {
-  try {
-    const response = await axiosInstance.get(`${path}/gradeClasses`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("get", "/gradeClasses");
 };
 
 export const getGradeClassById = async (id) => {
-  try {
-    const response = await axiosInstance.get(`${path}/gradeClasses/${id}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("get", `/gradeClasses/${id}`);
 };
 
 export const UpdateGradeClass = async (id, newData) => {
-  try {
-    const response = await axiosInstance.put(
-      `${path}/gradeClasses/${id}`,
-      newData
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("put", `/gradeClasses/${id}`, newData);
 };
 
 export const getGradeClassByCourse = async (id) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/gradeClasses/course/${id}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("get", `/gradeClasses/course/${id}`);
 };
 
 export const getGradeClassStudents = async (id, isPoints) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/gradeClasses/${id}/students?points=${isPoints || false}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("get", `/gradeClasses/${id}/students`, null, {
+    points: isPoints || false,
+  });
 };
 
 export const takeAttendance = async (id, newData) => {
-  console.log(newData)
-  try {
-    const response = await axiosInstance.post(
-      `${path}/gradeClasses/${id}/attendance`,
-      newData
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("post", `/gradeClasses/${id}/attendance`, newData);
 };
 
 export const reTakeAttendance = async (id, newData) => {
-  try {
-    const response = await axiosInstance.patch(
-      `${path}/gradeClasses/${id}/attendance`,
-      newData
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("patch", `/gradeClasses/${id}/attendance`, newData);
 };
 
 export const getAttendance = async (id, date, period) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/gradeClasses/${id}/attendance?date=${date}&period=${period}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("get", `/gradeClasses/${id}/attendance`, null, {
+    date,
+    period,
+  });
 };
 
 export const assignStudentToGradClass = async (gradClassId, studentId) => {
-  try {
-    const response = await axiosInstance.patch(
-      `${path}/gradeClasses/${gradClassId}/students/${studentId}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("patch", `/gradeClasses/${gradClassId}/students/${studentId}`);
 };
 
 export const removeStudentFromGradClass = async (gradClassId, studentId) => {
-  try {
-    const response = await axiosInstance.delete(
-      `${path}/gradeClasses/${gradClassId}/students/${studentId}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("delete", `/gradeClasses/${gradClassId}/students/${studentId}`);
 };
+
 export const assignCourseToGradClass = async (gradClassId, courseId) => {
-  try {
-    const response = await axiosInstance.patch(
-      `${path}/gradeClasses/${gradClassId}/courses/${courseId}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("patch", `/gradeClasses/${gradClassId}/courses/${courseId}`);
 };
 
 export const removeCourseFromGradClass = async (gradClassId, courseId) => {
-  try {
-    const response = await axiosInstance.delete(
-      `${path}/gradeClasses/${gradClassId}/courses/${courseId}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+  return makeRequest("delete", `/gradeClasses/${gradClassId}/courses/${courseId}`);
 };

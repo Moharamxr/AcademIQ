@@ -179,7 +179,7 @@ const ExamDetails = () => {
             questions?.map((question, index) =>
               role === "teacher" ? (
                 <QuestionCard
-                  key={question._id ? question._id : question.id}
+                  key={question.question._id ? question.question._id : question.question.id}
                   question={question}
                   index={index}
                   fetchExam={fetchExam}
@@ -187,7 +187,7 @@ const ExamDetails = () => {
                 />
               ) : (
                 <StudentQuestionCard
-                  key={question._id ? question._id : question.id}
+                  key={question.question._id ? question.question._id : question.question.id}
                   question={question}
                   index={index}
                   examId={id}

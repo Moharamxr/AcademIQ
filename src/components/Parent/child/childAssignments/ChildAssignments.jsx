@@ -13,7 +13,7 @@ const ChildAssignments = () => {
   const getAssignments = async () => {
     setLoading(true);
     try {
-      const data = await getAssessmentByStatus(false, childID, "assignment");
+      const data = await getAssessmentByStatus(null, childID, "assignment");
       setAssignments(data?.assessments);
       setLoading(false);
     } catch (error) {

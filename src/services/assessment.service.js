@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const path = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
 
 const axiosInstance = axios.create();
@@ -24,210 +25,82 @@ const handleResponse = (response) => {
 const handleError = (error) => {
   if (error.response && error.response.status === 401) {
     console.log("User is unauthorized. Logging out...");
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("role");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("fullName");
-    localStorage.removeItem("email");
-
-    window.location.href = "/login";
+    ["token", "userId", "role", "isLoggedIn", "fullName", "email"].forEach(
+      (item) => localStorage.removeItem(item)
+    );
+    window.location.href = "/";
   } else {
     console.error("Error occurred:", error);
     throw error;
   }
 };
 
-export const createAssessment = async (newData) => {
+const apiRequest = async (method, url, data = null, headers = {}) => {
   try {
-    const response = await axiosInstance.post(`${path}/assessments`, newData);
+    const response = await axiosInstance({
+      method,
+      url: `${path}${url}`,
+      data,
+      headers,
+    });
     return handleResponse(response);
   } catch (error) {
     handleError(error);
   }
 };
 
-export const updateAssessment = async (id, newData) => {
-  try {
-    const response = await axiosInstance.put(
-      `${path}/assessments/${id}`,
-      newData
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+// Helper function to build query parameters
+const buildQueryParams = (params) => {
+  const validParams = Object.entries(params)
+    .filter(([key, value]) => value !== null && value !== undefined)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join("&");
+  return validParams ? `?${validParams}` : "";
 };
 
-export const addMaterialsToAssessment = async (id, materials) => {
-  try {
-    const response = await axiosInstance.patch(
-      `${path}/assessments/${id}/materials`,
-      materials
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
+// Assessment API functions
+export const createAssessment = (newData) =>
+  apiRequest("post", "/assessments", newData);
+export const updateAssessment = (id, newData) =>
+  apiRequest("put", `/assessments/${id}`, newData);
+export const addMaterialsToAssessment = (id, materials) =>
+  apiRequest("patch", `/assessments/${id}/materials`, materials);
+export const removeMaterialsToAssessment = (id, materialId) =>
+  apiRequest("delete", `/assessments/${id}/materials/${materialId}`);
+export const getAssessmentById = (id) =>
+  apiRequest("get", `/assessments/${id}`);
+export const getAssessmentByCourse = (id, type) =>
+  apiRequest("get", `/assessments/courses/${id}${type ? `?type=${type}` : ""}`);
+export const getAssessmentByStatus = (status, studentId, type) => {
+  const params = buildQueryParams({ status, studentId, type });
+  return apiRequest("get", `/assessments${params}`);
 };
+export const addMultiQuestionsToAssessment = (id, newData) =>
+  apiRequest("patch", `/assessments/${id}/questions`, newData);
+export const addNewQuestionToAssessment = (id, question) =>
+  apiRequest("post", `/assessments/${id}/questions`, question);
+export const deleteAssessmentQuestion = (assessmentId, questionId) =>
+  apiRequest("delete", `/assessments/${assessmentId}/questions/${questionId}`);
 
-export const getAssessmentById = async (id) => {
-  try {
-    const response = await axiosInstance.get(`${path}/assessments/${id}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const getAssessmentByCourse = async (id, type) => {
-  const typeParam = type ? `?type=${type}` : "";
-  try {
-    const response = await axiosInstance.get(
-      `${path}/assessments/courses/${id}${typeParam}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-export const getAssessmentByStatus = async (status, studentId, type) => {
-  const statusQueryParam = status ? `?status=${status}` : "";
-  const studentIdParam = studentId ? `studentId=${studentId}` : "";
-  const typeQueryParam = type ? `type=${type}` : "";
-
-  const paramsArray = [statusQueryParam, studentIdParam, typeQueryParam].filter(
-    (param) => param
+// Submission API functions
+export const createSubmission = (id) =>
+  apiRequest("post", `/submissions/assessments/${id}`, {});
+export const submitExamAnswers = (id, answers) =>
+  apiRequest("patch", `/submissions/assessments/${id}/submit`, answers, {
+    "Content-Type": "multipart/form-data",
+  });
+export const getStartedSubmission = (id) =>
+  apiRequest("get", `/submissions/assessments/${id}/started`);
+export const getSubmissionById = (id) =>
+  apiRequest("get", `/submissions/${id}`);
+export const getSubmissionByAssessment = (id) =>
+  apiRequest("get", `/submissions/assessments/${id}`);
+export const getSubmissionsByStudent = (id) =>
+  apiRequest("get", `/submissions/students/${id}`);
+export const getStudentSubmissionByAssessment = (assessmentId, studentId) =>
+  apiRequest(
+    "get",
+    `/submissions/assessments/${assessmentId}/students/${studentId}`
   );
-  const params = paramsArray.length
-    ? `?${paramsArray.join("&").replace("?", "")}`
-    : "";
-
-  try {
-    const response = await axiosInstance.get(`${path}/assessments${params}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const addMultiQuestionsToAssessment = async (id, newData) => {
-  try {
-    const response = await axiosInstance.patch(
-      `${path}/assessments/${id}/questions`,
-      newData
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const addNewQuestionToAssessment = async (id, question) => {
-  try {
-    const response = await axiosInstance.post(
-      `${path}/assessments/${id}/questions`,
-      question
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const createSubmission = async (id) => {
-  try {
-    const response = await axiosInstance.post(
-      `${path}/submissions/assessments/${id}`,
-      {}
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const submitExamAnswers = async (id, answers) => {
-  try {
-    const response = await axios.patch(
-      `${path}/submissions/assessments/${id}/submit`,
-      answers,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const getStartedSubmission = async (id) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/submissions/assessments/${id}/started`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const getSubmissionById = async (id) => {
-  try {
-    const response = await axiosInstance.get(`${path}/submissions/${id}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const getSubmissionByAssessment = async (id) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/submissions/assessments/${id}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const getSubmissionsByStudent = async (id) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/submissions/students/${id}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const getStudentSubmissionByAssessment = async (
-  assessmentId,
-  studentId
-) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/submissions/assessments/${assessmentId}students/${studentId}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-export const deleteAssessmentQuestion = async (assessmentId, questionId) => {
-  try {
-    const response = await axiosInstance.delete(
-      `${path}/assessments/${assessmentId}/questions/${questionId}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
+export const markAssessment = (id, data) =>
+  apiRequest("patch", `/submissions/${id}/mark`, data);

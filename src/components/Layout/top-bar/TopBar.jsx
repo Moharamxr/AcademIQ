@@ -10,7 +10,7 @@ import { BiLoader } from "react-icons/bi";
 import { socket } from "../../../services/connect.service";
 
 const NotificationContainer = styled("div")({
-  MaxHeight: "90vh",
+  MaxHeight: "85vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "8px",
@@ -185,7 +185,7 @@ const TopBar = () => {
 
         <div className="relative">
           <div
-            className="bg-white p-5 between rounded-2xl cursor-pointer"
+            className={"p-5 between rounded-2xl cursor-pointer "+(isNotificationOpen ? "  bg-active-bg-2 " : "bg-white")}
             onClick={toggleNotificationDropdown}
           >
             <span className="relative inline-block">
@@ -199,11 +199,17 @@ const TopBar = () => {
             </span>
           </div>
           {isNotificationOpen && (
-            <NotificationContainer className="fixed top-20 max-h-[70vh] right-5 mt-2 p-2 flex flex-col gap-2  w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+            <NotificationContainer className="fixed top-20 max-h-[85vh] right-5 mt-2 p-2 flex flex-col gap-2  w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
               {isLoading ? (
                 <Skeleton variant="rectangular" height={70} />
               ) : (
                 <>
+                  {notifications.map((notification) => (
+                    <NotificationCard
+                      key={notification._id}
+                      notification={notification}
+                    />
+                  ))}
                   {notifications.map((notification) => (
                     <NotificationCard
                       key={notification._id}

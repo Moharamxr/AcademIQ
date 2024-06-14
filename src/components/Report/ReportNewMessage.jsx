@@ -4,10 +4,10 @@ import SendMessageIcon from "../../assets/icons/SendMessageIcon";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import { sendReport } from "../../services/report.service";
 import { CircularProgress } from "@mui/material";
-import { setToggleNewMessage } from "../../store/slices/reportsSlice";
+import { fetchReports, setToggleNewMessage } from "../../store/slices/reportsSlice";
 import { BiAddToQueue, BiLoader } from "react-icons/bi";
 
-const ReportNewMessage = ({fetchReports}) => {
+const ReportNewMessage = () => {
   
   const fullName = localStorage.getItem("fullName");
 
@@ -68,7 +68,7 @@ const ReportNewMessage = ({fetchReports}) => {
     try {
       await sendReport(formData);
       reset();
-      fetchReports();
+      dispatch(fetchReports());
       dispatch(setToggleNewMessage({ toggleNewMessage: false }));
     } catch (error) {
       setError(

@@ -1,2 +1,6 @@
-fix update user 
+front 
+create group cHAT
+redux fetching (reports)
 
+backend
+delete bank question
