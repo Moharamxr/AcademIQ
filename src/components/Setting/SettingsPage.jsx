@@ -1,20 +1,13 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import {
-  TextField,
-  MenuItem,
-  Skeleton,
-  LinearProgress,
-  IconButton,
-} from "@mui/material";
+import { TextField, MenuItem, Skeleton, LinearProgress } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { resetPassword } from "../../../services/auth.service";
-import { getUserById, updateUser } from "../../../services/user.service";
+import { getUserById, updateUser } from "../../services/user.service";
+import { resetPassword } from "../../services/auth.service";
 
 const genders = ["male", "female"];
 const roles = ["admin", "teacher", "student", "parent"];
 
-const Setting = () => {
+const SettingsPage = () => {
   const id = localStorage.getItem("userId");
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,8 +36,6 @@ const Setting = () => {
     getData();
   }, [getData]);
 
-
-
   const handleProfilePicChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -53,7 +44,7 @@ const Setting = () => {
         const formData = new FormData();
         formData.append("profilePicture", file);
         await updateUser(id, formData);
-              } catch (error) {
+      } catch (error) {
         console.error(error);
         setError("Failed to update profile picture");
         setTimeout(() => setError(null), 3000);
@@ -83,43 +74,45 @@ const Setting = () => {
   return (
     <div className="bg-white p-4 rounded-xl w-full">
       <h2 className="font-poppins font-light text-2xl text-active leading-8 mb-4 py-3">
-        Settings
+        SettingsPages
       </h2>
       {loading ? (
         <Skeleton variant="rectangular" width="100%" height={300} />
       ) : (
         <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="relative center col-span-full">
-            {userData?.profilePicture?.url ? (
-              <img
-                src={profilePic}
-                alt="profile-Pic"
-                className="w-40 h-40 rounded-full"
+          <div className="center col-span-full">
+            <div className="relative center ">
+              {userData?.profilePicture?.url ? (
+                <img
+                  src={profilePic}
+                  alt="profile-Pic"
+                  className="w-40 h-40 rounded-full"
+                />
+              ) : (
+                <div
+                  className="w-40 h-40 text-white text-5xl rounded-full center mr-2 select-none"
+                  style={{ backgroundColor: userData?.profilePicture?.color }}
+                >
+                  {(userData?.name.first?.charAt(0).toUpperCase() || "") +
+                    (userData?.name.last?.charAt(0).toUpperCase() || "")}
+                </div>
+              )}
+              <input
+                accept="image/*"
+                className="hidden"
+                id="profile-pic-input"
+                type="file"
+                onChange={handleProfilePicChange}
               />
-            ) : (
-              <div
-                className="w-40 h-40 text-white text-5xl rounded-full center mr-2 select-none"
-                style={{ backgroundColor: userData?.profilePicture?.color }}
+              <label
+                htmlFor="profile-pic-input"
+                className="absolute inset-0 bg-black bg-opacity-0 rounded-full flex justify-center items-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
               >
-                {(userData?.name.first?.charAt(0).toUpperCase() || "") +
-                  (userData?.name.last?.charAt(0).toUpperCase() || "")}
-              </div>
-            )}
-            <input
-              accept="image/*"
-              className="hidden"
-              id="profile-pic-input"
-              type="file"
-              onChange={handleProfilePicChange}
-            />
-            <label
-              htmlFor="profile-pic-input"
-              className="absolute inset-0 bg-black bg-opacity-0 rounded-full flex justify-center items-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
-            >
-              <div className="w-10 h-10 bg-white rounded-full flex justify-center items-center">
-                <EditIcon style={{ color: "black" }} />
-              </div>
-            </label>
+                <div className="w-10 h-10 bg-white rounded-full flex justify-center items-center">
+                  <EditIcon style={{ color: "black" }} />
+                </div>
+              </label>
+            </div>
           </div>
 
           <TextField
@@ -215,21 +208,18 @@ const Setting = () => {
             label="Street"
             name="street"
             value={userData?.contactInformation?.address?.street || ""}
-            
             disabled
           />
           <TextField
             label="City"
             name="city"
             value={userData?.contactInformation?.address?.city || ""}
-            
             disabled
           />
           <TextField
             label="State"
             name="state"
             value={userData?.contactInformation?.address?.state || ""}
-            
             disabled
           />
           <TextField
@@ -276,4 +266,4 @@ const Setting = () => {
   );
 };
 
-export default Setting;
+export default SettingsPage;

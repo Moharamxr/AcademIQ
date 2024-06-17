@@ -131,8 +131,8 @@ const CreateGroupModal = ({ open, onClose, onGroupCreated }) => {
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
-      <ModalContainer>
+    <Modal open={open} onClose={onClose} className="overflow-auto">
+      <ModalContainer >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2>Create Group</h2>
           <IconButton onClick={onClose}>
@@ -153,8 +153,6 @@ const CreateGroupModal = ({ open, onClose, onGroupCreated }) => {
           onChange={(e) => setDescription(e.target.value)}
           fullWidth
           variant="outlined"
-          multiline
-          rows={3}
         />
         <TextField
           label="Search Users"
@@ -163,7 +161,7 @@ const CreateGroupModal = ({ open, onClose, onGroupCreated }) => {
           fullWidth
           variant="outlined"
         />
-        <ScrollContainer style={{ height: "250px", marginTop: '1rem' }}>
+        <ScrollContainer style={{ maxHeight: "100px" }}>
           {loading ? (
             [...Array(5)].map((_, index) => (
               <Skeleton key={index} variant="rectangular" height={50} />
@@ -185,19 +183,19 @@ const CreateGroupModal = ({ open, onClose, onGroupCreated }) => {
               user={user}
               onRemove={() => handleUserRemove(user._id)}
               selected
+              className="bg-active"
             />
           ))}
         </ScrollContainer>
-        <Button
-          variant="contained"
-          color="primary"
+        <button
+          className="bg-active p-3 outline-none rounded-lg text-white"
           onClick={handleSubmit}
           fullWidth
           style={{ marginTop: '1rem' }}
           disabled={creating}
         >
           {creating ? <CircularProgress size={24} /> : "Create Group"}
-        </Button>
+        </button>
       </ModalContainer>
     </Modal>
   );

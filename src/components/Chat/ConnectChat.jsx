@@ -218,7 +218,7 @@ const ConnectChat = () => {
               style={{
                 backgroundColor: selectedChat?.member?.profilePicture?.color,
               }}
-              className="w-12 h-12 center rounded-full text-2xl flex items-center justify-center"
+              className="w-12 h-12 center rounded-full text-xl flex items-center justify-center"
             >
               {selectedChat?.type === "private"
                 ? getInitials(
@@ -229,7 +229,7 @@ const ConnectChat = () => {
             </div>
           )}
           <div className="flex flex-col gap-y-1 p-1">
-            <p className="font-poppins font-medium text-base  sm:text-sm">
+            <p className="font-poppins font-medium  text-base">
               {chatTitle}
             </p>
           </div>

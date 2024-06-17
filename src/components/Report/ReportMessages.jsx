@@ -84,7 +84,7 @@ const ReportMessages = () => {
 
     try {
       await replayReport(report._id, { body: replay });
-      dispatch(fetchReports());
+      fetchReportById();
       setReplay("");
       setReplaySuccess(true);
       setTimeout(() => {

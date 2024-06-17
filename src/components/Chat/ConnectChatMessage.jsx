@@ -18,11 +18,11 @@ const ConnectChatMessage = ({ content, forward, senderImage, createdAt }) => {
       {/* <img src={forward?senderImage:localStorage.getItem('profilePicture')} className="w-1/12 h-1/6 pt-1" /> */}
       <div className={`container py-1 flex ${!forward && "flex-row-reverse"}`}>
         <div
-          className={`font-poppins flex font-extralight leading-4 text-slate-800 text-sm  bg-blue-100/55 rounded-2xl ${
-            forward ? "rounded-bl-none" : "rounded-br-none"
+          className={`font-poppins flex font-extralight leading-4 text-slate-800 text-sm   rounded-2xl ${
+            forward ? "rounded-bl-none bg-blue-300/70" : "rounded-br-none bg-blue-100/55"
           } max-w-[fit-content] py-3 px-4 space-x-7`}
         >
-          <p>{content}</p>
+          <p  className="pt-1">{content}</p>
           <div 
             className={`font-poppins text-[10px] text-slate-500 mt-2  `}
           >

@@ -28,8 +28,6 @@ import SelectQuestions from "../components/Teacher/exams/examCreation/SelectQues
 import ExamDetails from "../components/Teacher/exams/examDetailsPage/ExamDetails";
 import ExamsPage from "../components/Teacher/exams/ExamsPage";
 import StudentParentHome from "../components/Parent/home/StudentParentHome";
-import SupportAndHelp from "../components/Layout/Support&Help/SupportAndHelp";
-import Settings from "../components/Layout/Setting/Settings";
 import AssignmentsPage from "../components/Assignments/AssignmentsPage";
 import MarkAssignments from "../components/Assignments/mark/MarkAssignments";
 import SearchPage from "../components/Layout/SearchPage/SearchPage";
@@ -37,6 +35,9 @@ import UpdateUserProfile from "../components/profile/UpdateUserProfile";
 import ForgotPassword from "../components/login/ForgotPassword";
 import ConnectPage from "../components/Chat/ConnectPage";
 import CourseDetailsPage from "../components/Courses/CourseDetailsPage";
+import SupportAndHelp from "../components/Support&Help/SupportAndHelp";
+import { SettingsInputComponentRounded } from "@mui/icons-material";
+import SettingsPage from "../components/Setting/SettingsPage";
 
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
@@ -239,7 +240,7 @@ const AcademiqRoutes = () => {
     },
     {
       path: "/settings",
-      component: <Settings />,
+      component: <SettingsPage  />,
     },
     {
       path: "/profile/:id",

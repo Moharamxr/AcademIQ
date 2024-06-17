@@ -41,15 +41,7 @@ const SupportAndHelp = () => {
           </ul>
         </section>
 
-        {/* <section>
-          <h2 className="text-xl font-semibold mb-4">Useful Resources</h2>
-          <ul className="list-disc list-inside text-gray-700">
-            <li className="mb-2"><a href="/user-guide" className="text-blue-600 underline">User Guide</a></li>
-            <li className="mb-2"><a href="/video-tutorials" className="text-blue-600 underline">Video Tutorials</a></li>
-            <li className="mb-2"><a href="/community-forum" className="text-blue-600 underline">Community Forum</a></li>
-            <li><a href="/privacy-policy" className="text-blue-600 underline">Privacy Policy</a></li>
-          </ul>
-        </section> */}
+        
       </div>
     </div>
   );
