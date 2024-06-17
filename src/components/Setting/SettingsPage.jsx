@@ -74,7 +74,7 @@ const SettingsPage = () => {
   return (
     <div className="bg-white p-4 rounded-xl w-full">
       <h2 className="font-poppins font-light text-2xl text-active leading-8 mb-4 py-3">
-        SettingsPages
+        Settings
       </h2>
       {loading ? (
         <Skeleton variant="rectangular" width="100%" height={300} />
