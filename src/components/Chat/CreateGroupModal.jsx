@@ -190,8 +190,7 @@ const CreateGroupModal = ({ open, onClose, onGroupCreated }) => {
         <button
           className="bg-active p-3 outline-none rounded-lg text-white"
           onClick={handleSubmit}
-          fullWidth
-          style={{ marginTop: '1rem' }}
+         
           disabled={creating}
         >
           {creating ? <CircularProgress size={24} /> : "Create Group"}

@@ -20,7 +20,6 @@ const AddNewPost = ({ isOpen, onClose, courseId, getPostsData }) => {
 
   const handleAttachmentsChange = (e) => {
     const files = e.target.files;
-    // Convert FileList to an array
     const filesArray = Array.from(files);
     setAttachments(filesArray);
   };

@@ -154,6 +154,15 @@ const Questionbank = () => {
         </>
       )}
 
+      {
+        questionBanks.length === 0 && !isLoading && (
+          <div className="center w-full h-full">
+            <h3 className="text-gray-500">No question banks available</h3>
+          </div>
+        )
+      
+      }
+
       <AddNewBank
         isOpen={isOpen}
         onClose={onClose}

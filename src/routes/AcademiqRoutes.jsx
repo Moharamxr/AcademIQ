@@ -36,8 +36,8 @@ import ForgotPassword from "../components/login/ForgotPassword";
 import ConnectPage from "../components/Chat/ConnectPage";
 import CourseDetailsPage from "../components/Courses/CourseDetailsPage";
 import SupportAndHelp from "../components/Support&Help/SupportAndHelp";
-import { SettingsInputComponentRounded } from "@mui/icons-material";
 import SettingsPage from "../components/Setting/SettingsPage";
+import RoomPage from "../components/Video/RoomPage";
 
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
@@ -131,6 +131,10 @@ const AcademiqRoutes = () => {
         path: "/connect",
         component: <ConnectPage />,
       },
+      {
+        path: "/room/:id",
+        component: <RoomPage />,
+      }
     ],
     teacher: [
       {
@@ -201,6 +205,10 @@ const AcademiqRoutes = () => {
         path: "/connect",
         component: <ConnectPage />,
       },
+      {
+        path: "/room/:id",
+        component: <RoomPage />,
+      }
     ],
     parent: [
       {

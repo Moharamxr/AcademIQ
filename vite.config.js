@@ -9,6 +9,12 @@ export default defineConfig({
       usePolling: true,
     },
   },
+  define: {
+    global: {
+      // Define globals for simple-peer here
+      global: 'window', // Example: Expose 'global' as 'window' for simple-peer
+    },
+  },
   plugins: [
     react(),
     reactRefresh(),

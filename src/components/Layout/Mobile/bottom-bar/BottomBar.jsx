@@ -17,7 +17,8 @@ import ClassesIcon from "../../../../assets/icons/ClassesIcon.jsx";
 import TeachersIcon from "../../../../assets/icons/TeachersIcon.jsx";
 import AdminsIcon from "../../../../assets/icons/AdminsIcon.jsx";
 import StudentsIcon from "../../../../assets/icons/StudentsIcon.jsx";
-
+import FamilyRestroomIcon from "@mui/icons-material/FamilyRestroom";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 const FixedBottomContent = styled.section`
   position: fixed;
   bottom: 0;
@@ -39,8 +40,8 @@ const BottomBar = () => {
       },
       {
         name: "Courses",
-        icon: <ClassesIcon />,
-        activeIcon: <ClassesIcon active={true} />,
+        icon: <MenuBookIcon sx={{ color: "#94A3B8" }} />,
+        activeIcon: <MenuBookIcon sx={{ color: "#00769E" }} />,
         path: "/admin/courses",
         active: false,
       },
@@ -66,14 +67,27 @@ const BottomBar = () => {
         active: false,
       },
       {
+        name: "Parents",
+        icon: <FamilyRestroomIcon sx={{ color: "#94A3B8" }} />,
+        activeIcon: <FamilyRestroomIcon sx={{ color: "#00769E" }} />,
+        path: "/admin/parents",
+        active: false,
+      },
+      {
         name: "Admins",
         icon: <AdminsIcon color={"#94A3B8"} />,
         activeIcon: <AdminsIcon color={"#00769E"} />,
         path: "/admin/admins",
         active: false,
       },
+      {
+        name: "Report",
+        icon: <ReportIcon />,
+        activeIcon: <ReportIcon active={true} />,
+        path: "/report",
+        active: false,
+      },
     ],
-
     parent: [
       {
         name: "Home",
@@ -86,15 +100,7 @@ const BottomBar = () => {
         name: "Child",
         icon: <ChildIcon />,
         activeIcon: <ChildIcon active={true} />,
-        path: "/child",
-        active: false,
-        
-      },
-      {
-        name: "Connect",
-        icon: <ConnectIcon />,
-        activeIcon: <ConnectIcon active={true} />,
-        path: "/connect",
+        path: `/child`,
         active: false,
       },
       {
@@ -102,6 +108,13 @@ const BottomBar = () => {
         icon: <ReportIcon />,
         activeIcon: <ReportIcon active={true} />,
         path: "/report",
+        active: false,
+      },
+      {
+        name: "Connect",
+        icon: <ConnectIcon />,
+        activeIcon: <ConnectIcon active={true} />,
+        path: "/connect",
         active: false,
       },
     ],
@@ -139,6 +152,13 @@ const BottomBar = () => {
         icon: <ExamsIcon />,
         activeIcon: <ExamsIcon active={true} />,
         path: "/exams",
+        active: false,
+      },
+      {
+        name: "Connect",
+        icon: <ConnectIcon />,
+        activeIcon: <ConnectIcon active={true} />,
+        path: "/connect",
         active: false,
       },
     ],
@@ -183,6 +203,27 @@ const BottomBar = () => {
         icon: <AttendanceIcon />,
         activeIcon: <AttendanceIcon active={true} />,
         path: "/attendance",
+        active: false,
+      },
+      {
+        name: "Assignments",
+        icon: <AssignmentsIcon />,
+        activeIcon: <AssignmentsIcon active={true} />,
+        path: "/assignments",
+        active: false,
+      },
+      {
+        name: "Report",
+        icon: <ReportIcon />,
+        activeIcon: <ReportIcon active={true} />,
+        path: "/report",
+        active: false,
+      },
+      {
+        name: "Connect",
+        icon: <ConnectIcon />,
+        activeIcon: <ConnectIcon active={true} />,
+        path: "/connect",
         active: false,
       },
     ],

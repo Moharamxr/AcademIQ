@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { setSelectedChat } from "../../store/slices/chatSlice";
+import { setActiveTab, setSelectedChat } from "../../store/slices/chatSlice";
 import { createChat as createChatService } from "../../services/connect.service";
 
 const ConnectListCard = ({ chat, active, closeSearch }) => {
@@ -40,9 +40,15 @@ const ConnectListCard = ({ chat, active, closeSearch }) => {
       };
       const newChat = await createChatService(data);
       dispatch(setSelectedChat(newChat));
+      if (window.innerWidth < 768) {
+        dispatch(setActiveTab({ tab: "chat" }));
+      }
       closeSearch();
     } else {
       dispatch(setSelectedChat({ chat }));
+      if (window.innerWidth < 768) {
+        dispatch(setActiveTab({ tab: "chat" }));
+      }
     }
   };
 
@@ -57,12 +63,14 @@ const ConnectListCard = ({ chat, active, closeSearch }) => {
     >
       {img ? (
         chat?.type === "group" ? (
-          <div className="w-12 h-12 center rounded-full bg-gray-200 text-2xl flex items-center justify-center">
-            {
-               chat?.title.split(" ").map((word) => word[0].toUpperCase()).join("")}
+          <div className="w-14 h-12 center rounded-full bg-gray-200 text-2xl flex items-center justify-center">
+            {chat?.title
+              .split(" ")
+              .map((word) => word[0].toUpperCase())
+              .join("")}
           </div>
         ) : (
-          <img src={img} className="w-12 h-12 rounded-full" alt="Profile" />
+          <img src={img} className="w-14 h-12 rounded-full" alt="Profile" />
         )
       ) : (
         <div
@@ -74,19 +82,20 @@ const ConnectListCard = ({ chat, active, closeSearch }) => {
       )}
       <div className="w-full flex flex-col gap-1 p-1 overflow-hidden">
         <div className="between">
-          <p className="font-poppins font-medium md:text-base text-sm">
-            {chatTitle}
-          </p>
+          <p className="font-poppins font-medium text-sm">{chatTitle}</p>
           <p className="font-poppins text-[9.5px] text-slate-500">
             {createdAt}
           </p>
         </div>
-        <p className="font-poppins font-medium text-xs text-slate-500 max-w-full overflow-hidden">
-          {chat?.lastMessage[0]?.content || "No messages yet"}
-        </p>
-        {/* <p className="text-xs text-gray-400 max-w-full overflow-hidden">
+        <p className="text-xs text-gray-400 max-w-full overflow-hidden">
           {chat?.member?.email || chat?.email}
-        </p> */}
+        </p>
+        {chat?.lastMessage && (
+          <p className="font-poppins font-medium text-xs text-slate-500 max-w-full overflow-hidden">
+            {chat.lastMessage[0]?.content || "No messages yet"}
+          </p>
+        )}
+
       </div>
     </div>
   );

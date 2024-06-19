@@ -28,8 +28,8 @@ const ViewQuestion = ({ isOpen, onClose, selectedQuestion, bankId }) => {
   }, [isOpen]);
   return (
     isOpen && (
-      <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-600 bg-opacity-50">
-        <div className="bg-white rounded-xl p-5 w-1/2 overflow-y-auto max-h-[95vh]">
+      <div className="fixed  inset-0 z-50 flex justify-center items-center bg-gray-600 bg-opacity-50">
+        <div className="bg-white rounded-xl p-5 lg:w-1/2 w-3/4 overflow-y-auto max-h-[95vh]">
           <div className="between">
             <span>Mcq</span>
             <span className="cursor-pointer" onClick={onClose}>

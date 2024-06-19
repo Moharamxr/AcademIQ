@@ -8,7 +8,7 @@ const AssignmentsPage = () => {
       <div className="w-full lg:w-8/12 flex flex-col gap-3">
         <AssignmentsDetails />
       </div>
-      <aside className="w-full lg:w-4/12  hidden md:block">
+      <aside className="w-full lg:w-4/12  ">
         <AssignmentsList />
       </aside>
     </>

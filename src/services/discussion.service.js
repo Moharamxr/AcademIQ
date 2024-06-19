@@ -21,7 +21,8 @@ axiosInstance.interceptors.request.use(
 
 // Response handler to log response data and return data only
 const handleResponse = (response) => {
-  console.log(response.data.message); // Assuming you want to log the message
+  console.log(response.data.message); 
+  console.log(response.data); 
   return response.data;
 };
 

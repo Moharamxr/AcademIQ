@@ -109,7 +109,7 @@ const TopBar = () => {
   };
 
   const toggleNotificationDropdown = () => {
-    setNewNotification(false    );
+    setNewNotification(false);
     setIsNotificationOpen(!isNotificationOpen);
   };
 
@@ -185,45 +185,53 @@ const TopBar = () => {
 
         <div className="relative">
           <div
-            className={"p-5 between rounded-2xl cursor-pointer "+(isNotificationOpen ? "  bg-active-bg-2 " : "bg-white")}
+            className={
+              "p-5 between rounded-2xl cursor-pointer " +
+              (isNotificationOpen ? "  bg-active-bg-2 " : "bg-white")
+            }
             onClick={toggleNotificationDropdown}
           >
             <span className="relative inline-block">
               <Badge
                 badgeContent={newNotification ? "" : 0}
                 color="error"
-                className={newNotification ? "absolute top-0 right-0" : "hidden"}
+                className={
+                  newNotification ? "absolute top-0 right-0" : "hidden"
+                }
               >
                 <NotificationIcon />
               </Badge>
             </span>
           </div>
           {isNotificationOpen && (
-            <NotificationContainer className="fixed top-20 max-h-[85vh] right-5 mt-2 p-2 flex flex-col gap-2  w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-              {isLoading ? (
-                <Skeleton variant="rectangular" height={70} />
-              ) : (
-                <>
-                  {notifications.map((notification) => (
-                    <NotificationCard
-                      key={notification._id}
-                      notification={notification}
-                    />
-                  ))}
-                  {notifications.map((notification) => (
-                    <NotificationCard
-                      key={notification._id}
-                      notification={notification}
-                    />
-                  ))}
-                  {notifications.length === 0 && (
-                    <p className="text-center text-gray-500">
-                      No notifications
-                    </p>
-                  )}
-                </>
-              )}
-            </NotificationContainer>
+            <>
+            <div className="fixed bg-black opacity-10 top-0 right-0 w-screen h-screen z-10" onClick={()=>setIsNotificationOpen(false)}></div>
+              <NotificationContainer className="fixed top-20 max-h-[85vh] right-5 mt-2 p-2 flex flex-col gap-2  w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                {isLoading ? (
+                  <Skeleton variant="rectangular" height={70} />
+                ) : (
+                  <>
+                    {notifications.map((notification) => (
+                      <NotificationCard
+                        key={notification._id}
+                        notification={notification}
+                      />
+                    ))}
+                    {notifications.map((notification) => (
+                      <NotificationCard
+                        key={notification._id}
+                        notification={notification}
+                      />
+                    ))}
+                    {notifications.length === 0 && (
+                      <p className="text-center text-gray-500">
+                        No notifications
+                      </p>
+                    )}
+                  </>
+                )}
+              </NotificationContainer>
+            </>
           )}
         </div>
       </div>

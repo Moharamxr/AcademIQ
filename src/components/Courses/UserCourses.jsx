@@ -60,7 +60,7 @@ const UserCourses = () => {
         <FixedTopContent className="between bg-white  py-5">
           <h2 className="text-2xl ">Courses</h2>
         </FixedTopContent>
-        <div className="grid sm:grid-cols-3 grid-cols-2  gap-5 ">
+        <div className="grid sm:grid-cols-3 grid-cols-2  gap-5 pb-5">
           {!isLoading ? (
             Array.isArray(gradeCourses) &&
             gradeCourses.map((courseData, index) => (

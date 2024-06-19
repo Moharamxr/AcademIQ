@@ -3,7 +3,6 @@ import io from "socket.io-client";
 
 const path = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
 
-// Initialize WebSocket connection
 export const socket = io(path, {
   extraHeaders: {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -12,7 +11,6 @@ export const socket = io(path, {
 
 const axiosInstance = axios.create();
 
-// Axios request interceptor to add Authorization header
 const handleRequest = async (config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -36,7 +34,7 @@ const handleResponse = (response) => {
 const handleError = (error) => {
   if (error.response && error.response.status === 401) {
     console.log("User is unauthorized. Logging out...");
-    // Clear local storage on unauthorized access
+
     ["token", "userId", "role", "isLoggedIn", "fullName", "email"].forEach((item) => localStorage.removeItem(item));
     // Redirect to login page
     window.location.href = "/login";
@@ -46,7 +44,6 @@ const handleError = (error) => {
   }
 };
 
-// General function for making API requests
 const apiRequest = async (method, url, data = null, headers = {}) => {
   try {
     const config = {
@@ -66,7 +63,6 @@ const apiRequest = async (method, url, data = null, headers = {}) => {
   }
 };
 
-// Chat API functions
 export const createChat = (newData) => apiRequest("post", "/chats", newData);
 export const updateChat = (id, newData) => apiRequest("put", `/chats/${id}`, newData);
 export const getMyChats = () => apiRequest("get", "/chats");
@@ -79,14 +75,15 @@ export const getChatMessages = (chatId) => apiRequest("get", `/chats/${chatId}/m
 export const getChatMessageWithAttachment = (chatId, messageId) => apiRequest("get", `/chats/${chatId}/messages/${messageId}`);
 export const getChatWithUser = (userId) => apiRequest("get", `/chats/users/${userId}`);
 
-// Function to listen for new chat messages via WebSocket
 export const subscribeToChatMessages = (chatId, callback) => {
   socket.on(`chat:${chatId}`, (message) => {
     callback(message);
   });
 };
 
-// Function to stop listening for chat messages
 export const unsubscribeFromChatMessages = (chatId) => {
   socket.off(`chat:${chatId}`);
 };
+
+export const createMeetingRoom = (newData) => apiRequest("post", "/rooms/", newData);
+

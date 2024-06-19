@@ -106,7 +106,7 @@ const SettingsPage = () => {
               />
               <label
                 htmlFor="profile-pic-input"
-                className="absolute inset-0 bg-black bg-opacity-0 rounded-full flex justify-center items-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
+                className="absolute inset-0 bg-black bg-opacity-20 rounded-full flex justify-center items-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
               >
                 <div className="w-10 h-10 bg-white rounded-full flex justify-center items-center">
                   <EditIcon style={{ color: "black" }} />

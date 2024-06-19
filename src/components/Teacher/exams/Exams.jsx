@@ -13,61 +13,79 @@ const Exams = ({ exams, isLoading }) => {
   const [loadingExam, setLoadingExam] = useState("");
 
   const handleGoto = async (id, status) => {
-    if (
-      role === "student" &&
-      status !== "published" 
-    ) {
+    if (role === "student" && status !== "published") {
       console.log("Student can't access this exam");
       return;
     }
+
     if (status === "draft") {
       navigate(`/exams/create/${id}`);
     } else {
-      if (role === "student" && status === "published") {
+      try {
+        setSubmitting(true);
+        setLoadingExam(id);
+
+        if (role === "student" && status === "published") {
+          const data = await getStartedSubmission(id);
+          console.log("Submission found");
+
+          if (data?.submission?.score) {
+            console.log("Student can not resubmit exam");
+            // Handle student resubmission scenario if needed
+          } else {
+            console.log("No previous submission found");
+            navigate(`/exams/details/${id}`);
+          }
+        } else if (role === "teacher") {
+          navigate(`/exams/details/${id}`);
+        }
+      } catch (error) {
+        console.error("Error while fetching or creating submission:", error);
+
+        if (error?.response?.status !== 404) {
+          return;
+        }
         try {
-          setSubmitting(true);
-          setLoadingExam(id);
-          await getStartedSubmission(id);
-        } catch (error) {
-          if (error.response.status !== 404) return;
-          setSubmitting(true);
           await createSubmission(id);
           console.log("Submission created");
           localStorage.setItem("examStartDate", new Date());
+          navigate(`/exams/details/${id}`);
+        } catch (createError) {
+          console.error("Error creating submission:", createError);
         }
+      } finally {
+        setSubmitting(false);
+        setLoadingExam("");
       }
-      setSubmitting(false);
-
-      navigate(`/exams/details/${id}`);
     }
   };
 
   return (
-    <div className="flex flex-col px-5 w-full  gap-4 h-full">
+    <div className="flex flex-col px-5 w-full gap-4 h-full">
       {isLoading && <Skeleton variant="rounded" height={50} />}
       {!isLoading && exams?.length > 0 ? (
-        exams.map((exam, index) => (
+        exams.map((exam) => (
           <div
             key={exam._id}
-            className=" between border-gray-300 border-[1px] rounded-lg p-3 cursor-pointer hover:bg-gray-100/70"
+            className="between border-gray-300 border-[1px] rounded-lg p-3 cursor-pointer hover:bg-gray-100/70"
             onClick={() => handleGoto(exam._id, exam.status)}
           >
             {!submitting && loadingExam !== exam._id ? (
               <>
                 <p>
-                  {exam?.title}{" "}
-                  {exam?.status === "draft" && index + 1 + " " + "(Draft)"}
+                  {exam?.title} {exam?.status === "draft" && "(Draft)"}
                   {exam?.status !== "draft" && (
                     <time className="text-sm text-gray-500 ps-2">
-                      {`(${exam?.startDate?.slice(0, 10)})` +
-                        " to " +
-                        `(${exam?.endDate?.slice(0, 10)})`}
+                      {`(${exam?.startDate?.slice(
+                        0,
+                        10
+                      )}) to (${exam?.endDate?.slice(0, 10)})`}
                     </time>
                   )}
                 </p>
                 {exam?.questions && (
                   <span className="text-sm text-gray-500">
-                    {exam?.questions?.length + " questions"}
+                    {exam?.questions?.length} questions
                   </span>
                 )}
               </>

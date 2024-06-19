@@ -135,7 +135,7 @@ const Dashboard = () => {
         <div className="col-span-10">
           <Announcements />
         </div>
-        <div className="col-span-2 bg-white rounded-xl h-[11.3rem] center flex-col gap-2">
+        <div className="col-span-2 bg-white rounded-xl h-[11.3rem] overflow-hidden center flex-col gap-2">
           <div className="center gap-3 w-5/6 px-3 py-2 bg-green-600  rounded-lg">
             <StudentsIcon color={"#FFFFFF"} />
             <h4 className="text-white  font-medium font-poppins">

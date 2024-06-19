@@ -91,7 +91,7 @@ const ExamDetails = () => {
 
   return (
     <TeacherExamsContainer className="fixed top-0 right-0 bottom-0 left-0 w-screen h-screen">
-      <div className="bg-white w-full rounded-xl p-5 pb-0 border-b-2 rounded-b-none px-6">
+      <div className="bg-white w-full rounded-xl p-5  pb-0 border-b-2 rounded-b-none px-6">
         <h2 className="font-poppins text-2xl font-medium">
           {exam?.title ? exam?.title : "Exam Title"}
         </h2>
@@ -164,7 +164,7 @@ const ExamDetails = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-5 p-5">
+      <div className="flex flex-col gap-5 p-5 px-10">
         {loading && (
           <>
             <Skeleton variant="text" height={30} width={500} />
@@ -179,7 +179,7 @@ const ExamDetails = () => {
             questions?.map((question, index) =>
               role === "teacher" ? (
                 <QuestionCard
-                  key={question.question._id ? question.question._id : question.question.id}
+                  key={question?._id}
                   question={question}
                   index={index}
                   fetchExam={fetchExam}
@@ -187,8 +187,8 @@ const ExamDetails = () => {
                 />
               ) : (
                 <StudentQuestionCard
-                  key={question.question._id ? question.question._id : question.question.id}
-                  question={question}
+                key={question?.question?._id ? question?.question?._id : question?.question?.id}
+                question={question}
                   index={index}
                   examId={id}
                 />

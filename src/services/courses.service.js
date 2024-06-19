@@ -1,12 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
 
-const baseURL = import.meta.env.VITE_ACADEMIQ_BACKEND_URL; // Assuming VITE_ACADEMIQ_BACKEND_URL is defined in your environment variables
+const baseURL = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
 
 const axiosInstance = axios.create({
   baseURL,
 });
 
-// Request interceptor to add authorization token to headers if available
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -20,34 +19,31 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response handler to log response data and return data only
 const handleResponse = (response) => {
-  console.log(response.data.message); // Assuming you want to log the message
+  console.log(response.data.message);
+  console.log(response.data);
   return response.data;
 };
 
-// Error handler to handle specific errors like 401 unauthorized
 const handleError = (error) => {
   if (error.response && error.response.status === 401) {
     console.log("User is unauthorized. Logging out...");
-    // Clear local storage on unauthorized
     const itemsToRemove = [
-      "token", 
-      "userId", 
-      "role", 
-      "isLoggedIn", 
-      "fullName", 
-      "email"
+      "token",
+      "userId",
+      "role",
+      "isLoggedIn",
+      "fullName",
+      "email",
     ];
-    itemsToRemove.forEach(item => localStorage.removeItem(item));
-    window.location.href = "/login"; // Redirect to login page
+    itemsToRemove.forEach((item) => localStorage.removeItem(item));
+    window.location.href = "/login";
   } else {
     console.error("Error occurred:", error);
   }
-  throw error; // Always throw error to maintain consistency in handling
+  throw error;
 };
 
-// Generic function to make HTTP requests
 const makeRequest = async (method, url, data = null, config = {}) => {
   try {
     const response = await axiosInstance({
@@ -62,25 +58,28 @@ const makeRequest = async (method, url, data = null, config = {}) => {
   }
 };
 
-// Example API functions using the generic makeRequest function
 export const createCourse = async (newData) => {
-  return makeRequest('post', '/courses', newData);
+  return makeRequest("post", "/courses", newData);
+};
+
+export const createCourseMeeting = async (id) => {
+  return makeRequest("post", `/courses/${id}/rooms`,{});
 };
 
 export const getGradeCourses = async () => {
-  return makeRequest('get', '/courses');
+  return makeRequest("get", "/courses");
 };
 
 export const getCourseById = async (id) => {
-  return makeRequest('get', `/courses/${id}`);
+  return makeRequest("get", `/courses/${id}`);
 };
 
 export const getCourseByGradeClass = async (id) => {
-  return makeRequest('get', `/courses/gradeClasses/${id}`);
+  return makeRequest("get", `/courses/gradeClasses/${id}`);
 };
 
 export const updateCourse = async (id, newData) => {
-  return makeRequest('put', `/courses/${id}`, newData);
+  return makeRequest("put", `/courses/${id}`, newData);
 };
 
 export const uploadCourseMaterial = async (id, formData) => {
@@ -91,13 +90,13 @@ export const uploadCourseMaterial = async (id, formData) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  return makeRequest('patch', `/courses/${id}/materials`, formData, config);
+  return makeRequest("patch", `/courses/${id}/materials`, formData, config);
 };
 
 export const assignTeacherToCourse = async (courseId, teacherId) => {
-  return makeRequest('patch', `/courses/${courseId}/teachers/${teacherId}`);
+  return makeRequest("patch", `/courses/${courseId}/teachers/${teacherId}`);
 };
 
 export const removeTeacherFromCourse = async (courseId, teacherId) => {
-  return makeRequest('delete', `/courses/${courseId}/teachers/${teacherId}`);
+  return makeRequest("delete", `/courses/${courseId}/teachers/${teacherId}`);
 };

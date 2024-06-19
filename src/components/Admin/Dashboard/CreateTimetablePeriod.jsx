@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createTimetablePeriod } from "../../../services/timetable.service";
 import { getGradeCourses } from "../../../services/courses.service";
 import { getTeachersByCourse } from "../../../services/user.service";
+import { CircularProgress } from "@mui/material";
 
 const CreateTimetablePeriod = ({ isOpen, onClose ,classId }) => {
   const [day, setDay] = useState("");
@@ -218,7 +219,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose ,classId }) => {
             </form>
             <form className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="TeacherID" className="text-active">
-                Teacher ID
+                Teacher
               </label>
               <select
                 name="TeacherID"
@@ -252,7 +253,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose ,classId }) => {
               disabled={isLoading}
               onClick={handleCreateTimetablePeriod}
             >
-              {!isLoading ? "Done" : "...."}
+              {!isLoading ? "Done" : <CircularProgress size={16} color="inherit" />}
             </button>
             <button
               className="w-64 bg-white border-active-br border-2 text-active rounded-lg p-3 text-center"

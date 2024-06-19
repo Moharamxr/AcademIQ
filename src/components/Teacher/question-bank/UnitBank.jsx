@@ -129,7 +129,7 @@ const UnitBank = () => {
       >
         <h2 className="text-2xl ">Unit Bank</h2>
       </FixedTopContent>
-      <div className="min-h-[68vh] bg-white ">
+      <div className=" bg-white ">
       {!isLoading ? (
         Array.isArray(questions) &&
         questions.map((question, index) => (

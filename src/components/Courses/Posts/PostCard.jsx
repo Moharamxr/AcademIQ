@@ -7,12 +7,15 @@ import {
   likePost,
 } from "../../../services/discussion.service";
 import { CircularProgress, Skeleton } from "@mui/material";
+import { socket } from "../../../services/connect.service";
+import { useNavigate } from "react-router-dom";
 const PostCard = ({ post, courseId }) => {
   const formatDate = (time) => {
     const date = new Date(time);
     const options = { year: "numeric", month: "short", day: "2-digit" };
     return date.toLocaleDateString("en-US", options);
   };
+  const navigate = useNavigate();
 
   const [isLiked, setIsLiked] = useState(post?.isLiked || false);
   const [likesCount, setLikesCount] = useState(post?.likes?.length || 0);
@@ -95,6 +98,14 @@ const PostCard = ({ post, courseId }) => {
     }
   };
 
+  const handleJoinRoom = () => {
+    socket.emit("joinRoom", {
+      roomId:post?.room?.link,
+    });
+    // console.log(socket)
+    navigate(`/room/${post?.room?.link}`);
+  }
+
   return (
     <div className="flex flex-col border-2 divide-y-2 border-gray-200/70 rounded-xl lg:w-5/6 w-full overflow-hidden">
       <div className="between p-4">
@@ -103,7 +114,6 @@ const PostCard = ({ post, courseId }) => {
             <img
               src={post?.creator?.profilePicture?.url}
               className="w-10 h-10 rounded-full"
-              
             />
           ) : (
             <div
@@ -140,9 +150,14 @@ const PostCard = ({ post, courseId }) => {
         </div>
       )}
 
-      <article className="font-poppins p-4 text-gray-700 ">
-        {post?.content}
-      </article>
+      <div className="flex flex-col gap-2 pb-3">
+        <p className="font-poppins p-4 text-gray-700 ">{post?.content}</p>
+        <div className="w-full flex flex-col justify-center items-center ">
+          {post?.room?._id && (
+            <button className="bg-active p-3 lg:w-1/3 sm:w-1/2 w-2/3 text-white rounded-lg font-medium" onClick={handleJoinRoom}>Join Meeting Room</button>
+          )}
+        </div>
+      </div>
 
       <div className="py-4 px-5 between ">
         <span onClick={toggleLike}>

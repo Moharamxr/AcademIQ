@@ -15,14 +15,14 @@ const FixedTopContent = styled.div`
   position: sticky;
   top: 0;
   background-color: white;
-  z-index: 10;
+  z-index: 1;
 `;
 
 const FixedBottomContent = styled.div`
   position: sticky;
   bottom: 0;
   background-color: white;
-  z-index: 10;
+  z-index: 1;
 `;
 
 const TeacherExamsContainer = styled.div`
