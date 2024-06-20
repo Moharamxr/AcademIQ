@@ -2,15 +2,18 @@ import { CircularProgress, Skeleton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getGradeCourses } from "../../../services/courses.service";
-import { assignCourseToGradClass, removeCourseFromGradClass } from "../../../services/gradClass.service";
+import {
+  assignCourseToGradClass,
+  removeCourseFromGradClass,
+} from "../../../services/gradClass.service";
 
 const AssignNewCourse = ({ isOpen, onClose, getData, currentCourses }) => {
-  console.log("currentCourses", currentCourses)
+  console.log("currentCourses", currentCourses);
   const { id } = useParams();
   const gradeClassId = id;
   const [courses, setCourses] = useState([]);
   const [loadingCourses, setLoadingCourses] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteCourse, setDeleteCourse] = useState("");
@@ -20,9 +23,16 @@ const AssignNewCourse = ({ isOpen, onClose, getData, currentCourses }) => {
     setLoadingCourses(true);
     try {
       const data = await getGradeCourses();
-      setCourses(data?.courses?.filter((c) => !currentCourses.find((cc) => cc._id === c._id)));
+
+
+      const coursesToAdd = data?.courses?.filter((course) => {
+        return (
+          !course.gradeClass?.gradeClassId
+        );
+      });
+
+      setCourses(coursesToAdd || []);
     } catch (error) {
-      setError("Failed to fetch courses");
       setTimeout(() => setError(null), 3000);
     } finally {
       setLoadingCourses(false);
@@ -63,7 +73,7 @@ const AssignNewCourse = ({ isOpen, onClose, getData, currentCourses }) => {
 
   const removeCourse = async (courseId) => {
     if (isDeleting) return;
-    
+
     setIsDeleting(true);
     setDeleteCourse(courseId);
     try {
@@ -84,8 +94,12 @@ const AssignNewCourse = ({ isOpen, onClose, getData, currentCourses }) => {
       <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-600 bg-opacity-50">
         <div className="bg-white rounded-xl p-5 w-2/3 max-h-[95vh] overflow-auto">
           <div className="center flex-col py-10 gap-2">
-            <p className="font-poppins font-light text-xl text-active leading-8">Assign course</p>
-            {error && <p className="text-red-500 text-sm font-poppins">{error}</p>}
+            <p className="font-poppins font-light text-xl text-active leading-8">
+              Assign course
+            </p>
+            {error && (
+              <p className="text-red-500 text-sm font-poppins">{error}</p>
+            )}
           </div>
           <div className="flex flex-col gap-y-3 divide-y-2 divide-gray-100 bg-white rounded-lg p-3">
             <div className="flex flex-col gap-5 py-2 px-1">
@@ -107,15 +121,24 @@ const AssignNewCourse = ({ isOpen, onClose, getData, currentCourses }) => {
                     </span>
                   ))}
                   {currentCourses.length === 0 && (
-                    <span className="text-gray-600 text-base font-medium px-4 bg-active-bg rounded-lg p-3">No courses</span>
+                    <span className="text-gray-600 text-base font-medium px-4 bg-active-bg rounded-lg p-3">
+                      No courses
+                    </span>
                   )}
                 </div>
               </div>
             </div>
             <div className="flex gap-5 py-2 px-1">
-              <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400 pt-3">Select course:</p>
+              <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400 pt-3">
+                Select course:
+              </p>
               {loadingCourses ? (
-                <Skeleton variant="rectangular" width="100%" height={40} className="rounded-lg" />
+                <Skeleton
+                  variant="rectangular"
+                  width="100%"
+                  height={40}
+                  className="rounded-lg"
+                />
               ) : (
                 <select
                   className="text-gray-600 text-base font-medium px-4 bg-gray-100 rounded-lg p-3"
@@ -124,7 +147,9 @@ const AssignNewCourse = ({ isOpen, onClose, getData, currentCourses }) => {
                 >
                   <option value="">Select course</option>
                   {courses.map((course) => (
-                    <option key={course._id} value={course._id}>{course.title}</option>
+                    <option key={course._id} value={course._id}>
+                      {course.title}
+                    </option>
                   ))}
                 </select>
               )}
@@ -136,7 +161,11 @@ const AssignNewCourse = ({ isOpen, onClose, getData, currentCourses }) => {
                 disabled={isLoading}
               >
                 {isLoading ? (
-                  <CircularProgress size={16} color="inherit" className="mr-2" />
+                  <CircularProgress
+                    size={16}
+                    color="inherit"
+                    className="mr-2"
+                  />
                 ) : (
                   "Assign"
                 )}

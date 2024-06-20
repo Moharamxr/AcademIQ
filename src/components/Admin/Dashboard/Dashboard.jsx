@@ -16,7 +16,7 @@ import { Skeleton } from "@mui/material";
 
 const Dashboard = () => {
   const [table, setTable] = useState([]);
-  const [classId, setClassId] = useState("66283d3721ad54ce0d9246d3");
+  const [classId, setClassId] = useState("");
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
   const periods = [
     "8:00 - 9:00",
@@ -44,8 +44,10 @@ const Dashboard = () => {
   };
   const renderAdminTable = async () => {
     const newTable = Array(30).fill({ subject: "", teacher: "", id: "" });
+    
     try {
       setIsTableLoading(true);
+      if (classId === "") return;
       const data = await getClassTimetable(classId);
       setIsTableLoading(false);
       setTableError(false);
@@ -165,6 +167,7 @@ const Dashboard = () => {
             onChange={handleClassChange}
             value={classId}
           >
+            <option value="">Select Class</option>
             {classesData.map((c) => (
               <option key={c._id} value={c._id}>
                 Class {c.level} {c.letter}
