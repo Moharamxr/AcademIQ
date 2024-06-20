@@ -170,6 +170,9 @@ const Dashboard = () => {
                 Class {c.level} {c.letter}
               </option>
             ))}
+            {classesData.length === 0 && (
+              <option>no classes found</option>
+            )}
           </select>
 
           <div className="flex center gap-3 px-3 ">

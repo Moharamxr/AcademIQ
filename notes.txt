@@ -2,4 +2,4 @@ front
 
 
 backend
-delete bank question
+assign course failed

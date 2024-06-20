@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createUser } from "../../../services/user.service";
 import { getGradeClasses } from "../../../services/gradClass.service";
+import { CircularProgress } from "@mui/material";
 
 const AddNewStudent = ({ isOpen, onClose }) => {
   const [day, setDay] = useState("");
@@ -21,6 +22,7 @@ const AddNewStudent = ({ isOpen, onClose }) => {
   });
 
   const [gradeClasses, setGradeClasses] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchGradeClasses = async () => {
     try {
@@ -178,6 +180,7 @@ const AddNewStudent = ({ isOpen, onClose }) => {
     };
 
     console.log(requestData);
+    setIsLoading(true);
     try {
       const data = await createUser(requestData);
       console.log(data);
@@ -190,6 +193,8 @@ const AddNewStudent = ({ isOpen, onClose }) => {
       } else {
         setError("Something went wrong");
       }
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -419,7 +424,7 @@ const AddNewStudent = ({ isOpen, onClose }) => {
               className="w-64 bg-active rounded-lg p-3  text-center text-white "
               onClick={handleAddNewStudent}
             >
-              Done
+              {isLoading ? <CircularProgress size={16} color="inherit" /> : "Add Student"}
             </button>
             <button
               className="w-64 bg-white border-2 border-active-br rounded-lg p-3  text-center text-active "

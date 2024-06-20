@@ -29,7 +29,7 @@ const AdminCourses = () => {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => {
     setIsOpen(false);
-    getData();
+    fetchCourses();
   };
   const onOpen = () => setIsOpen(true);
   const [selectedGrade, setSelectedGrade] = useState(0);
@@ -37,7 +37,7 @@ const AdminCourses = () => {
   const navigate = useNavigate();
   const [gradeCourses, setGradeCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const getData = async () => {
+  const fetchCourses = async () => {
     try {
       setIsLoading(true);
       const data = await getGradeCourses();
@@ -60,7 +60,7 @@ const AdminCourses = () => {
   };
 
   useEffect(() => {
-    getData();
+    fetchCourses();
   }, [selectedGrade]);
 
   const navigateToCourseDetails = (id) => {
@@ -129,7 +129,7 @@ const AdminCourses = () => {
           Add Course
         </button>
       </FixedBottomContent>
-      <AddNewCourse isOpen={isOpen} onClose={onClose} />
+      <AddNewCourse isOpen={isOpen} onClose={onClose} fetchCourses={fetchCourses} />
     </ListContainer>
   );
 };

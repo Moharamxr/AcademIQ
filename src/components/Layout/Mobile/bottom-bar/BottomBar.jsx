@@ -1,12 +1,10 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import HomeIcon from "../../../../assets/icons/HomeIcon";
 import ChildIcon from "../../../../assets/icons/ChildIcon";
 import ConnectIcon from "../../../../assets/icons/ConnectIcon";
 import ReportIcon from "../../../../assets/icons/ReportIcon";
-import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import { useEffect } from "react";
 import AssignmentsIcon from "../../../../assets/icons/AssignmentsIcon.jsx";
 import TodoListIcon from "../../../../assets/icons/TodoListIcon.jsx";
 import AttendanceIcon from "../../../../assets/icons/AttendanceIcon.jsx";
@@ -19,16 +17,51 @@ import AdminsIcon from "../../../../assets/icons/AdminsIcon.jsx";
 import StudentsIcon from "../../../../assets/icons/StudentsIcon.jsx";
 import FamilyRestroomIcon from "@mui/icons-material/FamilyRestroom";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
+
 const FixedBottomContent = styled.section`
   position: fixed;
   bottom: 0;
   left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   z-index: 10;
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
+const NavItem = styled(NavLink)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding: 5px;
+  text-decoration: none;
+  color: #94a3b8;
+
+  &.active {
+    color: #00769e;
+    border-top: 4px solid #00769e;
+  }
+`;
+
+const IconWrapper = styled.div`
+  margin-bottom: 5px;
+`;
+
+const Label = styled.p`
+  font-family: "Poppins", sans-serif;
+  font-size: 10px;
+  margin: 0;
 `;
 
 const BottomBar = () => {
   const location = useLocation();
-  const role = "teacher";
+  const role = localStorage.getItem("role");
   const [nav, setNav] = useState({
     admin: [
       {
@@ -246,24 +279,18 @@ const BottomBar = () => {
   }, [location.pathname, role]);
 
   return (
-    <FixedBottomContent className={"bg-white  min-h-12  flex md:hidden px-2 gap-x-1 min-w-full"}>
+    <FixedBottomContent>
       {nav[role].map((item, index) => (
-        <NavLink
+        <NavItem
           key={index}
           to={item.path}
-          className={`w-1/${nav[role].length} p-2  border-t-4 ${
-            item.active && "border-t-active-br"
-          } between flex-col rounded-sm items-center`}
+          className={({ isActive }) => (isActive ? "active" : "")}
         >
-          {item.active ? item.activeIcon : item.icon}
-          <p
-            className={`font-poppins text-xs leading-6 tracking-normal text-center ${
-              item.active ? "text-active" : "text-default"
-            } `}
-          >
+          <IconWrapper>{item.active ? item.activeIcon : item.icon}</IconWrapper>
+          <Label className={item.active ? "text-active" : "text-default"}>
             {item.name}
-          </p>
-        </NavLink>
+          </Label>
+        </NavItem>
       ))}
     </FixedBottomContent>
   );

@@ -35,7 +35,7 @@ const AdminClasses = () => {
   const [reservedClassRooms, setReservedClassRooms] = useState([]);
   const [selectedGrade, setSelectedGrade] = useState(0);
 
-  const getData = async () => {
+  const fetchGradeClasses = async () => {
     try {
       setIsLoading(true);
       const data = await getGradeClasses();
@@ -58,7 +58,7 @@ const AdminClasses = () => {
   };
 
   useEffect(() => {
-    getData();
+    fetchGradeClasses();
   }, [selectedGrade]);
 
   const navigateToClassDetails = (classId) => {
@@ -136,6 +136,7 @@ const AdminClasses = () => {
         isOpen={isOpen}
         onClose={onClose}
         reservedClassRooms={reservedClassRooms}
+        fetchGradeClasses={fetchGradeClasses}
       />
     </ListContainer>
   );

@@ -32,15 +32,10 @@ const MobileTopBar = () => {
           <Logo />
         </div>
         <div className="pe-2">
-          <NotificationIcon />
+          {/* <NotificationIcon /> */}
         </div>
       </FixedTopContent>
-      {/*<div className="bg-white py-2 px-4 w-full mb-0 block md:hidden">
-        <div className="between bg-gray-100 rounded-2xl p-1 gap-x-3 ps-3">
-          <SearchIcon />
-          <input type="text" name="mobileSearch" id="mobileSearch" placeholder="Search here" className="bg-gray-100 w-full outline-none" />
-        </div>
-      </div>*/}
+      
       <BurgerBar onClose={closeBurger} isOpen={isOpen} />
     </>
   );

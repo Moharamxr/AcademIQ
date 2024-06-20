@@ -82,7 +82,7 @@ const ConnectListCard = ({ chat, active, closeSearch }) => {
       )}
       <div className="w-full flex flex-col gap-1 p-1 overflow-hidden">
         <div className="between">
-          <p className="font-poppins font-medium text-sm">{chatTitle}</p>
+          <p className="font-poppins font-medium text-base">{chatTitle}</p>
           <p className="font-poppins text-[9.5px] text-slate-500">
             {createdAt}
           </p>
@@ -90,11 +90,11 @@ const ConnectListCard = ({ chat, active, closeSearch }) => {
         <p className="text-xs text-gray-400 max-w-full overflow-hidden">
           {chat?.member?.email || chat?.email}
         </p>
-        {chat?.lastMessage && (
+        {/* {chat?.lastMessage && (
           <p className="font-poppins font-medium text-xs text-slate-500 max-w-full overflow-hidden">
             {chat.lastMessage[0]?.content || "No messages yet"}
           </p>
-        )}
+        )} */}
 
       </div>
     </div>

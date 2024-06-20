@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../../services/user.service";
 import { Skeleton } from "@mui/material";
 const ListContainer = styled("div")({
-  height: "85vh",
+  maxHeight: "85vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "8px",

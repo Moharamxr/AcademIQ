@@ -67,19 +67,16 @@ export const getDiscussion = async (courseId) => {
   return makeRequest("get", `/discussions/${courseId}`);
 };
 
-export const createPost = async (post) => {
+export const createPost = async (postData) => {
   const token = localStorage.getItem("token");
-  const formData = new FormData();
-  for (const key in post) {
-    formData.append(key, post[key]);
-  }
+  
   const config = {
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     },
   };
-  return makeRequest("post", "/discussions/posts", formData, config);
+  return makeRequest("post", "/discussions/posts", postData, config);
 };
 
 export const likePost = async (postId) => {

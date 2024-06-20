@@ -24,7 +24,7 @@ const ModalContainer = styled(Box)({
   "&::-webkit-scrollbar-thumb:hover": {
     background: "rgba(0, 0, 0, 0.3)",
   },
-  height: '95vh',
+  maxHeight: '95vh',
   width: '90%',
   maxWidth: 700,
   backgroundColor: "white",
@@ -134,7 +134,7 @@ const CreateGroupModal = ({ open, onClose, onGroupCreated }) => {
     <Modal open={open} onClose={onClose} className="overflow-auto">
       <ModalContainer >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2>Create Group</h2>
+          <h2 className="text-2xl">Create Group</h2>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
@@ -193,7 +193,7 @@ const CreateGroupModal = ({ open, onClose, onGroupCreated }) => {
          
           disabled={creating}
         >
-          {creating ? <CircularProgress size={24} /> : "Create Group"}
+          {creating ? <CircularProgress size={24} color="inherit" /> : "Create Group"}
         </button>
       </ModalContainer>
     </Modal>

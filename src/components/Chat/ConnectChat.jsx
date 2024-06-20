@@ -72,7 +72,7 @@ const ConnectChat = () => {
   const bottomRef = useRef(null);
   const chatContainerRef = useRef(null);
   const textareaRef = useRef(null);
-  console.log(socket.connected)
+  // console.log(socket.connected);
   const dispatch = useDispatch();
 
   const selectedChat = useSelector((state) => state.chatData.selectedChat);
@@ -82,6 +82,21 @@ const ConnectChat = () => {
   const [message, setMessage] = useState("");
   const [messageAttachment, setMessageAttachment] = useState(null);
   const [sendingMessage, setSendingMessage] = useState(false);
+  const [typing, setTyping] = useState(false);
+
+  useEffect(() => {
+    socket.on("userTyping", handleSetTyping);
+    return () => {
+      socket.off("userTyping", handleSetTyping);
+    };
+  }, [message]);
+
+  const handleSetTyping = () => {
+    setTyping(true);
+    setTimeout(() => {
+      setTyping(false);
+    }, 2000);
+  };
 
   const handleAttachmentChange = (e) => {
     setMessageAttachment(e.target.files[0]);
@@ -156,34 +171,48 @@ const ConnectChat = () => {
       content: message,
       chatId: selectedChat._id,
     });
-    setSendingMessage(false);
 
     await sendMessage(selectedChat._id, formData);
+     //check if the message has attachment then fetch the chat again
+    if (messageAttachment) {
+      fetchChat();
+    }
+    
+    setSendingMessage(false);
 
     setMessage("");
     setMessageAttachment(null);
   };
 
-  const resizeTextarea = () => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height =
-        textareaRef.current.scrollHeight + "px";
-    }
-  };
+  // const resizeTextarea = () => {
+  //   if (textareaRef.current) {
+  //     textareaRef.current.style.height = "auto";
+  //     textareaRef.current.style.height =
+  //       textareaRef.current.scrollHeight + "px";
+  //   }
+  // };
 
-  useEffect(() => {
-    resizeTextarea();
-  }, []);
+  // useEffect(() => {
+  //   resizeTextarea();
+  // }, []);
 
-  useEffect(() => {
-    resizeTextarea();
-  }, [message]);
+  // useEffect(() => {
+  //   resizeTextarea();
+  // }, [message]);
 
   const handleGoBack = () => {
     if (window.innerWidth < 768) {
       dispatch(setActiveTab({ tab: "inbox" }));
     }
+  };
+
+
+
+  const handleMessageChange = (e) => {
+    setMessage(e.target.value);
+    socket.emit("typing", {
+      chatId: selectedChat._id,
+    });
   };
 
   if (!selectedChat?._id) {
@@ -197,20 +226,11 @@ const ConnectChat = () => {
   return (
     <ConnectChatContainer className="bg-white rounded-2xl w-full md:w-8/12">
       <FixedTopContent className="w-full between bg-white px-4 pe-6 py-3 border-b-gray-300 border-b-2 border-opacity-40">
-        <div className="flex gap-2" onClick={handleGoBack}>
+        <div className="flex gap-2 cursor-pointer" onClick={handleGoBack}>
           {(selectedChat?.type === "private" &&
             selectedChat?.member?.profilePicture?.url) ||
           (selectedChat?.type === "group" && selectedChat?.image) ? (
-            // <img
-            //   src={
-            //     selectedChat?.type === "private"
-            //       ? selectedChat?.member?.profilePicture?.url
-            //       : selectedChat?.image
-            //   }
-            //   alt="Profile"
-            //   className="w-12 h-12 rounded-full"
-            // />
-            <div className="w-12 h-12 center rounded-full bg-active text-white text-2xl flex items-center justify-center">
+            <div className="w-12 h-12 center rounded-full bg-gray-200  text-2xl flex items-center justify-center">
               {selectedChat?.type === "private" ? (
                 selectedChat?.member.profilePicture?.url ? (
                   <img
@@ -246,10 +266,15 @@ const ConnectChat = () => {
             </div>
           )}
           <div className="flex flex-col gap-y-1 p-1">
-            <p className="font-poppins font-medium  text-base">{chatTitle}</p>
-            <p className="font-poppins font-medium  text-xs text-gray-400">
+            <p className=" font-medium  text-base">{chatTitle}</p>
+            <p className=" font-medium  text-xs text-gray-400">
               {selectedChat?.member?.email}
             </p>
+            {typing && (
+              <p className="font-poppins font-medium  text-xs text-gray-800 animate-pulse">
+                Typing...
+              </p>
+            )}
           </div>
         </div>
       </FixedTopContent>
@@ -296,12 +321,16 @@ const ConnectChat = () => {
           id="connectTextInp"
           placeholder="Type a message"
           className="outline-none w-full overflow-hidden resize-none bg-active-bg rounded-lg p-3 font-poppins font-normal text-xs sm:text-sm leading-6 text-gray-700"
-          style={{ resize: "none" }} // Adjusted minHeight for better visibility
+          style={{ resize: "none" }}
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={handleMessageChange}
         />
-        <button onClick={handleSendMessage} className="outline-none">
-          {sendingMessage ? <BiLoader /> : <SendMessageIcon active={message} />}
+        <button
+          onClick={handleSendMessage}
+          disabled={sendingMessage}
+          className="outline-none"
+        >
+          {<SendMessageIcon active={message} />}
         </button>
       </FixedBottomContent>
     </ConnectChatContainer>

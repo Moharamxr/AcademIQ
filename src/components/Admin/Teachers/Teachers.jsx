@@ -6,7 +6,7 @@ import AddNewTeacher from "./AddNewTeacher";
 import { getUsers } from "../../../services/user.service";
 
 const ListContainer = styled("div")({
-  height: "85vh",
+  maxHeight: "85vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "8px",

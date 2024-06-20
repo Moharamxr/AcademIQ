@@ -12,7 +12,7 @@ const chatSlice = createSlice({
     setSelectedChat: (state, action) => {
       state.selectedChat = action.payload.chat;
     },
-    setActiveTab: (state, action) => {  // Renamed from setActiveTap to setActiveTab
+    setActiveTab: (state, action) => {  
       state.activeTab = action.payload.tab;
     },
   },

@@ -5,14 +5,17 @@ import { useState } from "react";
 import { Skeleton } from "@mui/material";
 import AddNewQuestion from "./AddNewQuestion";
 import { useParams } from "react-router-dom";
-import { getQuestionBankById } from "../../../services/questionBank.service";
+import {
+  deleteBankQuestion,
+  getQuestionBankById,
+} from "../../../services/questionBank.service";
 import EditPen from "../../../assets/icons/EditPen";
 import DeleteQIcon from "../../../assets/icons/DeleteQIcon";
 import ViewQuestion from "./ViewQuestion";
 import UpdateBankQuestion from "./UpdateBankQuestion";
 
 const ListContainer = styled("div")({
-  height: "85vh",
+  maxHeight: "85vh",
   overflowY: "auto",
   "&::-webkit-scrollbar": {
     width: "0",
@@ -51,7 +54,7 @@ const UnitBank = () => {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => {
     setIsOpen(false);
-    getData();
+    fetchBankQuestions();
   };
 
   const onOpen = () => setIsOpen(true);
@@ -60,7 +63,7 @@ const UnitBank = () => {
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const onCloseEdit = () => {
     setIsOpenEdit(false);
-    getData();
+    fetchBankQuestions();
   };
 
   const onOpenEdit = (i) => {
@@ -76,7 +79,7 @@ const UnitBank = () => {
     setViewQuestion(true);
   };
 
-  const getData = async () => {
+  const fetchBankQuestions = async () => {
     try {
       setIsLoading(true);
       const data = await getQuestionBankById(id);
@@ -89,21 +92,8 @@ const UnitBank = () => {
   };
 
   useEffect(() => {
-    getData();
+    fetchBankQuestions();
   }, []);
-
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-  //       closeDropMenu();
-  //     }
-  //   };
-
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, []);
 
   const toggleDropMenu = (index, event) => {
     event.stopPropagation();
@@ -121,6 +111,16 @@ const UnitBank = () => {
 
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
 
+  const handleDeleteQuestion = async () => {
+    try {
+      const response = await deleteBankQuestion(id, questions[openedIndex]._id);
+      console.log(response);
+      fetchBankQuestions();
+    } catch (error) {
+      console.error("Error deleting question: ", error);
+    }
+  };
+
   return (
     <ListContainer className="w-full flex flex-col px-5 gap-3 bg-white rounded-xl ">
       <FixedTopContent
@@ -130,56 +130,60 @@ const UnitBank = () => {
         <h2 className="text-2xl ">Unit Bank</h2>
       </FixedTopContent>
       <div className=" bg-white ">
-      {!isLoading ? (
-        Array.isArray(questions) &&
-        questions.map((question, index) => (
-          <div
-            key={question._id}
-            className="between  py-3 border-2 border-gray-200/60 rounded-md px-6 hover:cursor-pointer hover:bg-gray-100"
-            onClick={() => openViewQuestion(question._id)}
-          >
-            <div className="flex items-center gap-5">
-              {index + 1}
-              <span className="text-gray-600 ">{question.text}</span>
-            </div>
+        {!isLoading ? (
+          Array.isArray(questions) &&
+          questions.map((question, index) => (
             <div
-              className="cursor-pointer center flex-col gap-3"
-              onClick={(e) => toggleDropMenu(index, e)}
-              ref={dropdownRef}
+              key={question._id}
+              className="between  py-3 border-2 border-gray-200/60 rounded-md px-6 hover:cursor-pointer hover:bg-gray-100"
+              onClick={() => openViewQuestion(question._id)}
             >
-              <span className=" px-3 py-2">
-                <ThreeDots />
-              </span>
-              {openedIndex === index && (
-                <DropdownMenu top={menuPosition.top} left={menuPosition.left}>
-                  <div className="flex flex-col divide-y-[0.5px] divide-gray-400 bg-gray-200/55 text-center rounded-md text-sm ">
-                    <div
-                      className="flex gap-2 px-2 pt-3 pb-2 hover:bg-gray-300 rounded-t-md"
-                      onClick={() => onOpenEdit(index)}
-                    >
-                      <EditPen /> <span className="font-medium z-50">Edit</span>
+              <div className="flex items-center gap-5">
+                {index + 1}
+                <span className="text-gray-600 ">{question.text}</span>
+              </div>
+              <div
+                className="cursor-pointer center flex-col gap-3"
+                onClick={(e) => toggleDropMenu(index, e)}
+                ref={dropdownRef}
+              >
+                <span className=" px-3 py-2">
+                  <ThreeDots />
+                </span>
+                {openedIndex === index && (
+                  <DropdownMenu top={menuPosition.top} left={menuPosition.left}>
+                    <div className="flex flex-col divide-y-[0.5px] divide-gray-400 bg-gray-200/55 text-center rounded-md text-sm ">
+                      <div
+                        className="flex gap-2 px-2 pt-3 pb-2 hover:bg-gray-300 rounded-t-md"
+                        onClick={() => onOpenEdit(index)}
+                      >
+                        <EditPen />{" "}
+                        <span className="font-medium z-50">Edit</span>
+                      </div>
+                      <div
+                        className="flex gap-2 px-2 pb-3 pt-2 hover:bg-gray-300 rounded-b-md"
+                        onClick={handleDeleteQuestion}
+                      >
+                        <DeleteQIcon />{" "}
+                        <span className="font-medium">Delete</span>
+                      </div>
                     </div>
-                    {/* <div className="flex gap-2 px-2 pb-3 pt-2 hover:bg-gray-300 rounded-b-md">
-                      <DeleteQIcon />{" "}
-                      <span className="font-medium">Delete</span>
-                    </div> */}
-                  </div>
-                </DropdownMenu>
-              )}
+                  </DropdownMenu>
+                )}
+              </div>
             </div>
-          </div>
-        ))
-      ) : (
-        <>
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-          <Skeleton variant="rounded" height={50} />
-        </>
-      )}
+          ))
+        ) : (
+          <>
+            <Skeleton variant="rounded" height={50} />
+            <Skeleton variant="rounded" height={50} />
+            <Skeleton variant="rounded" height={50} />
+            <Skeleton variant="rounded" height={50} />
+            <Skeleton variant="rounded" height={50} />
+            <Skeleton variant="rounded" height={50} />
+            <Skeleton variant="rounded" height={50} />
+          </>
+        )}
       </div>
 
       <FixedBottomContent

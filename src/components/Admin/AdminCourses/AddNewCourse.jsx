@@ -5,8 +5,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { createCourse } from "../../../services/courses.service";
 import { getGradeClasses } from "../../../services/gradClass.service";
+import { CircularProgress } from "@mui/material";
 
-const AddNewCourse = ({ isOpen, onClose }) => {
+const AddNewCourse = ({ isOpen, onClose,fetchCourses }) => {
   const [title, setTitle] = useState("");
   const [department, setDepartment] = useState("");
   const [startDate, setStartDate] = useState(null);
@@ -118,14 +119,16 @@ const AddNewCourse = ({ isOpen, onClose }) => {
     setIsLoading(true);
     try {
       await createCourse(newData);
-      setIsLoading(false);
+      fetchCourses();
+      
       setError(null);
       onClose();
     } catch (error) {
-      console.error(error);
-      setIsLoading(false);
       setError(error.response.data.error);
+    }finally{
+      setIsLoading(false);
     }
+
   };
   return (
     isOpen && (
@@ -218,7 +221,7 @@ const AddNewCourse = ({ isOpen, onClose }) => {
               onClick={handleCreateCourse}
               disabled={isLoading}
             >
-              Done
+              {isLoading ? <CircularProgress size={16} color="inherit" /> : "Create"}
             </button>
             <button
               className="w-64 bg-white border-active-br border-2 text-active rounded-lg p-3  text-center"

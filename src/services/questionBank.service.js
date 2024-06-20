@@ -83,7 +83,17 @@ export const addQuestion = async (id, newData) => {
 };
 
 export const updateQuestion = async (bankId, questionId, newData) => {
-  return makeRequest("put", `/questionBanks/${bankId}/questions/${questionId}`, newData);
+  return makeRequest(
+    "put",
+    `/questionBanks/${bankId}/questions/${questionId}`,
+    newData
+  );
+};
+export const deleteBankQuestion = async (bankId, questionId) => {
+  return makeRequest(
+    "delete",
+    `/questionBanks/${bankId}/questions/${questionId}`
+  );
 };
 
 export const getQuestionById = async (bankId, questionId) => {

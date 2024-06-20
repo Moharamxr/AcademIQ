@@ -63,7 +63,7 @@ const Announcements = () => {
   }, []);
 
   return (
-    <section className="bg-white rounded-2xl px-4 py-4 mb-4 overflow-hidden">
+    <section className="bg-white rounded-2xl px-4 py-4 mb-4 min-h-48 overflow-hidden">
       <div className="flex justify-between items-center">
         <h1 className="font-poppins font-normal text-2xl leading-10 pt-0">
           Announcement

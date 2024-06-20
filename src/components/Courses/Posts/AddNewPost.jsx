@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { createPost } from "../../../services/discussion.service";
 import { CircularProgress } from "@mui/material";
+import { useParams } from "react-router-dom";
 
-const AddNewPost = ({ isOpen, onClose, courseId, getPostsData }) => {
+const AddNewPost = ({ isOpen, onClose, getPostsData }) => {
+  const {id : courseId} = useParams();
   const [postContent, setPostContent] = useState("");
   const [attachments, setAttachments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);

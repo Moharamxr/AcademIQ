@@ -170,7 +170,7 @@ const PostCard = ({ post, courseId }) => {
           {commentsCount === 0 ? "No Comments" : `${commentsCount} Comments`}
         </span>
         <span
-          className="font-poppins text-gray-400 text-sm cursor-pointer select-none"
+          className="font-poppins text-gray-400 text-xs cursor-pointer select-none"
           onClick={() => setAddCommentToggle(!addCommentToggle)}
         >
           {addCommentToggle ? "Cancel" : "Add comment"}
@@ -181,7 +181,7 @@ const PostCard = ({ post, courseId }) => {
           <input
             type="text"
             placeholder="comment..."
-            className="font-poppins text-gray-600 text-sm bg-gray-200/30 outline-none  w-5/6 p-3 rounded-"
+            className="font-poppins text-gray-600 text-sm  outline-none h-full  w-5/6 p-3 rounded-"
             onChange={(e) => setComment(e.target.value)}
             value={comment}
             name="comment"

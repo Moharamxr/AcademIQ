@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { createGradeClass } from "../../../services/gradClass.service";
 
-const AddNewClass = ({ isOpen, onClose, reservedClassRooms }) => {
+const AddNewClass = ({
+  isOpen,
+  onClose,
+  reservedClassRooms,
+  fetchGradeClasses,
+}) => {
   const [level, setLevel] = useState(1);
   const [classLetter, setClassLetter] = useState("A");
   const [classRoom, setClassRoom] = useState("Room 1");
@@ -20,23 +25,28 @@ const AddNewClass = ({ isOpen, onClose, reservedClassRooms }) => {
   };
 
   const handleCreateClass = async () => {
-    console.log(level, classLetter, classRoom);
     const newData = {
+      year: parseInt(level),
       level: parseInt(level),
       letter: classLetter,
       room: classRoom,
     };
+    console.log(newData);
 
     setIsLoading(true);
     try {
       await createGradeClass(newData);
-      setIsLoading(false);
+      fetchGradeClasses();
+
       setError(null);
       onClose();
     } catch (error) {
-      console.error(error);
-      setIsLoading(false);
       setError(error.response.data.error);
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+    } finally {
+      setIsLoading(false);
     }
   };
   const renderAvailableRooms = () => {
