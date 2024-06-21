@@ -157,7 +157,7 @@ const AssignmentsList = () => {
 
   return (
     <AssignmentsContainer className="bg-white flex flex-col justify-center items-center p-3 pt-0 rounded-xl">
-      <FixedTopContent className="bg-white py-3 w-full mb-20">
+      <FixedTopContent className="bg-white py-3 w-full ">
         <select
           value={assignmentStatus}
           onChange={(e) => setAssignmentStatus(e.target.value)}
@@ -169,7 +169,7 @@ const AssignmentsList = () => {
         </select>
       </FixedTopContent>
 
-      <div className="flex flex-col py-2 pt-10 gap-2 items-end w-full max-h-[40rem]">
+      <div className="flex flex-col py-2 pt-4 gap-2 items-end w-full max-h-[40rem]">
         {isAssignmentsLoading
           ? renderLoading()
           : !isAssignmentsError && renderAssignments()}

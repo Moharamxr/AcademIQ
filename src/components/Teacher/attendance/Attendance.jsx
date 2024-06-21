@@ -91,7 +91,7 @@ const Attendance = () => {
     }
 
     try {
-      const response = await getAttendance(id, dayjs().format("YYYY-MM-DD"), period);
+      const response = await getAttendance(id, dayjs().format("YYYY-MM-DD"), 7);
       const { attendance } = response;
       if (attendance) {
         setStudents(
@@ -111,7 +111,7 @@ const Attendance = () => {
         console.log("Automatic taking attendance: ", courseId, period)
         await takeAttendance(id, {
           courseId,
-          period:7,
+          period,
           students: [],
         });
         await getAttendance(id, dayjs().format("YYYY-MM-DD"), period);
@@ -169,7 +169,6 @@ const Attendance = () => {
       date : dayjs().format("YYYY-MM-DD"),
       students: attendedStudents,
       period ,
-      // courseId,
     };
     try {
       await reTakeAttendance(id, newData);
@@ -212,7 +211,7 @@ const Attendance = () => {
                 </p>
               )}
               <select
-                className="h-12 border-2 p- border-gray-200 rounded-lg text-sm text-gray-700"
+                className="h-12 border-2  border-gray-200 rounded-lg text-sm text-gray-700"
                 value={courseId}
                 onChange={(e) => setCourseId(e.target.value)}
               >

@@ -25,19 +25,20 @@ const FixedTopContent = styled.div`
 `;
 
 const ConnectList = () => {
-
   const [filteredChats, setFilteredChats] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
-  const { chats, loading ,selectedChat } = useSelector((state) => state.chatData);
+  const { chats, loading, selectedChat } = useSelector(
+    (state) => state.chatData
+  );
 
   const dispatch = useDispatch();
 
-  const fetchChatsData =  () => {
+  const fetchChatsData = () => {
     dispatch(fetchChats());
-  }
+  };
 
   useEffect(() => {
     fetchChatsData();
@@ -127,12 +128,14 @@ const ConnectList = () => {
       </FixedTopContent>
 
       <div className="w-full mx-auto flex flex-col gap-y-2 py-2">
-        <div
-          className="center bg-gray-100 cursor-pointer hover:bg-gray-200 rounded-lg py-2 font-semibold"
-          onClick={handleOpenModal}
-        >
-          Create a group
-        </div>
+        {localStorage.getItem("role")==='teacher' && (
+          <div
+            className="center bg-gray-100 cursor-pointer hover:bg-gray-200 rounded-lg py-2 font-semibold"
+            onClick={handleOpenModal}
+          >
+            Create a group
+          </div>
+        )}
         {loading ? (
           [...Array(7)].map((_, index) => (
             <Skeleton key={index} variant="rounded" height={55} />
@@ -145,7 +148,6 @@ const ConnectList = () => {
               active={checkIsActive(chat)}
               closeSearch={closeSearch}
               setShowSearch={setShowSearch}
-              
             />
           ))
         ) : (

@@ -34,7 +34,6 @@ const Teacher = () => {
     <div className="flex gap-4 w-full">
       <div className="w-full lg:w-8/12">
         <div className="flex flex-col gap-4 pt-1 w-full">
-          <Announcements />
           <div className="bg-white rounded-xl p-4">
             <h2 className="font-poppins font-bold text-2xl leading-10 text-gray-800">
               Hello, {fullName}
@@ -44,6 +43,7 @@ const Teacher = () => {
               Start creating highly engaging <br /> courses now!
             </p>
           </div>
+          <Announcements />
           <div className="bg-white rounded-xl flex justify-between gap-2 p-2 w-full">
             <div className="border-active-br border-[1px] rounded-lg flex flex-col items-center text-center p-3 md:py-4 py-5 w-1/3 min-h-full">
               <img src={Laptop} alt="Laptop icon" />

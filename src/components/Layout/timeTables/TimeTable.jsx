@@ -51,6 +51,7 @@ const TimeTable = () => {
 
     return false;
   };
+  const gradeClassId = localStorage.getItem("gradeClassId");
 
   const fetchTimetable = async () => {
     setIsLoading(true);
@@ -59,7 +60,6 @@ const TimeTable = () => {
       if (role === "teacher") {
         data = await getTeacherTimetable(userId);
       } else {
-        const gradeClassId = localStorage.getItem("gradeClassId");
         if (!gradeClassId || gradeClassId === "undefined" || gradeClassId === "null") {
           setIsLoading(false);
           return;
@@ -102,7 +102,7 @@ const TimeTable = () => {
 
   useEffect(() => {
     fetchTimetable();
-  }, []);
+  }, [gradeClassId]);
 
   // const currentTimePeriod = useSelector(state => state.timetableData.currentTimePeriod);
   // console.log("currentTimePeriod", currentTimePeriod)
@@ -112,6 +112,7 @@ const TimeTable = () => {
       <h3 className="font-poppins font-medium text-xl text-center leading-10 text-gray-700 py-5 ">
         Today Timetable
       </h3>
+      
       <div className="flex flex-col gap-y-5 w-full">
         {!isLoading &&
           activeTimeTable.map((time, index) => (
