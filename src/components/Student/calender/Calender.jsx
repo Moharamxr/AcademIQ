@@ -7,18 +7,19 @@ function Calendar() {
   const dispatch = useDispatch();
 
   const listRef = useRef(null);
-  const currentDate = new Date().toISOString().slice(0, 10); 
+  const currentDate = new Date().toISOString().slice(0, 10);
 
   const days = Array.from({ length: 365 }, (_, i) => {
-    const currentDate = new Date(new Date().getFullYear(), 0, i  );
+    const currentDate = new Date(new Date().getFullYear(), 0, i);
     const currentWeekDay = new Date(new Date().getFullYear(), 0, i );
-    const currentMonth = currentDate.getMonth() + 1; 
+    const currentMonth = currentDate.getMonth() + 1;
     const isoDate = currentDate.toISOString().slice(0, 10);
     return {
       dayOfWeek: currentWeekDay.toLocaleDateString("en-US", {
         weekday: "short",
       }),
-      dayOfMonth: currentDate.toLocaleDateString("en-US", { day: "2-digit" })-1,
+      dayOfMonth:
+        currentDate.toLocaleDateString("en-US", { day: "2-digit" }) ,
       month: currentMonth,
       isoDate,
     };
@@ -32,8 +33,6 @@ function Calendar() {
     setActiveIndex(index);
     dispatch(setDate({ date: days[index].isoDate }));
   };
-
-
 
   useEffect(() => {
     if (listRef.current) {

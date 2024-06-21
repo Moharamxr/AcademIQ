@@ -37,6 +37,7 @@ const ToDoLists = ({ status, todos, isLoading, fetchTodos }) => {
   };
   const closeAddTodo = () => {
     setIsOpen(false);
+    console.log("fetching todos")
     fetchTodos();
   };
   const calculateProgress = () => {
