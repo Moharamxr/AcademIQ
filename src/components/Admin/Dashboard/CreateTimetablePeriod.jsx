@@ -5,7 +5,6 @@ import { getTeachersByCourse } from "../../../services/user.service";
 import { CircularProgress } from "@mui/material";
 
 const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
-  console.log(classId)
   const [day, setDay] = useState("");
   const [period, setPeriod] = useState("");
   const [startTime, setStartTime] = useState({ hour: 0, minute: 0 });
@@ -117,7 +116,11 @@ const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
     }
     try {
       const data = await getGradeCourses();
-      setCourses(data.courses);
+      // filter courses that are assigned to the class Id
+      const filteredCourses = data.courses.filter(
+        (course) => course.gradeClass.gradeClassId === classId
+      );
+      setCourses(filteredCourses);
     } catch (error) {
       console.error(error);
     }
@@ -140,7 +143,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
         id: classId,
       };
       try {
-        await createTimetablePeriod(classId,newData);
+        await createTimetablePeriod(classId, newData);
         setIsLoading(false);
         reset();
         onClose();
@@ -165,7 +168,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
             </p>
           )}
           <div className="between flex flex-col md:flex-row py-4 md:gap-10">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Day" className="text-active">
                 Day
               </label>
@@ -182,8 +185,8 @@ const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
                 <option value="Wednesday">Wednesday</option>
                 <option value="Thursday">Thursday</option>
               </select>
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Period" className="text-active">
                 Period
               </label>
@@ -202,10 +205,10 @@ const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
                 <option value={5}>5</option>
                 <option value={6}>6</option>
               </select>
-            </form>
+            </div>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="courseId" className="text-active">
                 Course
               </label>
@@ -222,9 +225,10 @@ const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
                     {course.title}
                   </option>
                 ))}
+                {courses.length === 0 && <option>no courses found</option>}
               </select>
-            </form>
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="TeacherID" className="text-active">
                 Teacher
               </label>
@@ -242,17 +246,25 @@ const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
                   </option>
                 ))}
               </select>
-            </form>
+            </div>
           </div>
           <div className="between flex flex-col md:flex-row py-4 md:gap-10">
-            <form className="flex flex-col gap-2 w-full md:w-1/2">
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Duration" className="text-active">
                 Duration
               </label>
               <p className="bg-gray-100 text-gray-500 p-2 rounded-lg outline-none">
                 {duration ? duration : "--"}
               </p>
-            </form>
+            </div>
+            <div className="flex flex-col gap-2 w-full md:w-1/2">
+              <label htmlFor="Duration" className="text-active">
+                Class ID
+              </label>
+              <p className="bg-gray-100 text-gray-500 p-2 rounded-lg outline-none">
+                {classId ? classId : "--"}
+              </p>
+            </div>
           </div>
           <div className="between pt-8 pb-4">
             <button

@@ -39,7 +39,7 @@ const LeaderBoard = () => {
   return (
     <LeaderBoardContainer className="bg-white rounded-2xl p-4 overflow-hidden ">
       <h3 className="font-poppins font-medium text-2xl leading-10 pt-0 text-black bg-white">
-        Leader board
+        Leaderboard
       </h3>
       {!isLoading ? (
         leaders.map((stu, index) => (

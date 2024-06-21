@@ -29,7 +29,7 @@ const Exams = ({ exams, isLoading }) => {
           const data = await getStartedSubmission(id);
           console.log("Submission found");
 
-          if (data?.submission?.score) {
+          if (data?.submission?.score>=0) {
             console.log("Student can not resubmit exam");
             // Handle student resubmission scenario if needed
           } else {

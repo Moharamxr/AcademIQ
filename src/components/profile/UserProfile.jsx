@@ -61,6 +61,9 @@ const UserProfile = () => {
     { label: "Gender", value: userData?.gender },
     { label: "Birthdate", value: userData?.birthdate?.slice(0, 10) },
     { label: "SSN", value: userData?.ssn },
+    { label: "Class", value: `Class ${userData?.gradeClass.level} ${userData?.gradeClass.letter}` },
+    { label: "Room", value: `${userData?.gradeClass.room}` },
+    { label: "Points", value: `${userData?.points}` },
     ...(userData?.role !== "admin"
       ? [
           {
