@@ -13,7 +13,9 @@ const Announcements = () => {
 
   const handleMouseDown = (e) => {
     setIsDown(true);
-    setStartX(e.touches ? e.touches[0].pageX : e.pageX - carouselRef.current.offsetLeft);
+    setStartX(
+      e.touches ? e.touches[0].pageX : e.pageX - carouselRef.current.offsetLeft
+    );
     setScrollLeft(carouselRef.current.scrollLeft);
   };
 
@@ -27,7 +29,9 @@ const Announcements = () => {
 
   const handleMouseMove = (e) => {
     if (!isDown) return;
-    const x = e.touches ? e.touches[0].pageX : e.pageX - carouselRef.current.offsetLeft;
+    const x = e.touches
+      ? e.touches[0].pageX
+      : e.pageX - carouselRef.current.offsetLeft;
     const walk = (x - startX) * 3;
     carouselRef.current.scrollLeft = scrollLeft - walk;
   };
@@ -63,41 +67,55 @@ const Announcements = () => {
   }, []);
 
   return (
-    <section className="bg-white rounded-2xl px-4 py-4 mb-4 min-h-48 overflow-hidden">
-      <div className="flex justify-between items-center">
-        <h1 className="font-poppins font-normal text-2xl leading-10 pt-0">
-          Announcement
-        </h1>
-        {role === 'admin' && <span className="cursor-pointer" onClick={handleOpen}>
-          <AddIcon color="action" />
-        </span>}
+      <div className="bg-white rounded-2xl px-4 py-4  min-h-48 overflow-hidden">
+        <div className="flex justify-between items-center">
+          <h1 className="font-poppins font-normal text-2xl leading-10 pt-0">
+            Announcement
+          </h1>
+          {role === "admin" && (
+            <span className="cursor-pointer" onClick={handleOpen}>
+              <AddIcon color="action" />
+            </span>
+          )}
+        </div>
+        <div
+          className="flex overflow-x-auto gap-2 hide-scrollbar"
+          ref={carouselRef}
+          onTouchStart={handleMouseDown}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onTouchEnd={handleMouseUp}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          onTouchMove={handleMouseMove}
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {loading
+            ? Array.from(new Array(3)).map((_, index) => (
+                <Skeleton
+                  key={index}
+                  variant="rounded"
+                  width={600}
+                  height={128}
+                />
+              ))
+            : announcement?.map((ann, i) =>
+                ann?.attachments?.map((att, j) => (
+                  <img
+                    className="w-96 h-32  rounded-xl"
+                    key={`${i}-${j}`}
+                    src={att}
+                    alt="Announcement"
+                  />
+                ))
+              )}
+        </div>
+        <AddAnnouncement
+          isOpen={isOpen}
+          onClose={handleClose}
+          fetchAnnouncement={fetchAnnouncement}
+        />
       </div>
-      <div
-        className="flex overflow-x-auto gap-2 hide-scrollbar"
-        ref={carouselRef}
-        onTouchStart={handleMouseDown}
-        onMouseDown={handleMouseDown}
-        onMouseLeave={handleMouseLeave}
-        onTouchEnd={handleMouseUp}
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
-        onTouchMove={handleMouseMove}
-        style={{ WebkitOverflowScrolling: "touch" }}
-      >
-        {loading ? (
-          Array.from(new Array(3)).map((_, index) => (
-            <Skeleton key={index} variant="rounded" width={600} height={128} />
-          ))
-        ) : (
-          announcement?.map((ann, i) => (
-            ann?.attachments?.map((att, j) => (
-              <img className="w-96 h-32  rounded-xl" key={`${i}-${j}`} src={att} alt="Announcement" />
-            ))
-          ))
-        )}
-      </div>
-      <AddAnnouncement isOpen={isOpen} onClose={handleClose} fetchAnnouncement={fetchAnnouncement} />
-    </section>
   );
 };
 

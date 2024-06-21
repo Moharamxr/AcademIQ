@@ -8,10 +8,10 @@ const StudentParentHome = () => {
 
   return (
     <>
-      <div
-        className={`w-full ${role !== "parent" ? "lg:w-8/12" : ""}`}
-      >
-        <Announcements />
+      <div className={`w-full ${role !== "parent" ? "lg:w-8/12" : ""}`}>
+        <div className="pb-4">
+          <Announcements />
+        </div>
         <LeaderBoard />
       </div>
       {role === "student" && (

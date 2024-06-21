@@ -138,7 +138,7 @@ const Dashboard = () => {
   return (
     <div className="w-full ">
       <section className="grid grid-cols-12 gap-5">
-        <div className="col-span-10">
+        <div className="col-span-10 pb-4">
           <Announcements />
         </div>
         <div className="col-span-2 bg-white rounded-xl h-[11.3rem] overflow-hidden center flex-col gap-2">

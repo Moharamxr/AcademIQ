@@ -5,6 +5,7 @@ import Cap from "../../../assets/black graduation cap.png";
 import Book from "../../../assets/red opened book.png";
 import { getTeacherCounts } from "../../../services/user.service";
 import LeaderBoard from "../../Parent/leaderBoard/LeaderBoard";
+import Announcements from "../../Layout/announcements/Announcements";
 
 const Teacher = () => {
   const fullName = localStorage.getItem("fullName");
@@ -42,6 +43,7 @@ const Teacher = () => {
               Start creating highly engaging <br /> courses now!
             </p>
           </div>
+          <Announcements />
           <div className="bg-white rounded-xl flex justify-between gap-2 p-2 w-full">
             <div className="border-active-br border-[1px] rounded-lg flex flex-col items-center text-center p-3 md:py-4 py-5 w-1/3 min-h-full">
               <img src={Laptop} alt="Laptop icon" />
@@ -68,7 +70,6 @@ const Teacher = () => {
               </div>
             </div>
           </div>
-        <LeaderBoard />
         </div>
       </div>
       <aside className="w-full lg:w-4/12 hidden md:block">
