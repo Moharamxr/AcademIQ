@@ -23,21 +23,20 @@ axiosInstance.interceptors.request.use(handleRequest, (error) => {
   return Promise.reject(error);
 });
 
-// Helper function to handle successful responses
 const handleResponse = (response) => {
   console.log(response.data.message);
   console.log(response.data);
   return response.data;
 };
 
-// Helper function to handle errors
 const handleError = (error) => {
   if (error.response && error.response.status === 401) {
     console.log("User is unauthorized. Logging out...");
 
-    ["token", "userId", "role", "isLoggedIn", "fullName", "email"].forEach((item) => localStorage.removeItem(item));
-    // Redirect to login page
-    window.location.href = "/login";
+    ["token", "userId", "role", "isLoggedIn", "fullName", "email"].forEach(
+      (item) => localStorage.removeItem(item)
+    );
+    window.location.href = "/";
   } else {
     console.error("Error occurred:", error);
     throw error;
@@ -55,7 +54,6 @@ const apiRequest = async (method, url, data = null, headers = {}) => {
       },
     };
 
-
     const response = await axiosInstance(config);
     return handleResponse(response);
   } catch (error) {
@@ -64,16 +62,23 @@ const apiRequest = async (method, url, data = null, headers = {}) => {
 };
 
 export const createChat = (newData) => apiRequest("post", "/chats", newData);
-export const updateChat = (id, newData) => apiRequest("put", `/chats/${id}`, newData);
+export const updateChat = (id, newData) =>
+  apiRequest("put", `/chats/${id}`, newData);
 export const getMyChats = () => apiRequest("get", "/chats");
-export const addMemberToChat = (chatId, memberId) => apiRequest("patch", `/chats/${chatId}/users/${memberId}`, {});
-export const removeMemberFromChat = (chatId, memberId) => apiRequest("delete", `/chats/${chatId}/users/${memberId}`, {});
-export const sendMessage = (chatId, message) => apiRequest("post", `/chats/${chatId}/messages`, message, {
-  "Content-Type": "multipart/form-data",
-});
-export const getChatMessages = (chatId) => apiRequest("get", `/chats/${chatId}/messages`);
-export const getChatMessageWithAttachment = (chatId, messageId) => apiRequest("get", `/chats/${chatId}/messages/${messageId}`);
-export const getChatWithUser = (userId) => apiRequest("get", `/chats/users/${userId}`);
+export const addMemberToChat = (chatId, memberId) =>
+  apiRequest("patch", `/chats/${chatId}/users/${memberId}`, {});
+export const removeMemberFromChat = (chatId, memberId) =>
+  apiRequest("delete", `/chats/${chatId}/users/${memberId}`, {});
+export const sendMessage = (chatId, message) =>
+  apiRequest("post", `/chats/${chatId}/messages`, message, {
+    "Content-Type": "multipart/form-data",
+  });
+export const getChatMessages = (chatId) =>
+  apiRequest("get", `/chats/${chatId}/messages`);
+export const getChatMessageWithAttachment = (chatId, messageId) =>
+  apiRequest("get", `/chats/${chatId}/messages/${messageId}`);
+export const getChatWithUser = (userId) =>
+  apiRequest("get", `/chats/users/${userId}`);
 
 export const subscribeToChatMessages = (chatId, callback) => {
   socket.on(`chat:${chatId}`, (message) => {
@@ -85,5 +90,5 @@ export const unsubscribeFromChatMessages = (chatId) => {
   socket.off(`chat:${chatId}`);
 };
 
-export const createMeetingRoom = (newData) => apiRequest("post", "/rooms/", newData);
-
+export const createMeetingRoom = (newData) =>
+  apiRequest("post", "/rooms/", newData);

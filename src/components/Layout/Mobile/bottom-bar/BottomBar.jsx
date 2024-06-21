@@ -29,7 +29,7 @@ const FixedBottomContent = styled.section`
   padding: 10px 0;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   z-index: 10;
-  @media (min-width: 1024px) {
+  @media (min-width: 772px) {
     display: none;
   }
 `;

@@ -49,16 +49,17 @@ const apiRequest = async (method, url, data = null, headers = {}) => {
   }
 };
 
-// Helper function to build query parameters
 const buildQueryParams = (params) => {
   const validParams = Object.entries(params)
     .filter(([key, value]) => value !== null && value !== undefined)
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+    )
     .join("&");
   return validParams ? `?${validParams}` : "";
 };
 
-// Assessment API functions
 export const createAssessment = (newData) =>
   apiRequest("post", "/assessments", newData);
 export const updateAssessment = (id, newData) =>
@@ -82,7 +83,6 @@ export const addNewQuestionToAssessment = (id, question) =>
 export const deleteAssessmentQuestion = (assessmentId, questionId) =>
   apiRequest("delete", `/assessments/${assessmentId}/questions/${questionId}`);
 
-// Submission API functions
 export const createSubmission = (id) =>
   apiRequest("post", `/submissions/assessments/${id}`, {});
 export const submitExamAnswers = (id, answers) =>

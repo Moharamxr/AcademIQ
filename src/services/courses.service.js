@@ -37,7 +37,7 @@ const handleError = (error) => {
       "email",
     ];
     itemsToRemove.forEach((item) => localStorage.removeItem(item));
-    window.location.href = "/login";
+    window.location.href = "/";
   } else {
     console.error("Error occurred:", error);
   }

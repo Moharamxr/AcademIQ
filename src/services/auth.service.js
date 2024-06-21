@@ -54,6 +54,7 @@ export const forgotPassword = async (newData) => {
   console.log("forget Password set correctly");
   return response.data;
 };
+
 export const resetPassword = async (newData) => {
   console.log("resetPassword", newData);
 

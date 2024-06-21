@@ -20,151 +20,68 @@ const handleResponse = (response) => {
   console.log(response.data);
   return response.data;
 };
+
 const handleError = (error) => {
   if (error.response && error.response.status === 401) {
     console.log("User is unauthorized. Logging out...");
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("role");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("fullName");
-    localStorage.removeItem("email");
-
-    window.location.href = "/login";
+    ["token", "userId", "role", "isLoggedIn", "fullName", "email"].forEach(
+      (item) => localStorage.removeItem(item)
+    );
+    window.location.href = "/";
   } else {
     console.error("Error occurred:", error);
-    throw error;
   }
+  throw error;
 };
 
-export const getUsers = async (role) => {
+const makeRequest = async (method, url, data = null) => {
   try {
-    const response = await axiosInstance.get(`${path}/users/roles/${role}`);
+    const response = await axiosInstance({
+      method,
+      url,
+      data,
+    });
     return handleResponse(response);
   } catch (error) {
     handleError(error);
   }
 };
+export const getUsers = (role) =>
+  makeRequest("get", `${path}/users/roles/${role}`);
 
-export const createUser = async (newData) => {
-  try {
-    const response = await axiosInstance.post(
-      `${path}/users/${newData.role}`,
-      newData
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-export const updateUser = async (userId,newData) => {
-  try {
-    const response = await axiosInstance.put(
-      `${path}/users/${userId}?role=${newData.role}`,
-      newData
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
+export const createUser = (newData) =>
+  makeRequest("post", `${path}/users/${newData.role}`, newData);
 
-export const getUserById = async (id) => {
-  try {
-    const response = await axiosInstance.get(`${path}/users/${id}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
+export const updateUser = (userId, newData) =>
+  makeRequest("put", `${path}/users/${userId}?role=${newData.role}`, newData);
 
-export const getTeachersByCourse = async (courseId) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/users/teachers/courses/${courseId}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
+export const getUserById = (id) => makeRequest("get", `${path}/users/${id}`);
 
-export const getUsersCounts = async () => {
-  try {
-    const response = await axiosInstance.get(`${path}/users/counts`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
+export const getTeachersByCourse = (courseId) =>
+  makeRequest("get", `${path}/users/teachers/courses/${courseId}`);
 
-export const getChildrenByParent = async (id) => {
-  try {
-    const response = await axiosInstance.get(
-      `${path}/users/students/parents/${id}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
+export const getUsersCounts = () => makeRequest("get", `${path}/users/counts`);
 
+export const getChildrenByParent = (id) =>
+  makeRequest("get", `${path}/users/students/parents/${id}`);
 
-export const assignChildToParent = async (childId, parentId) => {
-  try {
-    const response = await axiosInstance.patch(
-      `${path}/users/students/${childId}/parents/${parentId}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
+export const assignChildToParent = (childId, parentId) =>
+  makeRequest("patch", `${path}/users/students/${childId}/parents/${parentId}`);
 
-export const removeChildFromParent = async (childId, parentId) => {
-  try {
-    const response = await axiosInstance.delete(
-      `${path}/users/students/${childId}/parents/${parentId}`
-    );
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
+export const removeChildFromParent = (childId, parentId) =>
+  makeRequest(
+    "delete",
+    `${path}/users/students/${childId}/parents/${parentId}`
+  );
 
-export const getTeacherCounts = async () => {
-  try {
-    const response = await axiosInstance.get(`${path}/users/teachers/home`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-}
+export const getTeacherCounts = () =>
+  makeRequest("get", `${path}/users/teachers/home`);
 
-export const getNotifications = async () => {
-  try {
-    const response = await axiosInstance.get(`${path}/users/notifications`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
+export const getNotifications = () =>
+  makeRequest("get", `${path}/users/notifications`);
 
-export const searchAll = async (query) => {
-  try {
-    const response = await axiosInstance.get(`${path}/search?query=${query}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
+export const searchAll = (query) =>
+  makeRequest("get", `${path}/search?query=${query}`);
 
-export const searchUsers = async (query) => {
-  try {
-    const response = await axiosInstance.get(`${path}/users/search?query=${query}`);
-    return handleResponse(response);
-  } catch (error) {
-    handleError(error);
-  }
-};
-
+export const searchUsers = (query) =>
+  makeRequest("get", `${path}/users/search?query=${query}`);

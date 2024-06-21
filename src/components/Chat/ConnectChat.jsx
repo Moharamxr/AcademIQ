@@ -1,18 +1,17 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import ThreeDots from "../../assets/icons/ThreeDots";
 import ConnectChatMessage from "./ConnectChatMessage";
 import SendMessageIcon from "../../assets/icons/SendMessageIcon";
 import {
   getChatMessages,
   sendMessage,
-  socket,
+  
 } from "../../services/connect.service";
 import { useDispatch, useSelector } from "react-redux";
 import { Badge } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { BiLoader } from "react-icons/bi";
 import { setActiveTab } from "../../store/slices/chatSlice";
+import { io } from "socket.io-client";
 
 const ConnectChatContainer = styled("section")({
   display: "flex",
@@ -67,12 +66,18 @@ const FixedBottomContent = styled.div`
   display: flex;
   align-items: center;
 `;
+const path = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
+
+const socket = io(path, {
+  extraHeaders: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
 
 const ConnectChat = () => {
   const bottomRef = useRef(null);
   const chatContainerRef = useRef(null);
   const textareaRef = useRef(null);
-  // console.log(socket.connected);
   const dispatch = useDispatch();
 
   const selectedChat = useSelector((state) => state.chatData.selectedChat);
@@ -173,11 +178,10 @@ const ConnectChat = () => {
     });
 
     await sendMessage(selectedChat._id, formData);
-     //check if the message has attachment then fetch the chat again
     if (messageAttachment) {
       fetchChat();
     }
-    
+
     setSendingMessage(false);
 
     setMessage("");
@@ -205,8 +209,6 @@ const ConnectChat = () => {
       dispatch(setActiveTab({ tab: "inbox" }));
     }
   };
-
-
 
   const handleMessageChange = (e) => {
     setMessage(e.target.value);
@@ -271,7 +273,7 @@ const ConnectChat = () => {
               {selectedChat?.member?.email}
             </p>
             {typing && (
-              <p className="font-poppins font-medium  text-xs text-gray-800 animate-pulse">
+              <p className="font-poppins font-medium  text-xs text-black animate-pulse transition-all ease-in-out ">
                 Typing...
               </p>
             )}

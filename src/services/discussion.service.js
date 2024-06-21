@@ -5,7 +5,6 @@ const axiosInstance = axios.create({
   baseURL,
 });
 
-// Request interceptor to add authorization token to headers if available
 axiosInstance.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem("token");
@@ -19,18 +18,15 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response handler to log response data and return data only
 const handleResponse = (response) => {
   console.log(response.data.message); 
   console.log(response.data); 
   return response.data;
 };
 
-// Error handler to handle specific errors like 401 unauthorized
 const handleError = (error) => {
   if (error.response && error.response.status === 401) {
     console.log("User is unauthorized. Logging out...");
-    // Clear local storage on unauthorized
     const itemsToRemove = [
       "token",
       "userId",
@@ -40,14 +36,13 @@ const handleError = (error) => {
       "email",
     ];
     itemsToRemove.forEach((item) => localStorage.removeItem(item));
-    window.location.href = "/login"; // Redirect to login page
+    window.location.href = "/"; 
   } else {
     console.error("Error occurred:", error);
   }
-  throw error; // Always throw error to maintain consistency in handling
+  throw error; 
 };
 
-// Generic function to make HTTP requests
 const makeRequest = async (method, url, data = null, config = {}) => {
   try {
     const response = await axiosInstance({
@@ -62,7 +57,6 @@ const makeRequest = async (method, url, data = null, config = {}) => {
   }
 };
 
-// API functions using the generic makeRequest function
 export const getDiscussion = async (courseId) => {
   return makeRequest("get", `/discussions/${courseId}`);
 };
@@ -97,10 +91,7 @@ export const getAnnouncements = async () => {
 
 export const createAnnouncement = async (announcement) => {
   const token = localStorage.getItem("token");
-  const formData = new FormData();
-  for (const key in announcement) {
-    formData.append(key, announcement[key]);
-  }
+  
   const config = {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -110,7 +101,7 @@ export const createAnnouncement = async (announcement) => {
   return makeRequest(
     "post",
     "/discussions/global/announcements",
-    formData,
+    announcement,
     config
   );
 };

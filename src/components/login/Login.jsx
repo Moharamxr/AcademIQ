@@ -7,7 +7,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../store/slices/userSlice";
-import { CircularProgress, LinearProgress } from "@mui/material";
+import { LinearProgress } from "@mui/material";
 
 const Login = () => {
   const navigate = useNavigate();

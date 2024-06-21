@@ -65,7 +65,6 @@ const AddAnnouncement = ({ isOpen, onClose, fetchAnnouncement }) => {
       setIsLoading(false);
       closeModal();
     } catch (error) {
-      console.error(error);
       setIsLoading(false);
       setError(error.response?.data?.error || "An error occurred");
       setTimeout(() => {

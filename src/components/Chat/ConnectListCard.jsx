@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setActiveTab, setSelectedChat } from "../../store/slices/chatSlice";
-import { createChat as createChatService } from "../../services/connect.service";
+import { createChat as createChatService, socket } from "../../services/connect.service";
 
 const ConnectListCard = ({ chat, active, closeSearch }) => {
   const chatTitle = chat?.type
@@ -52,6 +52,24 @@ const ConnectListCard = ({ chat, active, closeSearch }) => {
     }
   };
 
+  const [lastMessage, setLastMessage] = useState(chat?.lastMessage[0].content);
+
+  useEffect(() => {
+    setLastMessage(chat?.lastMessage.content);
+    console.log(lastMessage)
+    console.log(socket)
+    socket.on("newMessage", handleNewMessage);
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, [chat?.lastMessage.content]);
+
+  const handleNewMessage = (data) => {
+
+    setLastMessage(data.content);
+    console.log("data", data)
+  };
+
   return (
     <div
       className={`w-full flex ${
@@ -90,11 +108,11 @@ const ConnectListCard = ({ chat, active, closeSearch }) => {
         <p className="text-xs text-gray-400 max-w-full overflow-hidden">
           {chat?.member?.email || chat?.email}
         </p>
-        {/* {chat?.lastMessage && (
+       
           <p className="font-poppins font-medium text-xs text-slate-500 max-w-full overflow-hidden">
-            {chat.lastMessage[0]?.content || "No messages yet"}
+            {lastMessage || "No messages yet"}
           </p>
-        )} */}
+        
 
       </div>
     </div>

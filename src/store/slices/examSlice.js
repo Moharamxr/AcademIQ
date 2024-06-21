@@ -15,12 +15,10 @@ const examSlice = createSlice({
     setStudentAnswers: (state, action) => {
       const { studentId, examId, questionId, optionId } = action.payload;
 
-      // Check if the submitted studentId and examId match the current submission
       if (
         state.examSubmission.studentId !== studentId ||
         state.examSubmission.examId !== examId
       ) {
-        // Reset the submission if the studentId or examId is different
         state.examSubmission = { studentId, examId, answers: [] };
       }
 
