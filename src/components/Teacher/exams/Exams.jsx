@@ -36,6 +36,9 @@ const Exams = ({ exams, isLoading }) => {
             console.log("No previous submission found");
             navigate(`/exams/details/${id}`);
           }
+        }else if (role === "student" && status === "completed") {
+          navigate(`/exams/details/${id}`);
+          
         } else if (role === "teacher") {
           navigate(`/exams/details/${id}`);
         }

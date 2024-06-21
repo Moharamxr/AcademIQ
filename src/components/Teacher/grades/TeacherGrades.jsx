@@ -138,10 +138,10 @@ const TeacherGrades = () => {
                 {grade?.student?.email}
               </span>
               <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
-                {grade?.student?.points}
+                {grade?.submission?.score}
               </span>
               <span className="p-2 w-2/12 lg:w-1/12 bg-gray-100 rounded-lg text-center sm:text-base md:text-sm lg:text-base text-sm">
-                {((grade?.student?.points / fullScore) * 100).toFixed(2)}%
+                {((grade?.submission?.score / fullScore) * 100).toFixed(2)}%
               </span>
             </div>
           ))}
