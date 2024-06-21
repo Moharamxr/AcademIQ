@@ -85,6 +85,7 @@ const Dashboard = () => {
     try {
       const data = await getGradeClasses();
       setClassesData(data.gradeClasses);
+      setClassId(data.gradeClasses[0]?._id);
     } catch (error) {
       console.error(error);
     }
@@ -98,9 +99,12 @@ const Dashboard = () => {
     }
   };
   useEffect(() => {
-    renderAdminTable();
     getClasses();
     getUsersCount();
+  }, []);
+
+  useEffect(() => {
+    renderAdminTable();
   }, [classId]);
 
   const toggleDelete = () => {

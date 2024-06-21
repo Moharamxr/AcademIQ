@@ -150,6 +150,11 @@ const AssignNewStudent = ({ isOpen, onClose, getData, currentStudents }) => {
                       {student.email}
                     </option>
                   ))}
+                  {students.length === 0 && (
+                    <option value="" className="text-gray-600 text-base font-medium px-4 bg-active-bg rounded-lg p-3">
+                      No Students
+                    </option>
+                  )}
                 </select>
               )}
             </div>

@@ -30,7 +30,17 @@ const AssignNewTeacher = ({
       setLoadingTeachers(true);
       try {
         const data = await getUsers("teacher");
-        setTeachers(data?.users.filter((t) => t.department === department));
+        
+        // Filter teachers by department and filter out teachers already assigned to the course
+        const teachersToAdd = data?.users.filter((teacher) => {
+          return (
+            teacher.department === department &&
+            !currentTeachers.find((t) => t._id === teacher._id)
+          );
+        });
+
+        setTeachers(teachersToAdd || []);
+        
       } catch (error) {
         setError("Failed to fetch teachers");
       } finally {
@@ -39,7 +49,7 @@ const AssignNewTeacher = ({
     };
 
     fetchTeachers();
-  }, []);
+  }, [department]); 
 
   const validateSelection = () => {
     if (!selectedTeacher) {
@@ -57,8 +67,8 @@ const AssignNewTeacher = ({
     setError(null);
     try {
       await assignTeacherToCourse(gradeClassId, selectedTeacher);
-      selectedTeacher("");
-      getData();
+      setSelectedTeacher(""); 
+      getData(); 
       onClose();
     } catch (error) {
       setError("Failed to assign teacher");
@@ -74,7 +84,7 @@ const AssignNewTeacher = ({
     setDeleteTeacher(teacherId);
     try {
       await removeTeacherFromCourse(gradeClassId, teacherId);
-      getData();
+      getData(); 
       setDeleteTeacher("");
     } catch (error) {
       setError("Failed to remove teacher");
@@ -98,30 +108,30 @@ const AssignNewTeacher = ({
           )}
         </div>
         <div className="flex flex-col gap-y-3 divide-y-2 divide-gray-100 bg-white rounded-lg p-3">
-          <div className="flex flex-col gap-5 py-2 px-1">
+          <div className="py-2 px-1">
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
               Current Course Teachers:
-              <div className="flex flex-wrap gap-2">
-                {currentTeachers.map((teacher) => (
-                  <span
-                    key={teacher._id}
-                    className="text-gray-600 text-base font-medium px-4 bg-active-bg rounded-lg p-3 cursor-pointer hover:bg-red-500 hover:text-white transition-all duration-300 ease-in-out"
-                    onClick={() => handleRemoveTeacher(teacher._id)}
-                  >
-                    {isDeleting && deleteTeacher === teacher._id ? (
-                      <CircularProgress size={16} color="inherit" />
-                    ) : (
-                      teacher.email
-                    )}
-                  </span>
-                ))}
-                {currentTeachers.length === 0 && (
-                  <span className="text-gray-600 text-base font-medium px-4 bg-active-bg rounded-lg p-3">
-                    No Teachers
-                  </span>
-                )}
-              </div>
             </p>
+            <div className="flex flex-wrap gap-2">
+              {currentTeachers.map((teacher) => (
+                <span
+                  key={teacher._id}
+                  className="text-gray-600 text-base font-medium px-4 bg-active-bg rounded-lg p-3 cursor-pointer hover:bg-red-500 hover:text-white transition-all duration-300 ease-in-out"
+                  onClick={() => handleRemoveTeacher(teacher._id)}
+                >
+                  {isDeleting && deleteTeacher === teacher._id ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : (
+                    teacher.email
+                  )}
+                </span>
+              ))}
+              {currentTeachers.length === 0 && (
+                <span className="text-gray-600 text-base font-medium px-4 bg-active-bg rounded-lg p-3">
+                  No Teachers
+                </span>
+              )}
+            </div>
           </div>
           <div className="flex gap-5 py-2 px-1">
             <p className="font-poppins font-normal sm:text-sm text-xs leading-6 text-gray-400">
@@ -146,6 +156,11 @@ const AssignNewTeacher = ({
                     {teacher.email}
                   </option>
                 ))}
+                {teachers.length === 0 && (
+                  <option value="" className="text-gray-600 text-base font-medium px-4 bg-active-bg rounded-lg p-3">
+                    No Teachers
+                  </option>
+                )}
               </select>
             )}
           </div>

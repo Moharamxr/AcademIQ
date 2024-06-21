@@ -26,7 +26,7 @@ const AddNewClass = ({
 
   const handleCreateClass = async () => {
     const newData = {
-      year: parseInt(level),
+      year: parseInt(new Date().getFullYear() ),
       level: parseInt(level),
       letter: classLetter,
       room: classRoom,

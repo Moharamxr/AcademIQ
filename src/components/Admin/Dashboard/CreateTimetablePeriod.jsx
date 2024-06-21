@@ -4,7 +4,8 @@ import { getGradeCourses } from "../../../services/courses.service";
 import { getTeachersByCourse } from "../../../services/user.service";
 import { CircularProgress } from "@mui/material";
 
-const CreateTimetablePeriod = ({ isOpen, onClose ,classId }) => {
+const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
+  console.log(classId)
   const [day, setDay] = useState("");
   const [period, setPeriod] = useState("");
   const [startTime, setStartTime] = useState({ hour: 0, minute: 0 });
@@ -75,6 +76,12 @@ const CreateTimetablePeriod = ({ isOpen, onClose ,classId }) => {
         setError("");
       }, 3000);
       return false;
+    } else if (classId === "") {
+      setError("Class ID must be filled");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+      return false;
     } else if (teacherId.trim() === "") {
       setError("Teacher ID must be filled");
       setTimeout(() => {
@@ -133,7 +140,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose ,classId }) => {
         id: classId,
       };
       try {
-        await createTimetablePeriod(newData);
+        await createTimetablePeriod(classId,newData);
         setIsLoading(false);
         reset();
         onClose();
@@ -148,7 +155,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose ,classId }) => {
   return (
     isOpen && (
       <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-600 bg-opacity-50">
-        <section className="bg-white rounded-xl p-5 w-1/2">
+        <section className="bg-white rounded-xl p-5 lg:w-1/2 md:w-2/3 w-5/6">
           <h2 className="font-poppins text-2xl font-medium">
             Add New Timetable Period
           </h2>
@@ -253,7 +260,11 @@ const CreateTimetablePeriod = ({ isOpen, onClose ,classId }) => {
               disabled={isLoading}
               onClick={handleCreateTimetablePeriod}
             >
-              {!isLoading ? "Done" : <CircularProgress size={16} color="inherit" />}
+              {!isLoading ? (
+                "Done"
+              ) : (
+                <CircularProgress size={16} color="inherit" />
+              )}
             </button>
             <button
               className="w-64 bg-white border-active-br border-2 text-active rounded-lg p-3 text-center"

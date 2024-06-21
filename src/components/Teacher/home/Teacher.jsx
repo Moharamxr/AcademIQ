@@ -4,6 +4,7 @@ import Laptop from "../../../assets/laptop white screen.png";
 import Cap from "../../../assets/black graduation cap.png";
 import Book from "../../../assets/red opened book.png";
 import { getTeacherCounts } from "../../../services/user.service";
+import LeaderBoard from "../../Parent/leaderBoard/LeaderBoard";
 
 const Teacher = () => {
   const fullName = localStorage.getItem("fullName");
@@ -67,6 +68,7 @@ const Teacher = () => {
               </div>
             </div>
           </div>
+        <LeaderBoard />
         </div>
       </div>
       <aside className="w-full lg:w-4/12 hidden md:block">

@@ -3,33 +3,31 @@ import ActiveTimeTableIcon from "../../../assets/icons/ActiveTimeTableIcon";
 import DisabledTimeTableIcon from "../../../assets/icons/DisabledTimeTableIcon";
 import ActiveLastTimeTableIcon from "../../../assets/icons/ActiveLastTimeTableIcon";
 
+const periods = [
+  "8:00",
+  "9:00",
+  "10:00",
+  "11:00",
+  "12:00",
+  "1:00",
+  "2:00",
+  "3:00",
+  "4:00",
+];
 const TableCard = ({ timeTable, isLast, index }) => {
   const currentHour = new Date().getHours();
   const currentMinute = new Date().getMinutes();
 
 
-  // Parse timeTable start hour and minute to integers
-  const startTimeHour = parseInt(timeTable?.startTime?.hour)||0;
-  const startTimeMinute = parseInt(timeTable?.startTime?.minute)||0;
+  const startTimeHour = parseInt(timeTable?.startTime?.hour)||parseInt(periods[index].split(":")[0]);
+  const startTimeMinute = parseInt(timeTable?.startTime?.minute)||parseInt(periods[index].split(":")[1]);
 
   console.log(currentHour,startTimeHour)
 
-  // Check if current time is after or exactly the start time
   const isActive =
     currentHour > startTimeHour ||
     (currentHour === startTimeHour && currentMinute >= startTimeMinute);
 
-  const periods = [
-    "8:00",
-    "9:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "1:00",
-    "2:00",
-    "3:00",
-    "4:00",
-  ];
 
   const role = localStorage.getItem("role");
 
