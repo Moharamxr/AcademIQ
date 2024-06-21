@@ -28,7 +28,21 @@ const LeaderCard = ({ student, index }) => {
           {index + 1}
         </div>
         <div className="flex w-96">
-          <img className="w-12 m-3" src={LeaderStudent1} alt="LeaderStudent1" />
+          {student?.profilePicture?.url ? (
+            <img
+              className="w-12 m-3"
+              src={student?.profilePicture?.url}
+              alt="LeaderStudent1"
+            />
+          ) : (
+            <div
+              className={`w-14 m-3 p-3  rounded-full text-white text-2xl center`}
+              style={{ backgroundColor: student?.profilePicture?.color }}
+            >
+              {student?.name?.first[0].toUpperCase()}
+              {student?.name?.last[0].toUpperCase()}
+            </div>
+          )}
           <div className="flex flex-col w-full">
             <p className="font-poppins font-medium text-base leading-6 py-2">
               {student?.name?.first} {student?.name?.last}
@@ -36,7 +50,7 @@ const LeaderCard = ({ student, index }) => {
             <div className="flex-grow md:w-full w-48">
               <BorderLinearProgress
                 variant="determinate"
-                value={student?.points / 1000 * 100}
+                value={(student?.points / 1000) * 100}
               />
             </div>
             {/* <div className="flex gap-x-3">

@@ -58,12 +58,20 @@ const UserProfile = () => {
     ...(userData?.role === "teacher"
       ? [{ label: "Department", value: userData?.department }]
       : []),
+    ...(userData?.role === "teacher"
+      ? [
+          {
+            label: "Class",
+            value: `Class ${userData?.gradeClass?.level} ${userData?.gradeClass?.letter}`,
+          },
+          { label: "Room", value: `${userData?.gradeClass?.room}` },
+          { label: "Points", value: `${userData?.points}` },
+        ]
+      : []),
     { label: "Gender", value: userData?.gender },
     { label: "Birthdate", value: userData?.birthdate?.slice(0, 10) },
     { label: "SSN", value: userData?.ssn },
-    { label: "Class", value: `Class ${userData?.gradeClass.level} ${userData?.gradeClass.letter}` },
-    { label: "Room", value: `${userData?.gradeClass.room}` },
-    { label: "Points", value: `${userData?.points}` },
+
     ...(userData?.role !== "admin"
       ? [
           {
@@ -214,12 +222,14 @@ const UserProfile = () => {
           renderCourses()}
         {userData?.role === "parent" && renderChildren()}
       </div>
-      {role==='admin'&&<button
-        className="outline-none bg-active rounded-lg float-end text-white p-3"
-        onClick={handleNavigateToUpdate}
-      >
-        Update Profile
-      </button>}
+      {role === "admin" && (
+        <button
+          className="outline-none bg-active rounded-lg float-end text-white p-3"
+          onClick={handleNavigateToUpdate}
+        >
+          Update Profile
+        </button>
+      )}
     </div>
   );
 };
