@@ -198,7 +198,7 @@ const ReportMessages = () => {
               ) : replaySuccess ? (
                 <CheckCircleOutlineIcon color="inherit" size={20} />
               ) : (
-                "Replay"
+                "Reply"
               )}
             </button>
           </div>

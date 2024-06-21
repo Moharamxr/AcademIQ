@@ -4,9 +4,21 @@ import DisabledTimeTableIcon from "../../../assets/icons/DisabledTimeTableIcon";
 import ActiveLastTimeTableIcon from "../../../assets/icons/ActiveLastTimeTableIcon";
 
 const TableCard = ({ timeTable, isLast, index }) => {
+  const currentHour = new Date().getHours();
+  const currentMinute = new Date().getMinutes();
+
+
+  // Parse timeTable start hour and minute to integers
+  const startTimeHour = parseInt(timeTable?.startTime?.hour)||0;
+  const startTimeMinute = parseInt(timeTable?.startTime?.minute)||0;
+
+  console.log(currentHour,startTimeHour)
+
+  // Check if current time is after or exactly the start time
   const isActive =
-    timeTable?.startTime?.hour >= new Date().getHours() &&
-    timeTable?.startTime?.minute >= new Date().getMinutes();
+    currentHour > startTimeHour ||
+    (currentHour === startTimeHour && currentMinute >= startTimeMinute);
+
   const periods = [
     "8:00",
     "9:00",
@@ -18,18 +30,20 @@ const TableCard = ({ timeTable, isLast, index }) => {
     "3:00",
     "4:00",
   ];
+
   const role = localStorage.getItem("role");
+
   const initials =
     timeTable?.course?.title
       ?.split(" ")
       .map((word) => word[0])
       .join("")
       .toUpperCase() || "B";
-      
+
   return (
-    <div className="between xl:gap-2 gap-1  w-full">
-      <span className="  object-cover bg- h-12">
-        {!isActive ? (
+    <div className="between xl:gap-2 gap-1 w-full">
+      <span className="object-cover bg- h-12">
+        {isActive ? (
           isLast ? (
             <ActiveLastTimeTableIcon />
           ) : (
@@ -39,20 +53,22 @@ const TableCard = ({ timeTable, isLast, index }) => {
           <DisabledTimeTableIcon />
         )}
       </span>
+
       <div className="w-full bg-gray-100 rounded-xl p-3 relative overflow-hidden between h-14 min-w-[85%]">
         <div className="min-w-10 min-h-10 text-white text-xl rounded-full center mr-2 bg-active">
           {initials}
         </div>
 
-        <div className="flex flex-col items-center ">
-          <h4 className="font-poppins font-semibold  xl:text-sm text-xs  leading-6 text-gray-700">
-            {timeTable?.course ? timeTable?.course?.title : "Break"}
+        <div className="flex flex-col items-center">
+          <h4 className="font-poppins font-semibold xl:text-sm text-xs leading-6 text-gray-700">
+            {timeTable?.course?.title || "Break"}
           </h4>
-          <p className="font-poppins font-normal  hidden xl:block  text-xs leading-5  text-gray-700">
+          <p className="font-poppins font-normal hidden xl:block text-xs leading-5 text-gray-700">
             {timeTable?.teacher
-              ? timeTable?.teacher?.name?.first.slice(0, 8) +
-                " " +
-                timeTable?.teacher?.name?.last.slice(0, 8)
+              ? `${timeTable?.teacher?.name?.first.slice(
+                  0,
+                  8
+                )} ${timeTable?.teacher?.name?.last.slice(0, 8)}`
               : ""}
           </p>
         </div>
@@ -60,26 +76,23 @@ const TableCard = ({ timeTable, isLast, index }) => {
         <div className="flex flex-col items-center ps-3">
           <p className="font-poppins font-normal xl:text-sm text-xs leading-6 text-center text-active">
             {timeTable?.startTime
-              ? timeTable?.startTime?.hour +
-                ":" +
-                (timeTable?.startTime?.minute === 0
-                  ? "00"
-                  : timeTable?.startTime?.minute)
+              ? `${timeTable?.startTime?.hour}:${
+                  timeTable?.startTime?.minute === 0
+                    ? "00"
+                    : timeTable?.startTime?.minute
+                }`
               : periods[index]}
           </p>
 
           <p className="font-poppins font-normal xl:text-sm text-xs leading-6 text-center text-active">
             {timeTable?.endTime
-              ? timeTable?.endTime?.hour +
-                ":" +
-                (timeTable?.endTime?.minute === 0
-                  ? "00"
-                  : timeTable?.endTime?.minute)
+              ? `${timeTable?.endTime?.hour}:${
+                  timeTable?.endTime?.minute === 0
+                    ? "00"
+                    : timeTable?.endTime?.minute
+                }`
               : periods[index + 1]}
           </p>
-          {/* <p className="font-poppins font-normal xl:text-sm text-xs leading-5 flex items-end text-gray-700">
-            lab 2
-          </p> */}
         </div>
       </div>
     </div>
