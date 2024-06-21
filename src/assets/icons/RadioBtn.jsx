@@ -1,6 +1,6 @@
 import React from "react";
 
-const RadioBtn = () => {
+const RadioBtn = ({color}) => {
   return (
     <svg
       width="20"
@@ -11,7 +11,7 @@ const RadioBtn = () => {
       className="cursor-pointer mt-1"
     >
       <circle cx="10" cy="10.5" r="9" stroke="#00769E" strokeWidth="2" />
-      <circle cx="10.0003" cy="10.5003" r="5.83333" fill="#00769E" />
+      <circle cx="10.0003" cy="10.5003" r="5.83333" fill={color||"#00769E"} />
     </svg>
   );
 };

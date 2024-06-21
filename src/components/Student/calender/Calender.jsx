@@ -7,12 +7,12 @@ function Calendar() {
   const dispatch = useDispatch();
 
   const listRef = useRef(null);
-  const currentDate = new Date().toISOString().slice(0, 10); // Get current date in "YYYY-MM-DD" format
+  const currentDate = new Date().toISOString().slice(0, 10); 
 
   const days = Array.from({ length: 365 }, (_, i) => {
     const currentDate = new Date(new Date().getFullYear(), 0, i  );
-    const currentWeekDay = new Date(new Date().getFullYear(), 0, i + 3);
-    const currentMonth = currentDate.getMonth() + 1; // Adjust month index
+    const currentWeekDay = new Date(new Date().getFullYear(), 0, i );
+    const currentMonth = currentDate.getMonth() + 1; 
     const isoDate = currentDate.toISOString().slice(0, 10);
     return {
       dayOfWeek: currentWeekDay.toLocaleDateString("en-US", {

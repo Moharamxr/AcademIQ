@@ -99,7 +99,7 @@ const PostCard = ({ post, courseId }) => {
   };
 
   const handleJoinRoom = () => {
-   window.location.href = `http://localhost:3030/${post.room.link}`;
+   window.open(`http://localhost:3030/${post.room.link}`,'_blank');
   }
 
   return (

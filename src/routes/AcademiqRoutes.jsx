@@ -38,6 +38,7 @@ import CourseDetailsPage from "../components/Courses/CourseDetailsPage";
 import SupportAndHelp from "../components/Support&Help/SupportAndHelp";
 import SettingsPage from "../components/Setting/SettingsPage";
 import RoomPage from "../components/Video/RoomPage";
+import StudentSubmissionPage from "../components/Teacher/exams/examDetailsPage/StudentSubmissionPage";
 
 const AcademiqRoutes = () => {
   const role = localStorage.getItem("role");
@@ -89,9 +90,9 @@ const AcademiqRoutes = () => {
         component: <Report />,
       },
       {
-        path: '/updateUser/:id',
+        path: "/updateUser/:id",
         component: <UpdateUserProfile />,
-      }
+      },
     ],
     student: [
       {
@@ -120,6 +121,10 @@ const AcademiqRoutes = () => {
         component: <ExamDetails />,
       },
       {
+        path: "/exams/submission/:id",
+        component: <StudentSubmissionPage />,
+      },
+      {
         path: "/assignments",
         component: <AssignmentsPage />,
       },
@@ -134,7 +139,7 @@ const AcademiqRoutes = () => {
       {
         path: "/room/:id",
         component: <RoomPage />,
-      }
+      },
     ],
     teacher: [
       {
@@ -208,7 +213,7 @@ const AcademiqRoutes = () => {
       {
         path: "/room/:id",
         component: <RoomPage />,
-      }
+      },
     ],
     parent: [
       {
@@ -248,7 +253,7 @@ const AcademiqRoutes = () => {
     },
     {
       path: "/settings",
-      component: <SettingsPage  />,
+      component: <SettingsPage />,
     },
     {
       path: "/profile/:id",

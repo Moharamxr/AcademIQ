@@ -13,7 +13,7 @@ const Exams = ({ exams, isLoading }) => {
   const [loadingExam, setLoadingExam] = useState("");
 
   const handleGoto = async (id, status) => {
-    if (role === "student" && status !== "published") {
+    if (role === "student" && status === "pending") {
       console.log("Student can't access this exam");
       return;
     }
@@ -29,16 +29,16 @@ const Exams = ({ exams, isLoading }) => {
           const data = await getStartedSubmission(id);
           console.log("Submission found");
 
-          if (data?.submission?.score>=0) {
-            console.log("Student can not resubmit exam");
+          if (data?.submission?.score >= 0) {
+            console.log("Student can not resubmit exam222");
             // Handle student resubmission scenario if needed
           } else {
             console.log("No previous submission found");
             navigate(`/exams/details/${id}`);
           }
-        }else if (role === "student" && status === "completed") {
-          navigate(`/exams/details/${id}`);
-          
+        } else if (role === "student" && status === "completed") {
+          console.log("Student can access exam");
+          navigate(`/exams/submission/${id}`);
         } else if (role === "teacher") {
           navigate(`/exams/details/${id}`);
         }
