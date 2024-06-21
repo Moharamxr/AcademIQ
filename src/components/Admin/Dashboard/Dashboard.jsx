@@ -17,7 +17,7 @@ import { Skeleton } from "@mui/material";
 const Dashboard = () => {
   const [table, setTable] = useState([]);
   const [classId, setClassId] = useState("");
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
+  const days = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday"];
   const periods = [
     "8:00 - 9:00",
     "9:00 - 10:00",
@@ -44,7 +44,7 @@ const Dashboard = () => {
   };
   const renderAdminTable = async () => {
     const newTable = Array(30).fill({ subject: "", teacher: "", id: "" });
-    
+
     try {
       setIsTableLoading(true);
       if (classId === "") return;
@@ -177,9 +177,7 @@ const Dashboard = () => {
                 Class {c.level} {c.letter}
               </option>
             ))}
-            {classesData.length === 0 && (
-              <option>no classes found</option>
-            )}
+            {classesData.length === 0 && <option>no classes found</option>}
           </select>
 
           <div className="flex center gap-3 px-3 ">
@@ -189,7 +187,10 @@ const Dashboard = () => {
                   !deleteToggle ? "bg-white" : "bg-red-400"
                 }  shadow-lg rounded-lg z-10`}
               >
-                <p onClick={toggleDelete} className="hover:bg-red-300 p-2 rounded-lg cursor-pointer">
+                <p
+                  onClick={toggleDelete}
+                  className="hover:bg-red-300 p-2 rounded-lg cursor-pointer"
+                >
                   {deleteToggle ? "Disable" : "Enable"} Delete Period
                 </p>
               </div>
@@ -200,7 +201,7 @@ const Dashboard = () => {
             </span>
           </div>
         </div>
-        <div className="grid grid-cols-13 grid-rows-6 pt-5 gap-5">
+        <div className="grid grid-cols-13 grid-rows-6 pt-5 gap-2">
           <div
             className=" col-span-1 center hover:cursor-pointer"
             onClick={onOpen}
@@ -208,20 +209,20 @@ const Dashboard = () => {
             <CalenderIcon />
           </div>
 
-          <div className="row-start-2 row-span-1 col-span-1 bg-active-bg text-active center text-[15px]  rounded-lg">
+          <div className="row-start-2 row-span-1 col-span-1 bg-active-bg text-active center text-[15px] rounded-lg">
+            Saturday
+          </div>
+          <div className="row-start-3 row-span-1 col-span-1 bg-active-bg text-active center text-[15px]  rounded-lg">
             Sunday
           </div>
-          <div className="row-start-3 row-span-1 col-span-1 bg-active-bg text-active center text-[15px] rounded-lg">
+          <div className="row-start-4 row-span-1 col-span-1 bg-active-bg text-active center text-[15px] rounded-lg">
             Monday
           </div>
-          <div className="row-start-4 row-span-1 col-span-1 bg-active-bg text-active center text-[15px] rounded-lg">
+          <div className="row-start-5 row-span-1 col-span-1 bg-active-bg text-active center text-[15px] rounded-lg">
             Tuesday
           </div>
-          <div className="row-start-5 row-span-1 col-span-1 bg-active-bg text-active center text-[13px] rounded-lg">
+          <div className="row-start-6 row-span-1 col-span-1 bg-active-bg text-active center text-[13px] rounded-lg">
             Wednesday
-          </div>
-          <div className="row-start-6 row-span-1 col-span-1 bg-active-bg text-active center text-[15px] rounded-lg">
-            Thursday
           </div>
           {periods?.map((period, index) => (
             <div
@@ -235,7 +236,7 @@ const Dashboard = () => {
             ? table?.map((t, index) => (
                 <div
                   key={index}
-                  className={`col-span-2 bg-gray-100 text-gray-700 text-center py-2 px-4 center flex-col rounded-lg overflow-hidden ${
+                  className={`col-span-2 min-h-24 bg-gray-100 text-gray-700 text-center py-2 px-4 center flex-col rounded-lg overflow-hidden ${
                     deleteToggle &&
                     "hover:cursor-pointer hover:bg-red-400 hover:text-white"
                   }`}
@@ -248,7 +249,11 @@ const Dashboard = () => {
             : renderSkeleton()}
         </div>
       </section>
-      <CreateTimetablePeriod isOpen={isOpen} onClose={onClose} classId={classId} />
+      <CreateTimetablePeriod
+        isOpen={isOpen}
+        onClose={onClose}
+        classId={classId}
+      />
     </div>
   );
 };

@@ -23,7 +23,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
 
   const handlePeriodChange = (e) => {
     setPeriod(e.target.value);
-    const per = ["08-09", "09-10", "10-11", "11-12", "12-01", "01-02"];
+    const per = ["08-09", "09-10", "10-11", "11-12", "12-01", "13-15"];
     if (e.target.value === "") {
       setDuration("");
       return;
@@ -179,11 +179,11 @@ const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
                 onChange={handleDayChange}
               >
                 <option value="">select</option>
+                <option value="Saturday">Saturday</option>
                 <option value="Sunday">Sunday</option>
                 <option value="Monday">Monday</option>
                 <option value="Tuesday">Tuesday</option>
                 <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
               </select>
             </div>
             <div className="flex flex-col gap-2 w-full md:w-1/2">
@@ -251,7 +251,7 @@ const CreateTimetablePeriod = ({ isOpen, onClose, classId }) => {
           <div className="between flex flex-col md:flex-row py-4 md:gap-10">
             <div className="flex flex-col gap-2 w-full md:w-1/2">
               <label htmlFor="Duration" className="text-active">
-                Duration
+                Duration (24hr)
               </label>
               <p className="bg-gray-100 text-gray-500 p-2 rounded-lg outline-none">
                 {duration ? duration : "--"}
