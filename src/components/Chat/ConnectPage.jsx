@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ConnectList from "./ConnectList";
 import ConnectChat from "./ConnectChat";
 
 const ConnectPage = () => {
   const activeTab = useSelector((state) => state.chatData.activeTab);
-  console.log(activeTab);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -18,8 +17,6 @@ const ConnectPage = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
- 
 
   if (isMobile) {
     if (activeTab === "inbox") {

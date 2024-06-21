@@ -2,15 +2,14 @@ import React, { useRef, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import ConnectChatMessage from "./ConnectChatMessage";
 import SendMessageIcon from "../../assets/icons/SendMessageIcon";
-import {
-  getChatMessages,
-  sendMessage,
-  
-} from "../../services/connect.service";
+import { getChatMessages, sendMessage } from "../../services/connect.service";
 import { useDispatch, useSelector } from "react-redux";
 import { Badge } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { setActiveTab } from "../../store/slices/chatSlice";
+import {
+  moveSelectedChatToStart,
+  setActiveTab,
+} from "../../store/slices/chatSlice";
 import { io } from "socket.io-client";
 
 const ConnectChatContainer = styled("section")({
@@ -66,6 +65,7 @@ const FixedBottomContent = styled.div`
   display: flex;
   align-items: center;
 `;
+
 const path = import.meta.env.VITE_ACADEMIQ_BACKEND_URL;
 
 const socket = io(path, {
@@ -94,7 +94,7 @@ const ConnectChat = () => {
     return () => {
       socket.off("userTyping", handleSetTyping);
     };
-  }, [message]);
+  }, []);
 
   const handleSetTyping = () => {
     setTyping(true);
@@ -157,10 +157,11 @@ const ConnectChat = () => {
     return `${firstName[0]?.toUpperCase()}${lastName[0]?.toUpperCase()}`;
   };
 
-  const chatTitle =
-    selectedChat?.type === "private"
+  const chatTitle = selectedChat
+    ? selectedChat.type === "private"
       ? `${selectedChat?.member?.name?.first} ${selectedChat?.member?.name?.last}`
-      : selectedChat?.title;
+      : selectedChat.title
+    : "";
 
   const handleSendMessage = async () => {
     if (!message) return;
@@ -181,28 +182,13 @@ const ConnectChat = () => {
     if (messageAttachment) {
       fetchChat();
     }
+    dispatch(moveSelectedChatToStart());
 
     setSendingMessage(false);
 
     setMessage("");
     setMessageAttachment(null);
   };
-
-  // const resizeTextarea = () => {
-  //   if (textareaRef.current) {
-  //     textareaRef.current.style.height = "auto";
-  //     textareaRef.current.style.height =
-  //       textareaRef.current.scrollHeight + "px";
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   resizeTextarea();
-  // }, []);
-
-  // useEffect(() => {
-  //   resizeTextarea();
-  // }, [message]);
 
   const handleGoBack = () => {
     if (window.innerWidth < 768) {
@@ -213,7 +199,7 @@ const ConnectChat = () => {
   const handleMessageChange = (e) => {
     setMessage(e.target.value);
     socket.emit("typing", {
-      chatId: selectedChat._id,
+      chatId: selectedChat?._id,
     });
   };
 
@@ -234,10 +220,11 @@ const ConnectChat = () => {
           (selectedChat?.type === "group" && selectedChat?.image) ? (
             <div className="w-12 h-12 center rounded-full bg-gray-200  text-2xl flex items-center justify-center">
               {selectedChat?.type === "private" ? (
-                selectedChat?.member.profilePicture?.url ? (
+                selectedChat?.member?.profilePicture?.url ? (
                   <img
                     src={selectedChat?.member?.profilePicture?.url}
                     className="w-16 h-12 rounded-full"
+                    alt="Profile"
                   />
                 ) : (
                   getInitials(
@@ -248,7 +235,7 @@ const ConnectChat = () => {
               ) : (
                 selectedChat?.title
                   ?.split(" ")
-                  .map((word) => word[0].toUpperCase())
+                  .map((word) => word[0]?.toUpperCase())
                   .join("")
               )}
             </div>
@@ -268,12 +255,12 @@ const ConnectChat = () => {
             </div>
           )}
           <div className="flex flex-col gap-y-1 p-1">
-            <p className=" font-medium  text-base">{chatTitle}</p>
-            <p className=" font-medium  text-xs text-gray-400">
+            <p className="font-medium text-base">{chatTitle}</p>
+            <p className="font-medium text-xs text-gray-400">
               {selectedChat?.member?.email}
             </p>
             {typing && (
-              <p className="font-poppins font-medium  text-xs text-black animate-pulse transition-all ease-in-out ">
+              <p className="font-poppins font-medium text-xs text-black animate-pulse transition-all ease-in-out">
                 Typing...
               </p>
             )}
@@ -288,8 +275,8 @@ const ConnectChat = () => {
           messages?.map((message, index) => (
             <ConnectChatMessage
               key={message._id || message.content + index}
-              forward={message.sender._id !== localStorage.getItem("userId")}
-              content={message.content}
+              forward={message?.sender?._id !== localStorage.getItem("userId")}
+              content={message?.content}
               senderName={`${message.sender.name.first} ${message.sender.name.last}`}
               senderImage={message?.sender?.profilePicture?.url}
               createdAt={message.createdAt}
@@ -299,11 +286,11 @@ const ConnectChat = () => {
           ))}
       </ChatContainer>
       <FixedBottomContent
-        className="w-full between gap-2 border-t border-t-gray-400 border-opacity-40 px-4 py-2 pt-5  pb-3 max-h-32  "
+        className="w-full between gap-2 border-t border-t-gray-400 border-opacity-40 px-4 py-2 pt-5 pb-3 max-h-32"
         ref={bottomRef}
       >
         <Badge
-          badgeContent={messageAttachment ? "1" : 0}
+          badgeContent={messageAttachment ? 1 : 0}
           color="error"
           className={messageAttachment ? "absolute top-0 right-0" : "hidden"}
         >
@@ -332,7 +319,7 @@ const ConnectChat = () => {
           disabled={sendingMessage}
           className="outline-none"
         >
-          {<SendMessageIcon active={message} />}
+          <SendMessageIcon active={message} />
         </button>
       </FixedBottomContent>
     </ConnectChatContainer>

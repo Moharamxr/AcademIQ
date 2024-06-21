@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { setActiveTab, setSelectedChat } from "../../store/slices/chatSlice";
-import { createChat as createChatService, socket } from "../../services/connect.service";
+import { createChat as createChatService } from "../../services/connect.service";
 
-const ConnectListCard = ({ chat, active, closeSearch }) => {
+const ConnectListCard = ({ chat, active, closeSearch, setShowSearch }) => {
   const chatTitle = chat?.type
     ? chat?.type === "private"
       ? `${chat?.member?.name?.first} ${chat?.member?.name?.last}`
@@ -33,6 +33,7 @@ const ConnectListCard = ({ chat, active, closeSearch }) => {
 
   const handleSetSelectedChat = async () => {
     if (!chat?.type) {
+      console.log("Creating new chat");
       const data = {
         title: chatTitle,
         description: "description",
@@ -49,25 +50,8 @@ const ConnectListCard = ({ chat, active, closeSearch }) => {
       if (window.innerWidth < 768) {
         dispatch(setActiveTab({ tab: "chat" }));
       }
+      setShowSearch(false);
     }
-  };
-
-  const [lastMessage, setLastMessage] = useState(chat?.lastMessage[0].content);
-
-  useEffect(() => {
-    setLastMessage(chat?.lastMessage.content);
-    console.log(lastMessage)
-    console.log(socket)
-    socket.on("newMessage", handleNewMessage);
-    return () => {
-      socket.off("newMessage", handleNewMessage);
-    };
-  }, [chat?.lastMessage.content]);
-
-  const handleNewMessage = (data) => {
-
-    setLastMessage(data.content);
-    console.log("data", data)
   };
 
   return (
@@ -108,12 +92,6 @@ const ConnectListCard = ({ chat, active, closeSearch }) => {
         <p className="text-xs text-gray-400 max-w-full overflow-hidden">
           {chat?.member?.email || chat?.email}
         </p>
-       
-          <p className="font-poppins font-medium text-xs text-slate-500 max-w-full overflow-hidden">
-            {lastMessage || "No messages yet"}
-          </p>
-        
-
       </div>
     </div>
   );

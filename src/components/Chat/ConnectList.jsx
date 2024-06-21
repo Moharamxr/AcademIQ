@@ -4,10 +4,10 @@ import ConnectListCard from "./ConnectListCard";
 import styled from "@emotion/styled";
 import { Skeleton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { searchUsers } from "../../services/user.service";
-import { getMyChats } from "../../services/connect.service";
 import CreateGroupModal from "./CreateGroupModal";
+import { fetchChats } from "../../store/slices/chatSlice";
 
 const ConnectListContainer = styled("div")({
   height: "85vh",
@@ -25,34 +25,22 @@ const FixedTopContent = styled.div`
 `;
 
 const ConnectList = () => {
-  const selectedChat = useSelector((state) => state.chatData.selectedChat);
 
   const [filteredChats, setFilteredChats] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  const [chats, setChats] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
-  const fetchChats = async () => {
-    setLoading(true);
-    try {
-      const response = await getMyChats();
-      const sortedChats = response?.chats.sort((a, b) => {
-        const dateA = new Date(a.lastMessage[0]?.updatedAt || a.createdAt);
-        const dateB = new Date(b.lastMessage[0]?.updatedAt || b.createdAt);
-        return dateB - dateA;
-      });
-      setChats(sortedChats || []);
-    } catch (error) {
-      console.error("Failed to fetch chats", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { chats, loading ,selectedChat } = useSelector((state) => state.chatData);
+
+  const dispatch = useDispatch();
+
+  const fetchChatsData =  () => {
+    dispatch(fetchChats());
+  }
 
   useEffect(() => {
-    fetchChats();
+    fetchChatsData();
   }, []);
 
   const handleSearch = async (e) => {
@@ -95,9 +83,9 @@ const ConnectList = () => {
     setFilteredChats([...users, ...filtered]);
   };
 
-  const toggleSearch = () => {
+  const closeSearch = () => {
     setShowSearch(false);
-    fetchChats();
+    fetchChatsData();
     setSearchTerm("");
     setFilteredChats([]);
   };
@@ -121,7 +109,7 @@ const ConnectList = () => {
         <div className="flex border-opacity-40 border-b border-b-slate-400 pb-2 px-2">
           <div className="hover:shadow-sm hover:bg-gray-100 rounded-lg hover:cursor-pointer">
             {showSearch ? (
-              <span onClick={toggleSearch}>
+              <span onClick={closeSearch}>
                 <CloseIcon />
               </span>
             ) : (
@@ -155,7 +143,9 @@ const ConnectList = () => {
               key={chat?._id + (chat?.title || "")}
               chat={chat}
               active={checkIsActive(chat)}
-              closeSearch={toggleSearch}
+              closeSearch={closeSearch}
+              setShowSearch={setShowSearch}
+              
             />
           ))
         ) : (
@@ -165,7 +155,7 @@ const ConnectList = () => {
       <CreateGroupModal
         open={openModal}
         onClose={handleCloseModal}
-        onGroupCreated={fetchChats}
+        onGroupCreated={fetchChatsData}
       />
     </ConnectListContainer>
   );

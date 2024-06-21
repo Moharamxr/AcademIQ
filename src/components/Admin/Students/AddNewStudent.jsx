@@ -313,7 +313,7 @@ const AddNewStudent = ({ isOpen, onClose }) => {
                   }}
                 >
                   <option value="">Year</option>
-                  {Array.from({ length: 50 }, (_, i) => {
+                  {Array.from({ length: 60 }, (_, i) => {
                     return (
                       <option key={i} value={1960 + i}>
                         {1960 + i}
