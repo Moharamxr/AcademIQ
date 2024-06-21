@@ -99,11 +99,7 @@ const PostCard = ({ post, courseId }) => {
   };
 
   const handleJoinRoom = () => {
-    socket.emit("joinRoom", {
-      roomId:post?.room?.link,
-    });
-    // console.log(socket)
-    navigate(`/room/${post?.room?.link}`);
+   window.location.href = `http://localhost:3030/${post.room.link}`;
   }
 
   return (

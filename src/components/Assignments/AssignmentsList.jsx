@@ -79,6 +79,17 @@ const AssignmentsList = () => {
     }
     dispatch(setSelectedAssignment({ assignment }));
   };
+  const formatDateTime = (isoString) => {
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      
+    };
+    return new Date(isoString).toLocaleString(undefined, options);
+  };
 
   const renderLoading = () => {
     if (isAssignmentsLoading) {
@@ -110,7 +121,11 @@ const AssignmentsList = () => {
     }
 
     if (assignmentsToRender.length === 0) {
-      return <div className="text-gray-500 text-center w-full">No assignments available</div>;
+      return (
+        <div className="text-gray-500 text-center w-full">
+          No assignments available
+        </div>
+      );
     }
 
     return assignmentsToRender.map((assignment) => (
@@ -123,23 +138,26 @@ const AssignmentsList = () => {
         } rounded-lg w-full p-2 cursor-pointer hover:bg-active-bg transition-colors duration-300 ease-in-out`}
         onClick={() => handleSelectAssignment(assignment)}
       >
-        <div className="between">
-          <p className="text-lg font-normal">{assignment.title} </p>
-          <time className="text-xs ">
-            {new Date(assignment.startDate).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+        <div className="flex justify-between items-center">
+          <p className="text-lg font-normal">{assignment.title}</p>
+          <div className="between flex-col gap-1">
+            <time className="text-xs">
+            {formatDateTime(assignment.startDate)}
           </time>
+          <time className="text-xs">
+            {formatDateTime(assignment.endDate)}
+          </time>
+          </div>
+          
         </div>
-        <article className="text-gray-700">{assignment.description}</article>
+        <p className="text-gray-700">{assignment.description}</p>
       </div>
     ));
   };
 
   return (
     <AssignmentsContainer className="bg-white flex flex-col justify-center items-center p-3 pt-0 rounded-xl">
-      <FixedTopContent className="bg-white py-3 w-full">
+      <FixedTopContent className="bg-white py-3 w-full mb-20">
         <select
           value={assignmentStatus}
           onChange={(e) => setAssignmentStatus(e.target.value)}
@@ -151,7 +169,7 @@ const AssignmentsList = () => {
         </select>
       </FixedTopContent>
 
-      <div className="flex flex-col py-2 gap-2 items-end w-full max-h-[40rem]">
+      <div className="flex flex-col py-2 pt-10 gap-2 items-end w-full max-h-[40rem]">
         {isAssignmentsLoading
           ? renderLoading()
           : !isAssignmentsError && renderAssignments()}

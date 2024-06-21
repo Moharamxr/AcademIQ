@@ -18,18 +18,16 @@ const TableCard = ({ timeTable, isLast, index }) => {
   const currentHour = new Date().getHours();
   const currentMinute = new Date().getMinutes();
 
-
-  const startTimeHour = parseInt(timeTable?.startTime?.hour)||parseInt(periods[index].split(":")[0]);
-  const startTimeMinute = parseInt(timeTable?.startTime?.minute)||parseInt(periods[index].split(":")[1]);
-
-  console.log(currentHour,startTimeHour)
+  const startTimeHour =
+    parseInt(timeTable?.startTime?.hour) ||
+    parseInt(periods[index].split(":")[0]);
+  const startTimeMinute =
+    parseInt(timeTable?.startTime?.minute) ||
+    parseInt(periods[index].split(":")[1]);
 
   const isActive =
     currentHour > startTimeHour ||
     (currentHour === startTimeHour && currentMinute >= startTimeMinute);
-
-
-  const role = localStorage.getItem("role");
 
   const initials =
     timeTable?.course?.title

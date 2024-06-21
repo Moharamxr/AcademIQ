@@ -35,7 +35,7 @@ const AssignmentDetails = () => {
         const data = await getAssessmentById(id);
         setAssignment(data?.assessment);
       } catch (error) {
-        setError("Failed to fetch assignment details");
+        // setError("Failed to fetch assignment details");
         setTimeout(() => {
           setError(null);
         }, 3000);
