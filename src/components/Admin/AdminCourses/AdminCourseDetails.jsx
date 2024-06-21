@@ -68,6 +68,17 @@ const AdminCourseDetails = () => {
               </span>
             </p>
           </div>
+          {courseData.gradeClass && (
+            <div className="flex gap-5 py-2 px-1">
+              <p className="font-poppins font-normal text-sm leading-6 text-gray-400">
+                Class:
+                <span className="text-gray-600 text-base font-medium px-4">
+                  Class {courseData.gradeClass.level}{" "}
+                  {courseData.gradeClass.letter}
+                </span>
+              </p>
+            </div>
+          )}
           <div className="flex gap-5 py-2 px-1">
             <p className="font-poppins font-normal text-sm leading-6 text-gray-400">
               Course Id :
@@ -102,16 +113,16 @@ const AdminCourseDetails = () => {
               </div>
             )}
             <span onClick={handleOpenAssignTeacherModal} className="pt-1">
-                <AddCircle color="action" className="cursor-pointer" />
-              </span>
-              <AssignNewTeacher
-                isOpen={assignTeacherModal}
-                getData={getData}
-                onClose={handleCloseAssignTeacherModal}
-                gradeClassId={id}
-                department={courseData?.department}
-                currentTeachers={courseData?.teachers}
-              />
+              <AddCircle color="action" className="cursor-pointer" />
+            </span>
+            <AssignNewTeacher
+              isOpen={assignTeacherModal}
+              getData={getData}
+              onClose={handleCloseAssignTeacherModal}
+              gradeClassId={id}
+              department={courseData?.department}
+              currentTeachers={courseData?.teachers}
+            />
           </div>
         </div>
         <FixedBottomContent className="bg-white py-5 pe-4 flex flex-row-reverse">

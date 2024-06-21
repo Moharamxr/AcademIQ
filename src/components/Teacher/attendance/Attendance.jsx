@@ -91,7 +91,7 @@ const Attendance = () => {
     }
 
     try {
-      const response = await getAttendance(id, dayjs().format("YYYY-MM-DD"), 7);
+      const response = await getAttendance(id, dayjs().format("YYYY-MM-DD"), period);
       const { attendance } = response;
       if (attendance) {
         setStudents(
@@ -108,13 +108,13 @@ const Attendance = () => {
         setError(null);
       }, 3000);
       try {
-        console.log("Automatic taking attendance: ", courseId, 7)
+        console.log("Automatic taking attendance: ", courseId, period)
         await takeAttendance(id, {
           courseId,
           period:7,
           students: [],
         });
-        await getAttendance(id, dayjs().format("YYYY-MM-DD"), 7);
+        await getAttendance(id, dayjs().format("YYYY-MM-DD"), period);
       } catch (error) {
         console.error("Error automatic taking attendance: ", error.response.data.error)
       }
@@ -168,7 +168,7 @@ const Attendance = () => {
     const newData = {
       date : dayjs().format("YYYY-MM-DD"),
       students: attendedStudents,
-      period :7,
+      period ,
       // courseId,
     };
     try {

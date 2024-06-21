@@ -31,7 +31,6 @@ const AssignNewTeacher = ({
       try {
         const data = await getUsers("teacher");
         
-        // Filter teachers by department and filter out teachers already assigned to the course
         const teachersToAdd = data?.users.filter((teacher) => {
           return (
             teacher.department === department &&
