@@ -58,7 +58,7 @@ const UserProfile = () => {
     ...(userData?.role === "teacher"
       ? [{ label: "Department", value: userData?.department }]
       : []),
-    ...(userData?.role === "teacher"
+    ...(userData?.role === "student"
       ? [
           {
             label: "Class",
