@@ -26,6 +26,8 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
   const [courseId, setCourseId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log(year)
+
   const handleCourseIdChange = (e) => {
     setNewTeacherData({ ...newTeacherData, courses: [e.target.value] });
   };
@@ -201,6 +203,7 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
       courses: newTeacherData.courses,
       role: newTeacherData.role,
     };
+    console.log(newTeacherData);
     setIsLoading(true);
     try {
       await createUser(requestData);
@@ -327,7 +330,7 @@ const AddNewTeacher = ({ isOpen, onClose }) => {
                   <option value="">Year</option>
                   {Array.from({ length: 50 }, (_, i) => {
                     return (
-                      <option key={i} value={2000 + i}>
+                      <option key={i} value={1960 + i}>
                         {1960 + i}
                       </option>
                     );

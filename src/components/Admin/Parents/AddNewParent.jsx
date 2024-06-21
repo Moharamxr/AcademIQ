@@ -393,7 +393,7 @@ const AddNewParent = ({ isOpen, onClose }) => {
                   <option value="">Year</option>
                   {Array.from({ length: 50 }, (_, i) => {
                     return (
-                      <option key={i} value={2000 + i}>
+                      <option key={i} value={1960 + i}>
                         {1960 + i}
                       </option>
                     );
