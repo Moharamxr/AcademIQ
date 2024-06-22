@@ -42,6 +42,7 @@ const Attendance = () => {
   const [students, setStudents] = useState([]);
   const [attendedStudents, setAttendedStudents] = useState([]);
   const [isAttendanceTaken, setIsAttendanceTaken] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [attendanceLoading, setAttendanceLoading] = useState(false);
   const [period, setPeriod] = useState(0);
@@ -66,7 +67,9 @@ const Attendance = () => {
     } else {
       setPeriod(0);
     }
+    console.log('hour: ', hour, 'period: ', period)
   };
+
 
   const fetchCourses = async () => {
     setLoadingCourses(true);
@@ -83,15 +86,17 @@ const Attendance = () => {
 
   useEffect(() => {
     fetchCourses();
+    handleSetPeriod();
   }, []);
 
+  console.log("Period: ", period, "CourseId: ", courseId)
   const fetchAttendance = async () => {
     if (!courseId ) {
       return;
     }
 
     try {
-      const response = await getAttendance(id, dayjs().format("YYYY-MM-DD"), 7);
+      const response = await getAttendance(id, dayjs().format("YYYY-MM-DD"), period);
       const { attendance } = response;
       if (attendance) {
         setStudents(
@@ -172,6 +177,10 @@ const Attendance = () => {
     };
     try {
       await reTakeAttendance(id, newData);
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 5000);
       setIsAttendanceTaken(true);
       setAttendanceLoading(false);
     } catch (error) {
@@ -208,6 +217,11 @@ const Attendance = () => {
               {error && (
                 <p className="bg-red-200 text-red-700 p-2 rounded-lg text-sm text-center h-8">
                   {error}
+                </p>
+              )}
+              {success && (
+                <p className="bg-green-200 text-green-700 p-2 rounded-lg text-sm text-center h-8">
+                  Attendance taken successfully
                 </p>
               )}
               <select
